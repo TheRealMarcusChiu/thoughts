@@ -249,10 +249,10 @@ plugins:
     options:
       provider: giscus
       options:
-        repo: TheRealMarcusChiu/tech
-        repoId: R_kgDOS1tLog
+        repo: TheRealMarcusChiu/thoughts
+        repoId: R_kgDOS15zmg
         category: Announcements
-        categoryId: DIC_kwDOS1tLos4C-2lw
+        categoryId: DIC_kwDOS15zms4C-2nL
         mapping: pathname
         inputPosition: bottom
         reactionsEnabled: true
