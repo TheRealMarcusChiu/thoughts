@@ -151,12 +151,17 @@ plugins:
   - source: github:quartz-community/tag-page
     enabled: true
   - source: github:quartz-community/explorer
+    enabled: false
+    layout:
+      position: left
+      priority: 50
+  - source: ./local-plugins/explorer
     enabled: true
     layout:
       position: left
       priority: 50
   - source: github:quartz-community/graph
-    enabled: true
+    enabled: false
     layout:
       position: right
       priority: 10
@@ -213,7 +218,7 @@ plugins:
       priority: 30
       group: toolbar
   - source: github:quartz-community/reader-mode
-    enabled: true
+    enabled: flase
     layout:
       position: left
       priority: 35

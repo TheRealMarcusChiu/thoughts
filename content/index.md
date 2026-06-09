@@ -1,5 +1,8 @@
 ---
-title: Welcome to Tech
+title: Tech
 ---
 
 This is where I Tech Blog
+
+```recent
+```

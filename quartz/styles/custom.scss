@@ -65,3 +65,46 @@
 .sidebar.left .page-title {
   margin-bottom: -0.8rem;
 }
+
+// ============================================================
+// Explorer (left sidebar): no text wrap; long titles scroll
+// horizontally to the end of the text instead of wrapping.
+// ============================================================
+.explorer {
+  ul,
+  li,
+  .folder-outer,
+  .folder-container,
+  .folder-title,
+  & a {
+    white-space: nowrap;
+  }
+}
+
+.explorer-ul {
+  overflow-x: auto;
+
+  li {
+    width: max-content; // grow to fit the unwrapped title…
+    min-width: 100%; // …but short rows still fill the sidebar (consistent hover)
+  }
+}
+
+// ============================================================
+// Explorer: remove the desktop collapse button — keep the tree
+// permanently expanded. The "Explorer" title is a toggle that
+// collapses the panel on click; disable it and hide its fold
+// chevron. Mobile (<=800px) keeps its hamburger open/close.
+// ============================================================
+@media all and (min-width: 801px) {
+  .explorer .desktop-explorer {
+    cursor: default;
+    pointer-events: none; // clicks no longer collapse the panel
+  }
+  .explorer .desktop-explorer .fold {
+    display: none; // remove the collapse chevron/button
+  }
+  .explorer.collapsed {
+    flex: 0 1 auto; // safety: never shrink to the collapsed width
+  }
+}
