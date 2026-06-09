@@ -10,7 +10,7 @@ summary: 'summary'
 # Additional Thoughts on Praise
 
 I've been reflecting on "Thoughts on Praise" for a while now.
-I'm sure some of you may already know - but if not here's a [snippet](/thoughts/2025-07-09/).
+I'm sure some of you may already know - but if not here's a [snippet](2025-07-09).
 
 Three points on "Thoughts on Praise":
 * praise is the overflow of joy

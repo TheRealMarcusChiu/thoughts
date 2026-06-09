@@ -7,87 +7,57 @@ This is where I Mark the Thoughts
 
 
 <div style="white-space: pre; font-family: monospace;">
-		M.					   .:M
-		MMMM.					.:MMMM
-		MMMMMMMM			     .:MMMMMMM
-		:MMHHHMMMMHMM.	.:MMMMMMMMM:.	   .:MMHHMHMM:
-		 :MMHHIIIHMMMM.:MMHHHHIIIHHMMMM. .:MMHIHIIHHM:
-		  MMMHIIIIHHMMMIIHHMHHIIIIIHHMMMMMMHHHIIIIHHM:
-		  :MMHIIIIIHMMMMMMMHHIIIIIIHHHMMMMMHHII:::IHM.
-		   MH:I:::IHHMMMMMHHII:::IIHHMMMHHHMMM:I:IHMM
-		   :MHI:HHIHMMHHIIHII::.::IIHMMHHIHHMMM::HMM:
-		    MI::HHMMIIM:IIHII::..::HM:MHHII:::IHHMM:
-		    MMMHII::..:::IHMMHHHMHHMMI:::...::IHM:
-		    :MHHI::....::::HMMMMMMHHI::.. ..:::HM:
-		     :MI:.:MH:.....:HMMMMHHMIHMMHHI:HH.:M
-		     M:.I..MHHHHHMMMIHMMMMHMMHHHHHMMH:.:M.
-		     M:.H..H  I:HM:MHMHI:IM:I:MM::  MMM:M:
-		     :M:HM:.M I:MHMIIMMIIHM I:MM::.:MMI:M.
-		     'M::MM:IMH:MMII MMHIMHI :M::IIHMM:MM
-		      MH:HMMHIHMMMMMMHMMIMHIIHHHHIMMHHMM
-		       MI:MMMMHI:::::IMM:MHI:::IMMMMHIM
-			:IMHIHMMMMMM:MMMMMHHHHMMMHI:M
-			 HI:IMIHMMMM:MMMMMMHHHMI:.:M	  .....
-	     ............M::..:HMMMMIMHIIHMMMMHII:M:::''''
-		 ....:::MHI:.:HMMMMMMMMHHHMHHI::M:::::::''''''
-		''   ...:MHI:.::MMHHHMHMIHMMMMHH.MI..........
-		   ''  ...MHI::.::MHHHHIHHMM:::IHM           '''
-		      '  IMH.::..::HMMHMMMH::..:HM:
-			:M:.H.IHMIIII::IIMHMMM:H.MH
-			 IMMMH:HI:MMIMI:IHI:HIMIHM:
-		       .MMI:.HIHMIMI:IHIHMMHIHI:MIM.
-		      .MHI:::HHIIIIIHHI:IIII::::M:IM.
-		     .MMHII:::IHIII::::::IIIIIIHMHIIM
-		     MHHHI::.:IHHII:::.:::IIIIHMHIIHM:
-		    MHHHII::..::MII::.. ..:IIIHHHII:IM.
-		   .MHHII::....:MHII::.  .:IHHHI::IIHMM.
-		   MMHHII::.....:IHMI:. ..:IHII::..:HHMM
-		   MHHII:::......:IIHI...:IHI::.....::HM:
-		  :MMH:::........ ...::..::....  ...:IHMM
-		  IMHIII:::..........	  .........::IHMM.
-		  :MHIII::::......	    .......::IHMM:
-		   MHHIII::::...	     ......::IHMM:
-		   IMHHIII:::...	     .....::IIHMM,
-		   :MHHIII:::I:::...	 ....:::I:::IIHMM
-		    MMHHIII::IHI:::...........:::IIH:IHMM
-		    :MMHHII:IIHHI::::::.....:::::IH:IHMIM
-		     MMMHHII:IIHHI:::::::::::::IHI:IIHM:M.
-		     MMMHHIII::IHHII:::::::::IHI:IIIHMM:M:
-		     :MMHHHIII::IIIHHII::::IHI..IIIHHM:MHM
-		     :MMMHHII:..:::IHHMMHHHHI:IIIIHHMM:MIM
-		     .MMMMHHII::.:IHHMM:::IIIIIIHHHMM:MI.M
-		   .MMMMHHII::.:IHHMM:::IIIIIIHHHMM:MI.M
-		 .MMMMHHMHHII:::IHHMM:::IIIIIHHHHMM:MI.IM.
-		.MMHMMMHHHII::::IHHMM::I&&&IHHHHMM:MMH::IM.
-	       .MMHHMHMHHII:::.::IHMM::IIIIHHHMMMM:MMH::IHM
-	       :MHIIIHMMHHHII:::IIHMM::IIIHHMMMMM::MMMMHHHMM.
-	       MMHI:IIHMMHHHI::::IHMM:IIIIHHHMMMM:MMMHI::IHMM.
-	       MMH:::IHMMHHHHI:::IHMM:IIIHHHHMMMM:MMHI:.:IHHMM.
-	       :MHI:::IHMHMHHII::IHMM:IIIHHHMMMMM:MHH::.::IHHM:
-	       'MHHI::IHMMHMHHII:IHMM:IIHHHHMMMM:MMHI:...:IHHMM.
-		:MHII:IIHMHIHHIIIIHMM:IIHHHHMMMM:MHHI:...:IIHMM:
-		'MHIII:IHHMIHHHIIHHHMM:IHHHMMMMM:MHHI:..::IIHHM:
-		 :MHHIIIHHMIIHHHIHHHMM:HHHHMMMMM:MHII::::IIIHHMM
-		  MHHIIIIHMMIHHHIIHHMM:HHHHMMMM:MMHHIIHIIIIIHHMM.
-		  'MHHIIIHHMIIHHIIIHMM:HHHMMMMH:MHHMHII:IIIHHHMM:
-		   'MHHIIIHMMIHHHIHHMM:HHHMMMHH:MMIMMMHHHIIIHHMM:
-		    'MHHIIHHMIHHHHHMMM:HHHMMMH:MIMMMMMMMMMMHIHHM:
-		     'MHIIIHMMIHHHHHMM:HHHMMMH:IMMMMMHHIHHHMMHHM'
-		      :MHHIIHMIHHHHHMM:HHHMMMM:MMHMMHIHMHI:IHHHM
-		       MHHIIHM:HHHHHMM:HHHMMMM:MMMHIHHIHMM:HHIHM
-			MHHIHM:IHHHHMM:HHHHMM:MMHMIIHMIMMMHMHIM:
-			:MHIHMH:HHHHMM:HHHHMM:MMHIIHMIIHHMMHIHM:
-			 MMHHMH:HHHHMM:HHHHMM:MHHIHMMIIIMMMIIHM'
-			 'MMMMH:HHHHMM:HHHMM:MHHHIMMHIIII::IHM:
-			  :MMHM:HHHHMM:HHHMM:MHIHIMMHHIIIIIHM:
-			   MMMM:HHHHMM:HHHHM:MHHMIMMMHHHIHHM:MMMM.
-			   :MMM:IHHHMM:HHHMM:MHHMIIMMMHHMM:MMMMMMM:
-			   :MMM:IHHHM:HHHHMM:MMHHHIHHMMM:MMMMMMMMMM
-			    MHM:IHHHM:HHHMMM:MMHHHHIIIMMIIMMMMMMMMM
-			    MHM:HHHHM:HHHMMM:HMMHHHHHHHHHMMMMMMMMM:
-			 .MI:MM:MHHMM:MHMMHMHHMMMMHHHHHHHMMMMMMMMM'
-			:IM:MMIM:M:MM:MH:MM:MH:MMMMMHHHHHMMMMMMMM'
-			:IM:M:IM:M:HM:IMIHM:IMI:MMMMMHHHMMMMMM:'
-			 'M:MHM:HM:MN:HMIHM::M'   '::MMMMMMM:'
-			    'M'HMM'M''M''HM'I'
+                                                  ,,_
+                                               zd$$??=
+                                             z$$P? F:`c,                _
+                                            d$$, `c'cc$$i           ,cd$?R
+                                           $$$$ cud$,?$$$i       ,=P"2?z "
+                                            $" " ?$$$,?$$$.    ,-''`>, bzP
+                                             'cLdb,?$$,?$$$   ,h' "I$'J$P
+                                          ... `?$$$,"$$,`$$h  $$PxrF'd$"
+                                        d$PP""?-,"?$$,?$h`$$,,$$'$F44"
+                                        ?,,_`=4c,?=,"?hu?$`?L4$'? '
+                                           `""?==""=-"" `""-`'_,,,,
+                            .                      .ccu?m?e?JC,-,"=?
+                          ,'$$i                              """=='?"
+                         Jb<$$$$.
+               .         $F`?????
+             /<$$c,   .,cd$$$$$$$$$cr.                   ,ccc
+            zF<$$$$+ d$$$$$$$$P???$$ $Lcu              ,<lcc,
+            $F<$$$$L-?$$$$P",cd$$hcc,`?$$?=         ,cP?C<"?P
+           <$$ $$$F?<$$$$'c$'ccd$$$$$$$$$<"      ,c$b?$$$$$L
+           `$$c`$$F $$$$'d$hd$$???$$$$$$$,L,; ,ud$$$$`???="
+            $$$,`$$`$$$P<$$$$$ $$   ?$$$$$c`",uc`"?$$$b"
+            ?$$$,`$b<$$>d$$$$$.?$c, ,`$$P,c$L`"".$ $$$F
+             $$$$$,?.$$><$$$$$$c`"?P",$$$$$$$$$$:F,$F
+              ?$$$$$$$$$`$$$$$$$$$$$P?$$$$$$$$P"' "
+             $c$$$$$$$$$,?$$$$$$$$$$$$z, `"""'.,,,,,
+             `$$$$$$$$$$$,?$$$$$$$$$$$$$$=`,zd$ClcJ"
+              3$$$$$$$$$$$,"?$$$$$$$$P"z e$$CzeeF?$$
+               $$$$$$$$$$$$$c`??$$P",d$.$$$$$$$$F "
+              J$$$$$$$$$$$$$$$$b= c$$$$,?$$PF""
+              " J$$?$$$$$$$$$P",d$$$$$$$$c-,u
+                ?"  ?$$";??",c$$$$$$$$$$$'c$$h.
+                      "x$$$$$$$$$$$$$$$P.d$$$h.
+                    ,d$$$$$$$$$$$$$$$P"z$$$$$?L
+    4F       .,ucc$$$$$$$$$$$$$$$$$F,z$$$$$$$F
+   ,$L   ,zd$$$$$$$$$$$$$hh??$PF',zd$$$$$$$$P$,
+  z$$" z$$$$$$$$$$$$$$$$$$$$$'c$$$$$$$$$$$$$F`"
+ z$$"z$$$$$$$$$$$$$$$$$$$$$$? ?$$$$$$$$$$$$$
+,$P'd$$$$$$$$$$$$$$$$$$$$$F?h`cJ$$$$$$$$$$$F
+JP d$$$$$$$$$$$$$$$$$$$$$$$,"J$$$$$$$$$$$$"
+$"J$$$$$$$$$$$$$$$$$$$$$$$$$ $$$$$$$$$$$$'
+F $$$$$$$$$$$$$$$$$$$$$$$$$$F<$$$$$$$$$P'
+ 4$$$$$$$$$$$$$$$$$$$$$$$$$$F<$$$$$$$$"
+  $$$$$$$$$$$$$$$$$$$$$$$$$$ 4$$$$$P"z
+  $$$$$$$$$$$$$$$$$$$$$$$$$F,$$$$F,c$F
+   ?$$$$$$$$$$$$$$$$$$$$$$",$$P",d$$F
+    ?$$$$$$$$$$$$$$$$$$$F'=",c$$$$$"
+   ,,2$$$$$$$$$$$$$$$P,zc$$$$$$$$F
+ ,$$$$$$$$$$$$$$$P",c$$$$$$$$$P"
+ `$$$PF""????"" =$$$$$$$$$P"
+  `$'c$$$$hc   z$$$$P$$P"
+    4$$$i`?c\  $P",d$$$c+
+     `?$$$,4$;  "4$$$iC?$c
+        "?"??"    ""???"'"  
 </div>
