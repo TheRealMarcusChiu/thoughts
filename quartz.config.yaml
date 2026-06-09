@@ -314,8 +314,6 @@ layout:
     folder:
       exclude:
         - reader-mode
-      positions:
-        right: []
     tag:
       exclude:
         - reader-mode

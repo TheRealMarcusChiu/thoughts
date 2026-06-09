@@ -147,6 +147,36 @@
 }
 
 // ============================================================
+// Unify code-block backgrounds. A ```lang block is wrapped by
+// rehype-pretty-code in a <figure> (+ shiki data-theme / per-line
+// spans), while a plain ``` block is just <pre><code>; they ended
+// up painting the code surface on different elements and reading
+// as different backgrounds. Force both onto the container with the
+// theme's --code-background and keep the inner code transparent.
+// Unlayered, so it wins over the Obsidian theme.
+// ============================================================
+figure[data-rehype-pretty-code-figure],
+pre:has(> code) {
+  background-color: var(--code-background, var(--lightgray));
+}
+pre > code,
+pre > code > [data-line] {
+  background-color: transparent;
+}
+
+// Code font size. Unlayered so it overrides base.scss `code { font-size: 0.9em }`
+// (inline) and `pre > code { font-size: 0.85rem }` (blocks).
+code,
+pre > code {
+  font-size: large;
+}
+
+// Larger gap above `# Header` (in-content h1). base.scss sets 2.25rem.
+article h1 {
+  margin-top: 4rem;
+}
+
+// ============================================================
 // `recent-sidebar` component (left sidebar): recent dated pages,
 // title + tiny date. No text wrap; scroll horizontally for long
 // titles and vertically when the list is long. Unlayered so it
