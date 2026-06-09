@@ -1,9 +1,9 @@
 ---
-title: Tech
+title: Thoughts
 ---
 
 
-This is where I Tech Blog
+This is where I Mark the Thoughts
 
 
 <div style="white-space: pre; font-family: monospace;">

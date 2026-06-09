@@ -1,13 +1,13 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: Tech
+  pageTitle: Thoughts
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
   analytics:
     provider: plausible
   locale: en-US
-  baseUrl: git.marcuschiu.com/tech
+  baseUrl: git.marcuschiu.com/thoughts
   ignorePatterns:
     - private
     - templates
