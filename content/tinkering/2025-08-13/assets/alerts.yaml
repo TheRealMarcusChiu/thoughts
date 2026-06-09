@@ -1,0 +1,724 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: test-evaluation-group
+    folder: Over Heating
+    interval: 1m
+    rules:
+      - uid: beuwelt440i68a
+        title: Telegraf PVE1 ACPI
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve1")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "acpitz-acpi-0")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: beuwggs1n7egwa
+        title: Telegraf PVE2 ACPI
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve2")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "acpitz-acpi-0")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: eeuwgi0r2s6wwa
+        title: Telegraf PVE3 ACPI
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve3")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "acpitz-acpi-0")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 69
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: beuwhboam2akgf
+        title: Telegraf PVE1 CPU
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve1")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "coretemp-isa-0000")
+                  |> filter(fn: (r) => r["feature"] == "package_id_0")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: beuwhcro1g268f
+        title: Telegraf PVE2 CPU
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve2")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "coretemp-isa-0000")
+                  |> filter(fn: (r) => r["feature"] == "package_id_0")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: feuwhe6p4rp4wb
+        title: Telegraf PVE3 CPU
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve3")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "coretemp-isa-0000")
+                  |> filter(fn: (r) => r["feature"] == "package_id_0")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: ceuwhlpijgmbke
+        title: Telegraf PVE1 nvme-pci-0100
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve1")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "nvme-pci-0100")
+                  |> filter(fn: (r) => r["feature"] == "composite")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: deuwhmqkiqi2oe
+        title: Telegraf PVE2 nvme-pci-0100
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve2")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "nvme-pci-0100")
+                  |> filter(fn: (r) => r["feature"] == "composite")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord
+      - uid: deuwhnnfp52bkd
+        title: Telegraf PVE3 nvme-pci-0100
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: eeuumshgfaw3kf
+            model:
+              datasource:
+                type: influxdb
+                uid: eeuumshgfaw3kf
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                from(bucket: "telegraf-pve3")
+                  |> range(start: -2m)
+                  |> filter(fn: (r) => r["_measurement"] == "sensors")
+                  |> filter(fn: (r) => r["_field"] == "temp_input")
+                  |> filter(fn: (r) => r["chip"] == "nvme-pci-0100")
+                  |> filter(fn: (r) => r["feature"] == "composite")
+                  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                  |> yield(name: "mean")
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: mean
+              refId: B
+              type: reduce
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        isPaused: false
+        notification_settings:
+          receiver: Discord

@@ -1,3 +1,13 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// The bundled Obsidian theme redefines --bodyFont/--headerFont inside
+// @layer obsidian-theme, which overrides the quartz.config.yaml typography
+// (emitted in @layer quartz-base). This block is unlayered, so it wins over
+// every @layer and restores the configured font.
+:root {
+  --bodyFont: "Inter", system-ui, sans-serif;
+  --headerFont: "Inter", system-ui, sans-serif;
+  --titleFont: "Inter", system-ui, sans-serif;
+}

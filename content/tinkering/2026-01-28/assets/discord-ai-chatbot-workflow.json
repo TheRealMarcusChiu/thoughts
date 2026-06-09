@@ -1,0 +1,252 @@
+{
+  "name": "Discord AI chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.chat_message }} \n\nKeep the Reply Max and under 1000 characters.",
+        "options": {}
+      },
+      "id": "b2dd03bf-e52e-4046-a94b-1020ccc3709d",
+      "name": "Chat Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1832,
+        432
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.channel_id }}",
+        "contextWindowLength": 3
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1840,
+        656
+      ],
+      "id": "6061179e-e0f0-43fd-b466-b0cf42eebf2b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        656
+      ],
+      "id": "af689b4d-9a0f-4cd6-9822-c31657860b30",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "TK16ptC7HvyyJKjJ",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "numResults": 10,
+          "pageNumber": 1,
+          "language": "en",
+          "safesearch": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSearXng",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        656
+      ],
+      "id": "a1d0b0cc-a446-4b44-8f75-eb17b13b3980",
+      "name": "SearXNG",
+      "credentials": {
+        "searXngApi": {
+          "id": "hVVOrot2EPW9sHKs",
+          "name": "SearXNG account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        2096,
+        656
+      ],
+      "id": "52df5843-c7ff-4811-8883-81ac3199c9a1",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "getmessage",
+        "options": {}
+      },
+      "id": "6c2cc2e2-0123-45ac-ae8c-2f6f2d294c14",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        1488,
+        432
+      ],
+      "webhookId": "4c80241d-69ca-4394-8e09-d1f72cd0878f",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1377002337616527462",
+          "mode": "list",
+          "cachedResultName": "marcus chiu's server",
+          "cachedResultUrl": "https://discord.com/channels/1377002337616527462"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1465958965824192625",
+          "mode": "list",
+          "cachedResultName": "n8n-ai-agent",
+          "cachedResultUrl": "https://discord.com/channels/1377002337616527462/1465958965824192625"
+        },
+        "content": "={{ $json.output }}",
+        "options": {
+          "message_reference": "={{ $('Webhook').item.json.body.message_id }}"
+        }
+      },
+      "id": "1187dd59-d4d9-4916-8b91-49e5e0756cc1",
+      "name": "Discord Send Message",
+      "type": "n8n-nodes-base.discord",
+      "position": [
+        2304,
+        432
+      ],
+      "webhookId": "735bc71f-14ae-48ff-b145-f2620466a3d0",
+      "typeVersion": 2,
+      "credentials": {
+        "discordBotApi": {
+          "id": "sSznxnMY0FWJ0VoR",
+          "name": "Discord Bot account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "localhost:5678",
+            "user-agent": "python-requests/2.32.5",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "181"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "channel_id": "1465958965824192625",
+            "chat_message": "what are some boba places near plano texas?",
+            "timestamp": "2026-01-28 23:03:32.891000+00:00",
+            "message_id": "1466207097652777021",
+            "user_id": "620661857958625291"
+          },
+          "webhookUrl": "https://n8n.lan/webhook-test/getmessage",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Chat Agent": {
+      "main": [
+        [
+          {
+            "node": "Discord Send Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearXNG": {
+      "ai_tool": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "availableInMCP": false
+  },
+  "versionId": "bf134b5d-38ed-47d6-bf49-46c3e60d3cb4",
+  "meta": {
+    "templateId": "5816",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b6dec14ab8986d3a98a26cfe8005b4737483396f5303d71bcf3d5a4770fa25dd"
+  },
+  "id": "iygpVDn73U4bTmwQ",
+  "tags": []
+}
