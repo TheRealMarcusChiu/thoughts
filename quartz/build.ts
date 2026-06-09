@@ -1,6 +1,8 @@
 import sourceMapSupport from "source-map-support"
 sourceMapSupport.install(options)
 import path from "path"
+import { spawn } from "child_process"
+import { existsSync } from "fs"
 import { PerfTimer } from "./util/perf"
 import { rm } from "fs/promises"
 import { GlobbyFilterFunction, isGitIgnored } from "globby"
@@ -22,6 +24,42 @@ import { getStaticResourcesFromPlugins } from "./plugins"
 import { randomIdNonSecure } from "./util/random"
 import { ChangeEvent } from "./plugins/types"
 import { minimatch } from "minimatch"
+
+// Build the Pagefind search index from the emitted HTML. Quartz wipes the
+// output dir on every full build (and `--serve` never runs the standalone
+// `pagefind` step), so the index must be regenerated in-process after emit —
+// otherwise `/pagefind/pagefind.js` 404s under `quartz build --serve`.
+// Non-fatal: if pagefind isn't installed the site still builds, search is just
+// inert until `npm install` + rebuild.
+async function runPagefind(output: string): Promise<void> {
+  const binName = process.platform === "win32" ? "pagefind.cmd" : "pagefind"
+  const localBin = path.join("node_modules", ".bin", binName)
+  const useLocal = existsSync(localBin)
+  const cmd = useLocal ? localBin : "npx"
+  const args = useLocal ? ["--site", output] : ["--yes", "pagefind", "--site", output]
+
+  const perf = new PerfTimer()
+  await new Promise<void>((resolve) => {
+    const child = spawn(cmd, args, {
+      stdio: "ignore",
+      shell: process.platform === "win32",
+    })
+    child.on("error", (err) => {
+      console.warn(styleText("yellow", `Skipped Pagefind index (${err.message})`))
+      resolve()
+    })
+    child.on("close", (code) => {
+      if (code === 0) {
+        console.log(styleText("green", `Generated Pagefind index in ${perf.timeSince()}`))
+      } else {
+        console.warn(
+          styleText("yellow", `Pagefind exited with code ${code}; search index not updated`),
+        )
+      }
+      resolve()
+    })
+  })
+}
 
 function reportSlugCollisions(content: ProcessedContent[]): void {
   const collisions = detectSlugCollisions(content)
@@ -99,6 +137,8 @@ async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
     styleText("green", `Done processing ${markdownPaths.length} files in ${perf.timeSince()}`),
   )
   release()
+
+  await runPagefind(output)
 
   if (argv.watch) {
     ctx.incremental = true
@@ -354,6 +394,7 @@ async function rebuild(changes: ChangeEvent[], clientRefresh: () => void, buildD
     )
     console.log(styleText("green", `Done rebuilding in ${perf.timeSince()}`))
     changes.splice(0, numChangesInBuild)
+    await runPagefind(argv.output)
     clientRefresh()
   } finally {
     release()

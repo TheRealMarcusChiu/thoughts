@@ -161,6 +161,14 @@ plugins:
       position: right
       priority: 10
   - source: github:quartz-community/search
+    enabled: false
+    layout:
+      position: left
+      priority: 20
+      group: toolbar
+      groupOptions:
+        grow: true
+  - source: ./local-plugins/pagefind-search
     enabled: true
     layout:
       position: left
