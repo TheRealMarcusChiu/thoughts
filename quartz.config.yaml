@@ -239,7 +239,7 @@ plugins:
   - source: github:quartz-community/breadcrumbs
     enabled: true
     options:
-      rootName: Tech
+      rootName: Thoughts
     layout:
       position: beforeBody
       priority: 5
