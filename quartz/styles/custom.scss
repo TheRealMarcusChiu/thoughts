@@ -176,6 +176,12 @@ article h1 {
   margin-top: 4rem;
 }
 
+// Large gap at the bottom of every page's content, so the last lines aren't
+// flush against the footer/comments. Unlayered so it beats the theme.
+article {
+  padding-bottom: 20rem;
+}
+
 // ============================================================
 // Narrow-screen left sidebar: collapse off-canvas behind a floating
 // hamburger (top-left), slide in when html.left-open is set by the
