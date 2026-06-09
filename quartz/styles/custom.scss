@@ -108,3 +108,93 @@
     flex: 0 1 auto; // safety: never shrink to the collapsed width
   }
 }
+
+// ============================================================
+// `recent` plugin: list of index.md pages (title + tiny date),
+// most recent first. Unlayered so it beats the Obsidian theme's
+// list/link styling.
+// ============================================================
+.recent-list {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+}
+.recent-list .recent-item {
+  margin: 0 0 0.9rem 0;
+}
+.recent-list .recent-link {
+  display: block;
+  text-decoration: none;
+  // base.scss gives a.internal a --highlight background; the recent links carry
+  // the `internal` class, so drop it for a clean list.
+  background-color: transparent;
+}
+.recent-list .recent-link:hover .recent-title {
+  text-decoration: underline;
+}
+.recent-list .recent-title {
+  display: block;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-accent, var(--secondary));
+}
+.recent-list .recent-date {
+  display: block;
+  margin-top: 0;
+  font-size: 0.7rem;
+  line-height: 1.1;
+  color: var(--text-muted, var(--gray));
+}
+
+// ============================================================
+// `recent-sidebar` component (left sidebar): recent dated pages,
+// title + tiny date. No text wrap; scroll horizontally for long
+// titles and vertically when the list is long. Unlayered so it
+// beats the Obsidian theme's sidebar/link styling.
+// ============================================================
+.recent-sidebar {
+  width: 100%;
+  min-width: 0;
+}
+.recent-sidebar-title {
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+}
+.recent-sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 60vh;
+  overflow-y: auto; // long lists scroll vertically
+  overflow-x: auto; // long titles scroll horizontally
+}
+.recent-sidebar-item {
+  width: max-content; // grow to fit the unwrapped title…
+  min-width: 100%; // …but short rows still fill the sidebar
+  margin: 0 0 0.7rem 0;
+  white-space: nowrap;
+}
+.recent-sidebar-link {
+  display: block;
+  text-decoration: none;
+  background: none; // no internal-link highlight
+  white-space: nowrap;
+}
+.recent-sidebar-link:hover .recent-sidebar-name {
+  text-decoration: underline;
+}
+.recent-sidebar-name {
+  display: block;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-accent, var(--secondary));
+  white-space: nowrap;
+}
+.recent-sidebar-date {
+  display: block;
+  margin-top: 0;
+  font-size: 0.7rem;
+  line-height: 1.1;
+  color: var(--text-muted, var(--gray));
+  white-space: nowrap;
+}
