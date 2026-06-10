@@ -5,8 +5,8 @@ configuration:
   enableSPA: true
   enablePopovers: true
   analytics:
-    provider: google
-    measurementId: "G-WKSFZQ4K6F"
+    provider: 'google'
+    tagId: 'G-WKSFZQ4K6F'
   locale: en-US
   baseUrl: git.marcuschiu.com/thoughts
   ignorePatterns:
