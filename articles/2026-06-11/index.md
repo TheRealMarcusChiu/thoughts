@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "TEST"
 tags: ["TEST"]
 img: 'assets/20190429_194119.jpg'
