@@ -2,6 +2,7 @@
 draft: true
 title: 'Wedding Banquet'
 summary: 'summary'
+tags: ['relationships', 'reflection', 'life']
 ---
 
 Hello Future Me,

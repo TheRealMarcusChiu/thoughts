@@ -2,6 +2,7 @@
 draft: true
 title: 'Dimensional Me'
 summary: 'summary'
+tags: ['psychology', 'self-discovery']
 ---
 
 They say - "you can't trust yourself to know everything about yourself"

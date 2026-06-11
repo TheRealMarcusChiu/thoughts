@@ -2,6 +2,7 @@
 draft: true
 title: 'Post Achievement Depression'
 summary: 'summary'
+tags: ['psychology', 'mental-health', 'motivation', 'music']
 ---
 
 When Natalie talks about her depression after winning those bodybuilding competitions,

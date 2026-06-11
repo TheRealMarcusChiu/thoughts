@@ -2,6 +2,7 @@
 draft: false
 title: '2024 Reflection – The Year of Openness'
 summary: 'summary'
+tags: ['reflection', 'life']
 img: 'cover.png'
 ---
 

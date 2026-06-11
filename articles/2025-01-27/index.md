@@ -2,6 +2,7 @@
 draft: false
 title: 'Prune Your Time Like You Prune a Rose'
 summary: 'summary'
+tags: ['productivity', 'self-improvement']
 img: 'cover.jpeg'
 ---
 

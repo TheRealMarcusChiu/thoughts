@@ -2,6 +2,7 @@
 draft: true
 title: 'Thoughts on Bread (extended)'
 summary: 'summary'
+tags: ['christianity', 'faith', 'scripture']
 ---
 
 Been slacking on meditation. But for the past week I’ve been dwelling

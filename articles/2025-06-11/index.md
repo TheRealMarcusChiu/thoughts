@@ -2,6 +2,7 @@
 draft: true
 title: 'TODO'
 summary: 'summary'
+tags: ['philosophy', 'beauty', 'aesthetics']
 ---
 
 Beauty, in its broadest sense:

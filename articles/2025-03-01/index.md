@@ -2,6 +2,7 @@
 draft: false
 title: 'Character of Love'
 summary: 'summary'
+tags: ['love', 'marriage', 'relationships']
 img: 'cover.jpeg'
 ---
 

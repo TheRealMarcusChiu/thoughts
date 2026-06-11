@@ -2,6 +2,7 @@
 draft: true
 title: 'Death is Like Sleep'
 summary: 'summary'
+tags: ['christianity', 'faith', 'death']
 ---
 
 In christianity death is like sleep.

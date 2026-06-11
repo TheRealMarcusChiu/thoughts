@@ -2,6 +2,7 @@
 draft: false
 title: 'Thoughts on Praise'
 summary: 'summary'
+tags: ['christianity', 'faith', 'praise']
 img: 'cover.jpeg'
 ---
 

@@ -2,6 +2,7 @@
 draft: false
 title: '4yo Wisdom'
 summary: 'summary'
+tags: ['love', 'family']
 img: 'cover.jpeg'
 ---
 

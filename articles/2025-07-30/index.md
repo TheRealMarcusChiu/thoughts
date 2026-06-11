@@ -2,6 +2,7 @@
 draft: false
 title: 'Christian Ramblings #2'
 summary: 'summary'
+tags: ['christianity', 'faith', 'scripture', 'praise']
 img: 'cover.jpeg'
 ---
 

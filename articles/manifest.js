@@ -5,7 +5,11 @@ window.ARTICLES = [
     "path": "2026-02-03/index.md",
     "title": "Unworthy Love",
     "date": "2026-02-03",
-    "tags": [],
+    "tags": [
+      "love",
+      "relationships",
+      "self-worth"
+    ],
     "img": "2026-02-03/cover.jpeg"
   },
   {
@@ -13,7 +17,10 @@ window.ARTICLES = [
     "path": "2025-09-07/index.md",
     "title": "4yo Wisdom",
     "date": "2025-09-07",
-    "tags": [],
+    "tags": [
+      "love",
+      "family"
+    ],
     "img": "2025-09-07/cover.jpeg"
   },
   {
@@ -21,7 +28,12 @@ window.ARTICLES = [
     "path": "2025-07-30/index.md",
     "title": "Christian Ramblings #2",
     "date": "2025-07-30",
-    "tags": [],
+    "tags": [
+      "christianity",
+      "faith",
+      "scripture",
+      "praise"
+    ],
     "img": "2025-07-30/cover.jpeg"
   },
   {
@@ -29,7 +41,11 @@ window.ARTICLES = [
     "path": "2025-07-09/index.md",
     "title": "Thoughts on Praise",
     "date": "2025-07-09",
-    "tags": [],
+    "tags": [
+      "christianity",
+      "faith",
+      "praise"
+    ],
     "img": "2025-07-09/cover.jpeg"
   },
   {
@@ -37,7 +53,11 @@ window.ARTICLES = [
     "path": "2025-07-06/index.md",
     "title": "A Fading Glimpse",
     "date": "2025-07-06",
-    "tags": [],
+    "tags": [
+      "love",
+      "relationships",
+      "reflection"
+    ],
     "img": "2025-07-06/cover.jpeg"
   },
   {
@@ -45,7 +65,13 @@ window.ARTICLES = [
     "path": "2025-04-23/index.md",
     "title": "Christian Ramblings #1",
     "date": "2025-04-23",
-    "tags": [],
+    "tags": [
+      "christianity",
+      "faith",
+      "scripture",
+      "praise",
+      "relationships"
+    ],
     "img": "2025-04-23/cover.jpeg"
   },
   {
@@ -53,7 +79,11 @@ window.ARTICLES = [
     "path": "2025-03-17/index.md",
     "title": "Conversation in the Womb – A Parable of Life After Delivery",
     "date": "2025-03-17",
-    "tags": [],
+    "tags": [
+      "christianity",
+      "faith",
+      "parable"
+    ],
     "img": "2025-03-17/cover.jpeg"
   },
   {
@@ -61,7 +91,11 @@ window.ARTICLES = [
     "path": "2025-03-01/index.md",
     "title": "Character of Love",
     "date": "2025-03-01",
-    "tags": [],
+    "tags": [
+      "love",
+      "marriage",
+      "relationships"
+    ],
     "img": "2025-03-01/cover.jpeg"
   },
   {
@@ -69,7 +103,10 @@ window.ARTICLES = [
     "path": "2025-01-27/index.md",
     "title": "Prune Your Time Like You Prune a Rose",
     "date": "2025-01-27",
-    "tags": [],
+    "tags": [
+      "productivity",
+      "self-improvement"
+    ],
     "img": "2025-01-27/cover.jpeg"
   },
   {
@@ -77,7 +114,11 @@ window.ARTICLES = [
     "path": "2025-01-15/index.md",
     "title": "Prayer Mantra #2",
     "date": "2025-01-15",
-    "tags": [],
+    "tags": [
+      "christianity",
+      "faith",
+      "relationships"
+    ],
     "img": "2025-01-15/cover.jpeg"
   },
   {
@@ -85,7 +126,10 @@ window.ARTICLES = [
     "path": "2024-12-28/index.md",
     "title": "2024 Reflection – The Year of Openness",
     "date": "2024-12-28",
-    "tags": [],
+    "tags": [
+      "reflection",
+      "life"
+    ],
     "img": "2024-12-28/cover.png"
   }
 ];

@@ -2,6 +2,7 @@
 draft: false
 title: 'Prayer Mantra #2'
 summary: '“Let us make mankind in our image” – God'
+tags: ['christianity', 'faith', 'relationships']
 img: 'cover.jpeg'
 ---
 

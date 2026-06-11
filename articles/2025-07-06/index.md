@@ -2,6 +2,7 @@
 draft: false
 title: 'A Fading Glimpse'
 summary: 'summary'
+tags: ['love', 'relationships', 'reflection']
 img: 'cover.jpeg'
 ---
 

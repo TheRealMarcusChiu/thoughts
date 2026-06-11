@@ -2,6 +2,7 @@
 draft: true
 title: 'Ramblings #1'
 summary: 'summary'
+tags: ['christianity', 'faith', 'love', 'identity', 'relationships']
 ---
 
 
