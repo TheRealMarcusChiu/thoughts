@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="articles/manifest.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #0f0c09; }
+  ::selection { background: #d8a942; color: #0f0c09; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div style="background: #0f0c09; min-height: 100vh; color: #ece1cf; font-family: 'JetBrains Mono', monospace; padding: 0 0 120px; -webkit-font-smoothing: antialiased;">
+
+  <div style="max-width: 1180px; margin: 0 auto; padding: 0 40px;">
+
+    <!-- ===== HEADER ===== -->
+    <header style="padding: 96px 0 52px; border-bottom: 1px solid #221c14;">
+      <a href="http://www.marcuschiu.com" target="_blank" rel="noopener noreferrer" style="display: inline-block; font-size: 12px; letter-spacing: 0.34em; color: #d8a942; text-transform: uppercase; margin-bottom: 38px; text-decoration: none;" style-hover="color: #ece1cf;">www.marcuschiu.com ↗</a>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(48px, 8vw, 104px); line-height: 0.98; letter-spacing: -0.015em;">Writing.</h1>
+      <p style="margin-top: 30px; max-width: 56ch; font-size: 14px; line-height: 1.85; color: #8c8170;">Reflections, parables, and ramblings — collected here. Sort and filter, or click any post to read it.</p>
+    </header>
+
+    <!-- ===== CONTROLS BAR ===== -->
+    <div style="position: relative; z-index: 50; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 34px 0 30px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+
+        <!-- SORT dropdown -->
+        <div style="position: relative;">
+          <button type="button" onClick="{{ toggleSort }}" style="{{ sortBtnStyle }}" style-hover="{{ btnHover }}">
+            <span style="color: #5f574a;">Sort</span>
+            <span style="color: #ece1cf;">{{ sortLabel }}</span>
+            <span style="color: #b78f3a; font-size: 9px;">{{ sortCaret }}</span>
+          </button>
+          <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 214px; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
+              <sc-for list="{{ sortOptions }}" as="o" hint-placeholder-count="4">
+                <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- FILTER (tags) dropdown -->
+        <div style="position: relative;">
+          <button type="button" onClick="{{ toggleTag }}" style="{{ tagBtnStyle }}" style-hover="{{ btnHover }}">
+            <span style="color: #5f574a;">Filter</span>
+            <span style="color: #ece1cf;">{{ tagLabel }}</span>
+            <span style="color: #b78f3a; font-size: 9px;">{{ tagCaret }}</span>
+          </button>
+          <sc-if value="{{ tagOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; max-height: 340px; overflow-y: auto; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
+              <sc-for list="{{ tagOptions }}" as="o" hint-placeholder-count="6">
+                <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+      </div>
+      <div style="font-size: 12px; letter-spacing: 0.18em; color: #5f574a; text-transform: uppercase; white-space: nowrap;">{{ countLabel }}</div>
+    </div>
+
+    <!-- click-away overlay -->
+    <sc-if value="{{ anyOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 40;"></div>
+    </sc-if>
+
+    <!-- ===== WRITING GRID ===== -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px;">
+      <sc-for list="{{ articles }}" as="a" hint-placeholder-count="9">
+        <a href="article.html?slug={{ a.slug }}" style="display: flex; flex-direction: column; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.28s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 18px 40px -20px rgba(216,169,66,0.45);">
+          <div style="position: relative; aspect-ratio: 16 / 10; background-color: #16120c; background-image: repeating-linear-gradient(135deg, #181309 0px, #181309 11px, #1d1710 11px, #1d1710 22px); border-bottom: 1px solid #29221a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <sc-if value="{{ a.hasImg }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ a.imgUrl }}" alt="{{ a.title }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+            </sc-if>
+            <sc-if value="{{ a.noImg }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6c6354; text-align: center; padding: 0 20px;">{{ a.slug }}<br><span style="color: #4a4337; letter-spacing: 0.16em;">cover image</span></div>
+            </sc-if>
+            <span style="position: absolute; left: 16px; bottom: 8px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 48px; line-height: 1; color: rgba(216,169,66,0.16); z-index: 1;">{{ a.num }}</span>
+          </div>
+          <div style="padding: 22px 22px 20px; display: flex; flex-direction: column; flex: 1;">
+            <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a;">{{ a.date }}</div>
+            <h3 style="margin-top: 13px; font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 23px; line-height: 1.22; letter-spacing: -0.005em; text-wrap: pretty;">{{ a.title }}</h3>
+            <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 7px;">
+              <sc-for list="{{ a.tags }}" as="t" hint-placeholder-count="2">
+                <span style="font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a; border: 1px solid #3a2f1a; border-radius: 3px; padding: 4px 8px;">{{ t }}</span>
+              </sc-for>
+            </div>
+            <div style="margin-top: auto; padding-top: 22px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170;">Read post</span>
+              <span style="font-size: 13px; color: #d8a942;">→</span>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+
+    <!-- ===== PAGINATION ===== -->
+    <sc-if value="{{ showPager }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px;">
+        <button type="button" onClick="{{ prev.onClick }}" style="{{ prev.style }}" style-hover="{{ prev.hoverStyle }}">{{ prev.label }}</button>
+        <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="5">
+          <button type="button" onClick="{{ pg.onClick }}" style="{{ pg.style }}" style-hover="{{ pg.hoverStyle }}">{{ pg.label }}</button>
+        </sc-for>
+        <button type="button" onClick="{{ next.onClick }}" style="{{ next.style }}" style-hover="{{ next.hoverStyle }}">{{ next.label }}</button>
+      </div>
+    </sc-if>
+
+    <!-- ===== FOOTER ===== -->
+    <footer style="margin-top: 96px; padding-top: 30px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+      <div style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a;">© 2026 Marcus Chiu</div>
+      <a href="http://www.marcuschiu.com" target="_blank" rel="noopener noreferrer" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">www.marcuschiu.com ↗</a>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tag: 'all', sort: 'newest', menu: null, page: 1, allArticles: [], loading: true };
+
+  componentDidMount() {
+    this.loadArticles();
+  }
+
+  async loadArticles() {
+    await this.waitForArticles();
+    try {
+      const posts = window.ARTICLES || [];
+      const loaded = posts.map((p) => ({
+        slug: p.slug,
+        path: p.path,
+        title: p.title,
+        date: this.formatDate(p.date),
+        tags: Array.isArray(p.tags) ? p.tags : (p.tags ? [p.tags] : []),
+        ts: Date.parse(p.date),
+        hasImg: !!p.img,
+        noImg: !p.img,
+        imgUrl: !p.img ? '' : (/^(?:https?:)?\/\//i.test(p.img) ? p.img : 'articles/' + p.img),
+      }));
+      loaded.sort((a, b) => b.ts - a.ts);
+      loaded.forEach((a, i) => { a.num = String(i + 1).padStart(2, '0'); });
+      this.setState({ allArticles: loaded, loading: false });
+    } catch (e) {
+      this.setState({ allArticles: [], loading: false });
+    }
+  }
+
+  waitForArticles() {
+    return new Promise((resolve) => {
+      let n = 0;
+      const tick = () => {
+        if (window.ARTICLES || n > 200) return resolve();
+        n++;
+        setTimeout(tick, 25);
+      };
+      tick();
+    });
+  }
+
+  formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  sortDefs = [
+    { key: 'newest', label: 'Newest' },
+    { key: 'oldest', label: 'Oldest' },
+    { key: 'az', label: 'Title A–Z' },
+    { key: 'za', label: 'Title Z–A' },
+  ];
+
+  buildPages(page, total) {
+    const out = [];
+    const push = (n) => out.push(n);
+    const left = Math.max(2, page - 1);
+    const right = Math.min(total - 1, page + 1);
+    push(1);
+    if (left > 2) push('gap-l');
+    for (let i = left; i <= right; i++) push(i);
+    if (right < total - 1) push('gap-r');
+    if (total > 1) push(total);
+    return out;
+  }
+
+  renderVals() {
+    const { tag, sort, menu, loading } = this.state;
+    const all = this.state.allArticles;
+
+    // tag list derived from loaded frontmatter, ordered by frequency then name
+    const tagCounts = {};
+    all.forEach(a => a.tags.forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+    const tagOrder = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a] || a.localeCompare(b));
+
+    const menuBtn = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '10px',
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: '12px',
+      letterSpacing: '0.14em',
+      textTransform: 'uppercase',
+      padding: '11px 15px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      background: '#14100b',
+      whiteSpace: 'nowrap',
+      transition: 'all 0.2s ease',
+    };
+    const sortOpen = menu === 'sort';
+    const tagOpen = menu === 'tag';
+    const sortBtnStyle = { ...menuBtn, border: sortOpen ? '1px solid #d8a942' : '1px solid #29221a', color: '#8c8170' };
+    const tagBtnStyle = { ...menuBtn, border: tagOpen ? '1px solid #d8a942' : '1px solid #29221a', color: '#8c8170' };
+
+    const optBase = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '14px',
+      width: '100%',
+      textAlign: 'left',
+      background: 'transparent',
+      border: 'none',
+      cursor: 'pointer',
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: '11.5px',
+      letterSpacing: '0.12em',
+      textTransform: 'uppercase',
+      padding: '10px 11px',
+      borderRadius: '4px',
+      transition: 'all 0.15s ease',
+    };
+    const mkOpt = (on) => ({
+      style: { ...optBase, background: on ? '#1d1710' : 'transparent', color: on ? '#d8a942' : '#8c8170' },
+      hoverStyle: on ? {} : { background: '#1a150e', color: '#c9bca6' },
+    });
+
+    // sort options
+    const sortOptions = this.sortDefs.map(s => {
+      const on = s.key === sort;
+      const o = mkOpt(on);
+      return { label: s.label, onClick: () => this.setState({ sort: s.key, menu: null, page: 1 }), style: o.style, hoverStyle: o.hoverStyle };
+    });
+    const sortLabel = (this.sortDefs.find(s => s.key === sort) || this.sortDefs[0]).label;
+
+    // tag options
+    const tagDefs = [{ key: 'all', label: 'All posts', count: all.length }]
+      .concat(tagOrder.map(t => ({ key: t, label: t, count: tagCounts[t] })));
+    const tagOptions = tagDefs.map(t => {
+      const on = t.key === tag;
+      const o = mkOpt(on);
+      return {
+        label: t.label,
+        count: t.count,
+        onClick: () => this.setState({ tag: t.key, menu: null, page: 1 }),
+        style: o.style,
+        hoverStyle: o.hoverStyle,
+        countStyle: { fontSize: '10px', letterSpacing: '0.05em', color: on ? '#b78f3a' : '#5f574a' },
+      };
+    });
+    const tagLabel = tag === 'all' ? 'All posts' : tag;
+
+    // filter + sort + paginate
+    const filtered = tag === 'all' ? all : all.filter(a => a.tags.includes(tag));
+    const sorters = {
+      newest: (a, b) => b.ts - a.ts,
+      oldest: (a, b) => a.ts - b.ts,
+      az: (a, b) => a.title.localeCompare(b.title),
+      za: (a, b) => b.title.localeCompare(a.title),
+    };
+    const sorted = filtered.slice().sort(sorters[sort] || sorters.newest);
+
+    const perPage = 10;
+    const totalPages = Math.max(1, Math.ceil(sorted.length / perPage));
+    const page = Math.min(Math.max(1, this.state.page), totalPages);
+    const start = (page - 1) * perPage;
+    const articles = sorted.slice(start, start + perPage);
+
+    const countLabel = loading
+      ? 'Loading…'
+      : (tag === 'all' ? `${sorted.length} posts` : `${sorted.length} of ${all.length}`);
+
+    // pager with ellipsis
+    const pagerBtn = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: '12px',
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase',
+      padding: '9px 13px',
+      minWidth: '42px',
+      borderRadius: '5px',
+      background: 'transparent',
+      transition: 'all 0.2s ease',
+      flexShrink: 0,
+    };
+    const mkNav = (label, target, disabled) => ({
+      label,
+      onClick: disabled ? () => {} : () => this.setState({ page: target }),
+      style: { ...pagerBtn, border: '1px solid #29221a', color: disabled ? '#433c30' : '#c9bca6', cursor: disabled ? 'default' : 'pointer' },
+      hoverStyle: disabled ? {} : { borderColor: '#4a3c1d', color: '#ece1cf' },
+    });
+
+    const pages = this.buildPages(page, totalPages).map(item => {
+      if (item === 'gap-l' || item === 'gap-r') {
+        return { label: '…', onClick: () => {}, style: { ...pagerBtn, minWidth: '24px', border: 'none', color: '#5f574a', cursor: 'default' }, hoverStyle: {} };
+      }
+      const on = item === page;
+      return {
+        label: String(item).padStart(2, '0'),
+        onClick: () => this.setState({ page: item }),
+        style: { ...pagerBtn, border: on ? '1px solid #d8a942' : '1px solid #29221a', color: on ? '#ece1cf' : '#8c8170', cursor: 'pointer' },
+        hoverStyle: on ? {} : { borderColor: '#4a3c1d', color: '#c9bca6' },
+      };
+    });
+
+    return {
+      // dropdowns
+      btnHover: { borderColor: '#4a3c1d' },
+      sortBtnStyle, tagBtnStyle,
+      sortOpen, tagOpen,
+      sortCaret: sortOpen ? '▲' : '▼',
+      tagCaret: tagOpen ? '▲' : '▼',
+      sortLabel, tagLabel,
+      sortOptions, tagOptions,
+      toggleSort: () => this.setState(s => ({ menu: s.menu === 'sort' ? null : 'sort' })),
+      toggleTag: () => this.setState(s => ({ menu: s.menu === 'tag' ? null : 'tag' })),
+      anyOpen: menu !== null,
+      closeMenus: () => this.setState({ menu: null }),
+      // grid + pager
+      articles,
+      countLabel,
+      showPager: totalPages > 1,
+      pages,
+      prev: mkNav('← Prev', page - 1, page <= 1),
+      next: mkNav('Next →', page + 1, page >= totalPages),
+    };
+  }
+}
+</script>
+</body>
+</html>

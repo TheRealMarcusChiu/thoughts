@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="articles/manifest.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #0f0c09; }
+  ::selection { background: #d8a942; color: #0f0c09; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .prose { font-family: 'Newsreader', Georgia, serif; font-size: 19px; line-height: 1.82; color: #cdc1ab; animation: riseIn 0.5s ease both; }
+  .prose > *:first-child { margin-top: 0; }
+  .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+  .prose h2 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 31px; line-height: 1.18; letter-spacing: -0.01em; margin: 1.9em 0 0.55em; }
+  .prose h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 23px; margin: 1.6em 0 0.5em; }
+  .prose a { color: #d8a942; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(216,169,66,0.4); }
+  .prose a:hover { text-decoration-color: #d8a942; }
+  .prose strong { color: #ece1cf; font-weight: 600; }
+  .prose em { font-style: italic; }
+  .prose blockquote { margin: 1.6em 0; padding: 0.1em 0 0.1em 1.4em; border-left: 2px solid #d8a942; color: #a99e88; font-style: italic; }
+  .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.3em; }
+  .prose li { margin: 0.4em 0; }
+  .prose li::marker { color: #b78f3a; }
+  .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.82em; background: #1c1710; border: 1px solid #2a2218; border-radius: 4px; padding: 2px 6px; color: #d8a942; }
+  .prose pre { background: #14110b; border: 1px solid #2a2218; border-radius: 6px; padding: 18px; overflow-x: auto; margin: 0 0 1.4em; }
+  .prose pre code { background: none; border: none; padding: 0; color: #cdc1ab; }
+  .prose hr { border: none; border-top: 1px solid #2a2218; margin: 2.6em 0; }
+  .prose img { max-width: 100%; border-radius: 6px; }
+</style>
+</helmet>
+
+<div style="background: #0f0c09; min-height: 100vh; color: #ece1cf; font-family: 'JetBrains Mono', monospace; padding: 0 0 140px; -webkit-font-smoothing: antialiased;">
+  <div style="max-width: 720px; margin: 0 auto; padding: 0 32px;">
+
+    <!-- top bar -->
+    <div style="padding: 48px 0 0;">
+      <a href="index.html?view=writing" style="display: inline-flex; align-items: center; gap: 9px; font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170; text-decoration: none;" style-hover="color: #d8a942;">← All writing</a>
+    </div>
+
+    <!-- article header -->
+    <header style="padding: 64px 0 30px; border-bottom: 1px solid #221c14;">
+      <div style="font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: #b78f3a; margin-bottom: 26px;">{{ date }}</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.015em; text-wrap: pretty;">{{ title }}</h1>
+    </header>
+
+    <!-- body -->
+    <article style="padding: 46px 0 0;">
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a;">Loading…</div>
+      </sc-if>
+      {{ body }}
+    </article>
+
+    <!-- prev / next (by date) -->
+    <sc-if value="{{ hasNav }}" hint-placeholder-val="{{ false }}">
+      <nav style="margin-top: 72px; padding-top: 38px; border-top: 1px solid #221c14; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <sc-if value="{{ hasNewer }}" hint-placeholder-val="{{ false }}">
+            <a href="article.html?slug={{ newer.slug }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
+              <span style="font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170;">← Newer post</span>
+              <span style="font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 19px; line-height: 1.25; text-wrap: pretty;">{{ newer.title }}</span>
+              <span style="margin-top: auto; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a;">{{ newer.date }}</span>
+            </a>
+          </sc-if>
+        </div>
+        <div>
+          <sc-if value="{{ hasOlder }}" hint-placeholder-val="{{ false }}">
+            <a href="article.html?slug={{ older.slug }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-align: right; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
+              <span style="font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170;">Older post →</span>
+              <span style="font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 19px; line-height: 1.25; text-wrap: pretty;">{{ older.title }}</span>
+              <span style="margin-top: auto; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a;">{{ older.date }}</span>
+            </a>
+          </sc-if>
+        </div>
+      </nav>
+    </sc-if>
+
+    <!-- footer -->
+    <footer style="margin-top: 56px; padding-top: 28px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+      <a href="index.html?view=writing" style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">← More writing</a>
+      <a href="https://marcuschiu.com" target="_blank" rel="noopener noreferrer" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a; text-decoration: none;" style-hover="color: #d8a942;">marcuschiu.com ↗</a>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { html: '', title: '', date: '', slug: '', loading: true, articles: [] };
+
+  async componentDidMount() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
+
+    // Manifest carries the metadata — no need to fetch every article's body.
+    let posts = [];
+    await this.waitForArticles();
+    posts = window.ARTICLES || [];
+
+    const articles = posts
+      .map((p) => ({ slug: p.slug, path: p.path, title: p.title, date: this.formatDate(p.date), ts: Date.parse(p.date) }))
+      .sort((a, b) => b.ts - a.ts);
+    this.setState({ articles });
+
+    const meta = articles.find(a => a.slug === slug) || articles[0];
+    if (!meta) {
+      document.title = 'Not found — Marcus Chiu';
+      this.setState({ title: 'Post not found', date: '', slug: slug || '', html: '', loading: false });
+      return;
+    }
+
+    this.setState({ title: meta.title, date: meta.date, slug: meta.slug });
+    document.title = meta.title + ' — Marcus Chiu';
+
+    // Fetch only this article's Markdown, then strip its frontmatter.
+    // Load this article's body (sibling .js next to the .md; works from file://).
+    let md = '';
+    await this.loadBody(meta.path);
+    const bundled = window.ARTICLE_CONTENT && window.ARTICLE_CONTENT[meta.path];
+    if (bundled != null) {
+      md = this.stripFrontmatter(bundled);
+    } else {
+      try {
+        const r = await fetch('articles/' + meta.path, { cache: 'no-cache' });
+        if (r.ok) md = this.stripFrontmatter(await r.text());
+      } catch (e) {}
+    }
+    if (!md) md = '*This post has no Markdown yet.*';
+
+    await this.waitForMarked();
+    let html;
+    try {
+      html = window.marked ? window.marked.parse(md) : md.replace(/\n/g, '<br>');
+    } catch (e) {
+      html = md.replace(/\n/g, '<br>');
+    }
+    this.setState({ html, loading: false });
+  }
+
+  stripFrontmatter(text) {
+    return text.replace(/^\uFEFF?---\s*\n[\s\S]*?\n---\s*\n?/, '');
+  }
+
+  formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  loadBody(path) {
+    return new Promise((resolve) => {
+      if (window.ARTICLE_CONTENT && window.ARTICLE_CONTENT[path] != null) return resolve();
+      const s = document.createElement('script');
+      s.src = 'articles/' + path.replace(/\.md$/, '.js');
+      s.onload = () => resolve();
+      s.onerror = () => resolve();
+      document.head.appendChild(s);
+    });
+  }
+
+  waitForArticles() {
+    return new Promise((resolve) => {
+      let n = 0;
+      const tick = () => {
+        if (window.ARTICLES || n > 200) return resolve();
+        n++;
+        setTimeout(tick, 25);
+      };
+      tick();
+    });
+  }
+
+  waitForMarked() {
+    return new Promise(resolve => {
+      let n = 0;
+      const tick = () => {
+        if (window.marked || n > 120) return resolve();
+        n++;
+        setTimeout(tick, 50);
+      };
+      tick();
+    });
+  }
+
+  renderVals() {
+    const body = this.state.html
+      ? React.createElement('div', { className: 'prose', dangerouslySetInnerHTML: { __html: this.state.html } })
+      : null;
+    // date-ordered neighbours (newest first)
+    const sorted = this.state.articles.slice().sort((a, b) => b.ts - a.ts);
+    const idx = sorted.findIndex(a => a.slug === this.state.slug);
+    const newer = idx > 0 ? sorted[idx - 1] : null;
+    const older = idx >= 0 && idx < sorted.length - 1 ? sorted[idx + 1] : null;
+
+    return {
+      title: this.state.title || 'Untitled',
+      date: this.state.date,
+      loading: this.state.loading,
+      body,
+      hasNewer: !!newer,
+      hasOlder: !!older,
+      newer: newer || {},
+      older: older || {},
+      hasNav: !!(newer || older),
+    };
+  }
+}
+</script>
+</body>
+</html>
