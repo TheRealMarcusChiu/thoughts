@@ -153,9 +153,10 @@ export function createAdminServer(root) {
 // Run directly: start listening.
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const port = Number(process.env.PORT || 8787);
+  const host = process.env.HOST || '127.0.0.1';
   const root = process.env.ADMIN_ROOT || process.cwd();
-  createAdminServer(root).listen(port, '127.0.0.1', () => {
-    console.log(`Admin server: http://127.0.0.1:${port}/  (serving ${root})`);
+  createAdminServer(root).listen(port, host, () => {
+    console.log(`Admin server: http://${host}:${port}/  (serving ${root})`);
     console.log('Press Ctrl+C to stop. Do not deploy this server.');
   });
 }
