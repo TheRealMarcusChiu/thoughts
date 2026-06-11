@@ -10,7 +10,7 @@ window.ARTICLES = [
       "relationships",
       "self-worth"
     ],
-    "img": "2026-02-03/cover.jpeg"
+    "img": "2026-02-03/assets/cover.jpeg"
   },
   {
     "slug": "2025-09-07--4yo-Wisdom",
@@ -21,7 +21,7 @@ window.ARTICLES = [
       "love",
       "family"
     ],
-    "img": "2025-09-07/cover.jpeg"
+    "img": "2025-09-07/assets/cover.jpeg"
   },
   {
     "slug": "2025-07-30--Christian-Ramblings-%232",
@@ -34,7 +34,7 @@ window.ARTICLES = [
       "scripture",
       "praise"
     ],
-    "img": "2025-07-30/cover.jpeg"
+    "img": "2025-07-30/assets/cover.jpeg"
   },
   {
     "slug": "2025-07-09--Thoughts-on-Praise",
@@ -46,7 +46,7 @@ window.ARTICLES = [
       "faith",
       "praise"
     ],
-    "img": "2025-07-09/cover.jpeg"
+    "img": "2025-07-09/assets/cover.jpeg"
   },
   {
     "slug": "2025-07-06--A-Fading-Glimpse",
@@ -58,7 +58,7 @@ window.ARTICLES = [
       "relationships",
       "reflection"
     ],
-    "img": "2025-07-06/cover.jpeg"
+    "img": "2025-07-06/assets/cover.jpeg"
   },
   {
     "slug": "2025-04-23--Christian-Ramblings-%231",
@@ -72,7 +72,7 @@ window.ARTICLES = [
       "praise",
       "relationships"
     ],
-    "img": "2025-04-23/cover.jpeg"
+    "img": "2025-04-23/assets/cover.jpeg"
   },
   {
     "slug": "2025-03-17--Conversation-in-the-Womb-%E2%80%93-A-Parable-of-Life-After-Delivery",
@@ -84,7 +84,7 @@ window.ARTICLES = [
       "faith",
       "parable"
     ],
-    "img": "2025-03-17/cover.jpeg"
+    "img": "2025-03-17/assets/cover.jpeg"
   },
   {
     "slug": "2025-03-01--Character-of-Love",
@@ -96,7 +96,7 @@ window.ARTICLES = [
       "marriage",
       "relationships"
     ],
-    "img": "2025-03-01/cover.jpeg"
+    "img": "2025-03-01/assets/cover.jpeg"
   },
   {
     "slug": "2025-01-27--Prune-Your-Time-Like-You-Prune-a-Rose",
@@ -107,7 +107,7 @@ window.ARTICLES = [
       "productivity",
       "self-improvement"
     ],
-    "img": "2025-01-27/cover.jpeg"
+    "img": "2025-01-27/assets/cover.jpeg"
   },
   {
     "slug": "2025-01-15--Prayer-Mantra-%232",
@@ -119,7 +119,7 @@ window.ARTICLES = [
       "faith",
       "relationships"
     ],
-    "img": "2025-01-15/cover.jpeg"
+    "img": "2025-01-15/assets/cover.jpeg"
   },
   {
     "slug": "2024-12-28--2024-Reflection-%E2%80%93-The-Year-of-Openness",
@@ -130,6 +130,6 @@ window.ARTICLES = [
       "reflection",
       "life"
     ],
-    "img": "2024-12-28/cover.png"
+    "img": "2024-12-28/assets/cover.png"
   }
 ];
