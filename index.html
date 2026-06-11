@@ -78,7 +78,7 @@
     </sc-if>
 
     <!-- ===== WRITING GRID ===== -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px;">
       <sc-for list="{{ articles }}" as="a" hint-placeholder-count="12">
         <a href="article.html?slug={{ a.slug }}" style="display: flex; flex-direction: column; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.2s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 0 0 1px #d8a942, 0 18px 40px -20px rgba(216,169,66,0.5);">
           <div style="position: relative; aspect-ratio: 16 / 10; background-color: #16120c; background-image: repeating-linear-gradient(135deg, #181309 0px, #181309 11px, #1d1710 11px, #1d1710 22px); border-bottom: 1px solid #29221a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
