@@ -2,6 +2,7 @@
 draft: false
 title: 'Thoughts on Praise'
 summary: 'summary'
+img: 'cover.jpeg'
 ---
 
 I find myself revisiting Thoughts on Praise - below is a trimmed version.

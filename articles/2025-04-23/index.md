@@ -2,6 +2,7 @@
 draft: false
 title: 'Christian Ramblings #1'
 summary: 'summary'
+img: 'cover.jpeg'
 ---
 
 Finished a 12-week introductory lesson on Christianity. Everyone in class was told to write a one-page reflection and share it at “last supper”. Unfortunately, I couldn’t make it but here’s my reflection.

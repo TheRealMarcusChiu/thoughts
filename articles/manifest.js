@@ -6,7 +6,7 @@ window.ARTICLES = [
     "title": "Unworthy Love",
     "date": "2026-02-03",
     "tags": [],
-    "img": ""
+    "img": "2026-02-03/cover.jpeg"
   },
   {
     "slug": "index",
@@ -14,7 +14,7 @@ window.ARTICLES = [
     "title": "4yo Wisdom",
     "date": "2025-09-07",
     "tags": [],
-    "img": ""
+    "img": "2025-09-07/cover.jpeg"
   },
   {
     "slug": "index",
@@ -22,7 +22,7 @@ window.ARTICLES = [
     "title": "Christian Ramblings #2",
     "date": "2025-07-30",
     "tags": [],
-    "img": ""
+    "img": "2025-07-30/cover.jpeg"
   },
   {
     "slug": "index",
@@ -30,7 +30,7 @@ window.ARTICLES = [
     "title": "Thoughts on Praise",
     "date": "2025-07-09",
     "tags": [],
-    "img": ""
+    "img": "2025-07-09/cover.jpeg"
   },
   {
     "slug": "index",
@@ -38,7 +38,7 @@ window.ARTICLES = [
     "title": "A Fading Glimpse",
     "date": "2025-07-06",
     "tags": [],
-    "img": ""
+    "img": "2025-07-06/cover.jpeg"
   },
   {
     "slug": "index",
@@ -46,7 +46,7 @@ window.ARTICLES = [
     "title": "Christian Ramblings #1",
     "date": "2025-04-23",
     "tags": [],
-    "img": ""
+    "img": "2025-04-23/cover.jpeg"
   },
   {
     "slug": "index",
@@ -54,7 +54,7 @@ window.ARTICLES = [
     "title": "Conversation in the Womb – A Parable of Life After Delivery",
     "date": "2025-03-17",
     "tags": [],
-    "img": ""
+    "img": "2025-03-17/cover.jpeg"
   },
   {
     "slug": "index",
@@ -62,7 +62,7 @@ window.ARTICLES = [
     "title": "Character of Love",
     "date": "2025-03-01",
     "tags": [],
-    "img": ""
+    "img": "2025-03-01/cover.jpeg"
   },
   {
     "slug": "index",
@@ -70,7 +70,7 @@ window.ARTICLES = [
     "title": "Prune Your Time Like You Prune a Rose",
     "date": "2025-01-27",
     "tags": [],
-    "img": ""
+    "img": "2025-01-27/cover.jpeg"
   },
   {
     "slug": "index",
@@ -78,7 +78,7 @@ window.ARTICLES = [
     "title": "Prayer Mantra #2",
     "date": "2025-01-15",
     "tags": [],
-    "img": ""
+    "img": "2025-01-15/cover.jpeg"
   },
   {
     "slug": "index",
@@ -86,6 +86,6 @@ window.ARTICLES = [
     "title": "2024 Reflection – The Year of Openness",
     "date": "2024-12-28",
     "tags": [],
-    "img": ""
+    "img": "2024-12-28/cover.png"
   }
 ];

@@ -2,6 +2,7 @@
 draft: false
 title: 'Christian Ramblings #2'
 summary: 'summary'
+img: 'cover.jpeg'
 ---
 
 "When you really think about it: Everything are parables."

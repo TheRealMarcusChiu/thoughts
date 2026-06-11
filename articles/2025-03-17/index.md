@@ -2,6 +2,7 @@
 draft: false
 title: 'Conversation in the Womb – A Parable of Life After Delivery'
 summary: 'summary'
+img: 'cover.jpeg'
 ---
 
 In a mother’s womb were two babies.

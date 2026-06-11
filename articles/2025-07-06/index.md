@@ -2,6 +2,7 @@
 draft: false
 title: 'A Fading Glimpse'
 summary: 'summary'
+img: 'cover.jpeg'
 ---
 
 Take a step back - a glimpse of you will flicker.

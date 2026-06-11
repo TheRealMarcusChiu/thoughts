@@ -2,7 +2,10 @@
 draft: false
 title: '4yo Wisdom'
 summary: 'summary'
+img: 'cover.jpeg'
 ---
+
+![alt](cover.jpeg)
 
 - Dad: I love you, sweetheart.
 - 4yo Daughter: I love you too, Daddy.
