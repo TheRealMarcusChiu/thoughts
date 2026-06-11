@@ -113,7 +113,10 @@ class Component extends DCLogic {
       .sort((a, b) => b.ts - a.ts);
     this.setState({ articles });
 
-    const meta = articles.find(a => a.slug === slug) || articles[0];
+    // URLSearchParams already decodes the param; manifest slugs are URL-escaped,
+    // so match on the decoded form (and fall back to a raw compare).
+    const dec = (s) => { try { return decodeURIComponent(s); } catch (e) { return s; } };
+    const meta = articles.find(a => dec(a.slug) === slug || a.slug === slug) || articles[0];
     if (!meta) {
       document.title = 'Not found — Marcus Chiu';
       this.setState({ title: 'Post not found', date: '', slug: slug || '', html: '', loading: false });

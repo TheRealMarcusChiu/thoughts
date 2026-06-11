@@ -28,7 +28,7 @@
     <!-- ===== HEADER ===== -->
     <header style="padding: 96px 0 52px; border-bottom: 1px solid #221c14;">
       <a href="http://www.marcuschiu.com" target="_blank" rel="noopener noreferrer" style="display: inline-block; font-size: 12px; letter-spacing: 0.34em; color: #d8a942; text-transform: uppercase; margin-bottom: 38px; text-decoration: none;" style-hover="color: #ece1cf;">www.marcuschiu.com ↗</a>
-      <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(48px, 8vw, 104px); line-height: 0.98; letter-spacing: -0.015em;">Writing.</h1>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(48px, 8vw, 104px); line-height: 0.98; letter-spacing: -0.015em;">Mark the Thoughts</h1>
       <p style="margin-top: 30px; max-width: 56ch; font-size: 14px; line-height: 1.85; color: #8c8170;">Reflections, parables, and ramblings — collected here. Sort and filter, or click any post to read it.</p>
     </header>
 
@@ -78,15 +78,15 @@
     </sc-if>
 
     <!-- ===== WRITING GRID ===== -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px;">
-      <sc-for list="{{ articles }}" as="a" hint-placeholder-count="9">
-        <a href="article.html?slug={{ a.slug }}" style="display: flex; flex-direction: column; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.28s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 18px 40px -20px rgba(216,169,66,0.45);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px;">
+      <sc-for list="{{ articles }}" as="a" hint-placeholder-count="12">
+        <a href="article.html?slug={{ a.slug }}" style="display: flex; flex-direction: column; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.2s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 0 0 1px #d8a942, 0 18px 40px -20px rgba(216,169,66,0.5);">
           <div style="position: relative; aspect-ratio: 16 / 10; background-color: #16120c; background-image: repeating-linear-gradient(135deg, #181309 0px, #181309 11px, #1d1710 11px, #1d1710 22px); border-bottom: 1px solid #29221a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
             <sc-if value="{{ a.hasImg }}" hint-placeholder-val="{{ false }}">
               <img src="{{ a.imgUrl }}" alt="{{ a.title }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
             </sc-if>
             <sc-if value="{{ a.noImg }}" hint-placeholder-val="{{ true }}">
-              <div style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6c6354; text-align: center; padding: 0 20px;">{{ a.slug }}<br><span style="color: #4a4337; letter-spacing: 0.16em;">cover image</span></div>
+              <div style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6c6354; text-align: center; padding: 0 20px;">{{ a.title }}<br><span style="color: #4a4337; letter-spacing: 0.16em;">cover image</span></div>
             </sc-if>
             <span style="position: absolute; left: 16px; bottom: 8px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 48px; line-height: 1; color: rgba(216,169,66,0.16); z-index: 1;">{{ a.num }}</span>
           </div>
@@ -97,10 +97,6 @@
               <sc-for list="{{ a.tags }}" as="t" hint-placeholder-count="2">
                 <span style="font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a; border: 1px solid #3a2f1a; border-radius: 3px; padding: 4px 8px;">{{ t }}</span>
               </sc-for>
-            </div>
-            <div style="margin-top: auto; padding-top: 22px; display: flex; align-items: center; gap: 9px;">
-              <span style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170;">Read post</span>
-              <span style="font-size: 13px; color: #d8a942;">→</span>
             </div>
           </div>
         </a>
@@ -284,7 +280,7 @@ class Component extends DCLogic {
     };
     const sorted = filtered.slice().sort(sorters[sort] || sorters.newest);
 
-    const perPage = 10;
+    const perPage = 12;
     const totalPages = Math.max(1, Math.ceil(sorted.length / perPage));
     const page = Math.min(Math.max(1, this.state.page), totalPages);
     const start = (page - 1) * perPage;

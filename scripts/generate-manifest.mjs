@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * Regenerates articles/manifest.js (the listing) plus a sibling <slug>.js body
+ * Regenerates articles/manifest.js (the listing) plus a sibling index.js body
  * file next to each article, by scanning articles/ recursively. Each article
- * lives in a single date-named folder: articles/<YYYY-MM-DD>/<slug>.md
+ * lives in a single date-named folder and is named index.md:
+ * articles/<YYYY-MM-DD>/index.md
  *
  *   node scripts/generate-manifest.mjs
  *
- * For every articles/<YYYY-MM-DD>/<slug>.md file it reads the
+ * For every articles/<YYYY-MM-DD>/index.md file it reads the
+ * YAML-ish frontmatter (the block between the first pair of `---` lines):
  * YAML-ish frontmatter (the block between the first pair of `---` lines):
  *
  *   ---
@@ -22,15 +24,18 @@
  *
  *   { "slug", "path", "title", "date", "tags", "img" }
  *
- * Each article's body (frontmatter stripped) is also written to a sibling JS
- * file beside its .md — e.g. articles/2026-02-03/unworthy-love.js — which
- * registers itself onto window.ARTICLE_CONTENT[path]. The article page loads
- * just the one it needs via <script src>, so bodies render from file:// too.
+ * Each article's body (frontmatter stripped) is also written to a sibling
+ * index.js — e.g. articles/2026-02-03/index.js — which registers itself onto
+ * window.ARTICLE_CONTENT[path]. The article page loads just the one it needs
+ * via <script src>, so bodies render from file:// too.
  *
  * Rules:
  *   - draft: true  -> the post is omitted from the manifest entirely.
+ *   - slug         -> "<date>--<Title>" with spaces replaced by dashes, then
+ *                     URL-escaped. e.g. title "Unworthy Love" in 2026-02-03 ->
+ *                     "2026-02-03--Unworthy-Love". Used as ?slug= in URLs.
  *   - date missing -> derived from the folder name,
- *                     e.g. articles/2026-05-18/foo.md => "2026-05-18".
+ *                     e.g. articles/2026-05-18/index.md => "2026-05-18".
  *   - tags missing -> [].
  *   - img          -> cover image, declared in the article's frontmatter via
  *                     an `img:` key. Given as a path relative to the article's
@@ -90,7 +95,7 @@ async function walk(dir) {
   for (const e of entries) {
     const full = join(dir, e.name);
     if (e.isDirectory()) files.push(...(await walk(full)));
-    else if (e.name.endsWith('.md')) files.push(full);
+    else if (e.name === 'index.md') files.push(full);
   }
   return files;
 }
@@ -106,7 +111,6 @@ for (const file of files) {
   if (isTrue(fm.draft)) continue;
 
   const rel = relative(ARTICLES_DIR, file).split(sep).join('/');
-  const slug = rel.split('/').pop().replace(/\.md$/, '');
   const dirRel = rel.split('/').slice(0, -1).join('/');
 
   let date = fm.date || '';
@@ -116,6 +120,10 @@ for (const file of files) {
   }
 
   const tags = Array.isArray(fm.tags) ? fm.tags : fm.tags ? [fm.tags] : [];
+
+  // Slug = "<date>--<Title>" with spaces turned to dashes, then URL-escaped.
+  const title = fm.title || dirRel.split('/').pop();
+  const slug = encodeURIComponent(date + '--' + title.replace(/ /g, '-'));
 
   // Cover image is declared in the article's frontmatter (`img:`), as a path
   // relative to the article's own folder (e.g. `cover.jpg` or `assets/1.png`),
