@@ -3,7 +3,7 @@ draft: false
 title: 'A Fading Glimpse'
 summary: 'summary'
 tags: ['love', 'relationships', 'reflection']
-img: 'cover.jpeg'
+img: 'assets/cover.jpeg'
 ---
 
 Take a step back - a glimpse of you will flicker.

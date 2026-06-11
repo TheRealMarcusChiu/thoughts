@@ -3,7 +3,7 @@ draft: false
 title: 'Prune Your Time Like You Prune a Rose'
 summary: 'summary'
 tags: ['productivity', 'self-improvement']
-img: 'cover.jpeg'
+img: 'assets/cover.jpeg'
 ---
 
 Once again – I have found myself doing too many things and I’ve been stretching out myself too thin. I have always been a yes man type of guy – to do this and do that – but there just isn’t enough time to do them all unfortunately 🙁 Even the things I get to spend time doing ends up being half-assed. Sometimes you gotta say “no” and prune things out so that what you actually work on becomes even more vibrant.

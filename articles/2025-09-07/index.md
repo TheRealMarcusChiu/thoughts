@@ -3,7 +3,7 @@ draft: false
 title: '4yo Wisdom'
 summary: 'summary'
 tags: ['love', 'family']
-img: 'cover.jpeg'
+img: 'assets/cover.jpeg'
 ---
 
 ![alt](cover.jpeg)

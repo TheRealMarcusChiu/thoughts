@@ -3,7 +3,7 @@ draft: false
 title: 'Thoughts on Praise'
 summary: 'summary'
 tags: ['christianity', 'faith', 'praise']
-img: 'cover.jpeg'
+img: 'assets/cover.jpeg'
 ---
 
 I find myself revisiting Thoughts on Praise - below is a trimmed version.
