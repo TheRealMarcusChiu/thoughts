@@ -1,12 +1,12 @@
 ---
 draft: true
-title: 'Ramblings #1'
-summary: 'summary'
-tags: ['christianity', 'faith', 'love', 'identity', 'relationships']
+title: "Ramblings #1"
+tags: ["christianity", "faith", "love", "identity", "relationships"]
+date: 2037-11-20
 ---
 
-
 orthodoxy and orthopraxy are both applies to external behaviora. with right dox leads to right practice. But there should be something more internal
+
 
 # Belief
 
