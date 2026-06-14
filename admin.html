@@ -13,6 +13,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown@7/dist/turndown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { background: #0f0c09; }
@@ -22,14 +24,18 @@
   input, textarea, select, button { font-family: 'JetBrains Mono', monospace; }
   .fld { width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 14px; padding: 11px 13px; outline: none; transition: border-color 0.2s ease; }
   .fld:focus { border-color: #d8a942; }
-  .md-raw { width: 100%; min-height: 540px; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #cdc1ab; font-size: 14px; line-height: 1.7; padding: 18px; resize: vertical; outline: none; transition: border-color 0.2s ease; }
+  .md-raw { width: 100%; min-height: 520px; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #cdc1ab; font-size: 14px; line-height: 1.7; padding: 18px; resize: vertical; outline: none; transition: border-color 0.2s ease; }
   .md-raw:focus { border-color: #d8a942; }
-  .prose { font-family: 'Newsreader', Georgia, serif; font-size: 19px; line-height: 1.82; color: #cdc1ab; min-height: 540px; }
+  /* inline title field styled to match the article.html <h1> */
+  .title-input { width: 100%; background: transparent; border: none; outline: none; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.015em; }
+  .title-input::placeholder { color: #463f33; }
+  .prose { font-family: 'Newsreader', Georgia, serif; font-size: 19px; line-height: 1.82; color: #cdc1ab; }
   .prose > *:first-child { margin-top: 0; }
   .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
   .prose h1, .prose h2 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 31px; line-height: 1.18; letter-spacing: -0.01em; margin: 1.9em 0 0.55em; }
   .prose h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 23px; margin: 1.6em 0 0.5em; }
   .prose a { color: #d8a942; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(216,169,66,0.4); }
+  .prose a:hover { text-decoration-color: #d8a942; }
   .prose strong { color: #ece1cf; font-weight: 600; }
   .prose em { font-style: italic; }
   .prose blockquote { margin: 1.6em 0; padding: 0.1em 0 0.1em 1.4em; border-left: 2px solid #d8a942; color: #a99e88; font-style: italic; }
@@ -39,198 +45,245 @@
   .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.82em; background: #1c1710; border: 1px solid #2a2218; border-radius: 4px; padding: 2px 6px; color: #d8a942; }
   .prose pre { background: #14110b; border: 1px solid #2a2218; border-radius: 6px; padding: 18px; overflow-x: auto; margin: 0 0 1.4em; }
   .prose pre code { background: none; border: none; padding: 0; color: #cdc1ab; }
+  .prose hr { border: none; border-top: 1px solid #2a2218; margin: 2.6em 0; }
   .prose img { max-width: 100%; border-radius: 6px; }
   .prose table { border-collapse: collapse; margin: 0 0 1.4em; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
   .prose th, .prose td { border: 1px solid #2a2218; padding: 7px 12px; text-align: left; }
+  /* WYSIWYG editing surface — same prose look, just editable */
+  .prose.wysiwyg { min-height: 440px; outline: none; }
+  .prose.wysiwyg:empty:before { content: 'Write your article…'; color: #463f33; font-style: italic; }
 </style>
 </helmet>
 
 <div style="background: #0f0c09; min-height: 100vh; color: #ece1cf; font-family: 'JetBrains Mono', monospace; padding: 0 0 120px; -webkit-font-smoothing: antialiased;">
-  <div style="max-width: 1180px; margin: 0 auto; padding: 0 40px;">
 
-    <!-- server-down banner -->
-    <sc-if value="{{ serverDown }}" hint-placeholder-val="{{ false }}">
-      <div style="margin-top: 28px; padding: 16px 18px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 13px; line-height: 1.7;">
+  <!-- server-down banner (shown in any view) -->
+  <sc-if value="{{ serverDown }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 24px 40px 0;">
+      <div style="padding: 16px 18px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 13px; line-height: 1.7;">
         Admin server not reachable. Start it with <span style="color: #f0c9bf;">node scripts/admin-server.mjs</span> then
         <button type="button" onClick="{{ reload }}" style="margin-left: 8px; background: #6b2c20; border: none; color: #ffe; border-radius: 5px; padding: 6px 12px; cursor: pointer; font-size: 12px;">Retry</button>
       </div>
-    </sc-if>
+    </div>
+  </sc-if>
 
-    <!-- HEADER -->
-    <header style="padding: 72px 0 36px; border-bottom: 1px solid #221c14; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-      <div>
-        <a href="index.html" style="display: inline-block; font-size: 12px; letter-spacing: 0.34em; color: #d8a942; text-transform: uppercase; margin-bottom: 26px; text-decoration: none;" style-hover="color: #ece1cf;">← View site</a>
-        <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(40px, 7vw, 76px); line-height: 0.98; letter-spacing: -0.015em;">Admin</h1>
-      </div>
-      <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+  <!-- ===================== LIST VIEW ===================== -->
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 40px;">
+
+      <!-- HEADER -->
+      <header style="padding: 72px 0 36px; border-bottom: 1px solid #221c14; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+        <div>
+          <a href="index.html" style="display: inline-block; font-size: 12px; letter-spacing: 0.34em; color: #d8a942; text-transform: uppercase; margin-bottom: 26px; text-decoration: none;" style-hover="color: #ece1cf;">← View site</a>
+          <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(40px, 7vw, 76px); line-height: 0.98; letter-spacing: -0.015em;">Admin</h1>
+        </div>
         <button type="button" onClick="{{ openNew }}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 13px 18px; border-radius: 5px; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09;" style-hover="background: #e6bb58;">+ New article</button>
+      </header>
+
+      <!-- controls -->
+      <div style="position: relative; z-index: 50; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 34px 0 30px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <div style="position: relative;">
+            <button type="button" onClick="{{ toggleSort }}" style="{{ sortBtnStyle }}" style-hover="{{ btnHover }}">
+              <span style="color: #5f574a;">Sort</span><span style="color: #ece1cf;">{{ sortLabel }}</span><span style="color: #b78f3a; font-size: 9px;">{{ sortCaret }}</span>
+            </button>
+            <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 214px; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
+                <sc-for list="{{ sortOptions }}" as="o" hint-placeholder-count="4">
+                  <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <div style="position: relative;">
+            <button type="button" onClick="{{ toggleTag }}" style="{{ tagBtnStyle }}" style-hover="{{ btnHover }}">
+              <span style="color: #5f574a;">Filter</span><span style="color: #ece1cf;">{{ tagLabel }}</span><span style="color: #b78f3a; font-size: 9px;">{{ tagCaret }}</span>
+            </button>
+            <sc-if value="{{ tagOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; max-height: 340px; overflow-y: auto; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
+                <sc-for list="{{ tagOptions }}" as="o" hint-placeholder-count="6">
+                  <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="font-size: 12px; letter-spacing: 0.18em; color: #5f574a; text-transform: uppercase; white-space: nowrap;">{{ countLabel }}</div>
+      </div>
+
+      <sc-if value="{{ anyOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 40;"></div>
       </sc-if>
-    </header>
 
-    <!-- ===================== LIST VIEW ===================== -->
-    <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
-      <div>
-        <!-- controls -->
-        <div style="position: relative; z-index: 50; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 34px 0 30px;">
-          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <div style="position: relative;">
-              <button type="button" onClick="{{ toggleSort }}" style="{{ sortBtnStyle }}" style-hover="{{ btnHover }}">
-                <span style="color: #5f574a;">Sort</span><span style="color: #ece1cf;">{{ sortLabel }}</span><span style="color: #b78f3a; font-size: 9px;">{{ sortCaret }}</span>
-              </button>
-              <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
-                <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 214px; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
-                  <sc-for list="{{ sortOptions }}" as="o" hint-placeholder-count="4">
-                    <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}">{{ o.label }}</button>
-                  </sc-for>
-                </div>
+      <!-- grid (mirrors index.html tiles; whole tile opens the reader, ✎ opens the editor) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px;">
+        <sc-for list="{{ articles }}" as="a" hint-placeholder-count="12">
+          <div onClick="{{ a.onOpen }}" style="position: relative; display: flex; flex-direction: column; cursor: pointer; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.2s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 0 0 1px #d8a942, 0 18px 40px -20px rgba(216,169,66,0.5);">
+            <div style="position: relative; aspect-ratio: 16 / 10; background-color: #16120c; background-image: repeating-linear-gradient(135deg, #181309 0px, #181309 11px, #1d1710 11px, #1d1710 22px); border-bottom: 1px solid #29221a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+              <sc-if value="{{ a.hasImg }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ a.imgUrl }}" alt="{{ a.title }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
               </sc-if>
+              <sc-if value="{{ a.noImg }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6c6354; text-align: center; padding: 0 20px;">{{ a.title }}<br><span style="color: #4a4337; letter-spacing: 0.16em;">cover image</span></div>
+              </sc-if>
+              <span style="position: absolute; left: 16px; bottom: 8px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 48px; line-height: 1; color: rgba(216,169,66,0.16); z-index: 1;">{{ a.num }}</span>
+              <sc-if value="{{ a.draft }}" hint-placeholder-val="{{ false }}">
+                <span style="position: absolute; left: 12px; top: 12px; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #0f0c09; background: #d8a942; border-radius: 3px; padding: 4px 8px; z-index: 2;">Draft</span>
+              </sc-if>
+              <!-- edit icon, top-right -->
+              <button type="button" title="Edit" onClick="{{ a.onEdit }}" style="position: absolute; top: 12px; right: 12px; z-index: 3; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; background: rgba(15,12,9,0.72); border: 1px solid #3a2f1a; color: #d8a942; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: all 0.18s ease;" style-hover="border-color: #d8a942; background: #1d1710; color: #ece1cf;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+              </button>
             </div>
-            <div style="position: relative;">
-              <button type="button" onClick="{{ toggleTag }}" style="{{ tagBtnStyle }}" style-hover="{{ btnHover }}">
-                <span style="color: #5f574a;">Filter</span><span style="color: #ece1cf;">{{ tagLabel }}</span><span style="color: #b78f3a; font-size: 9px;">{{ tagCaret }}</span>
-              </button>
-              <sc-if value="{{ tagOpen }}" hint-placeholder-val="{{ false }}">
-                <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; max-height: 340px; overflow-y: auto; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
-                  <sc-for list="{{ tagOptions }}" as="o" hint-placeholder-count="6">
-                    <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
-                  </sc-for>
-                </div>
-              </sc-if>
+            <div style="padding: 22px 22px 20px; display: flex; flex-direction: column; flex: 1;">
+              <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a;">{{ a.dateLabel }}</div>
+              <h3 style="margin-top: 13px; font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 23px; line-height: 1.22; letter-spacing: -0.005em; text-wrap: pretty;">{{ a.title }}</h3>
+              <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 7px;">
+                <sc-for list="{{ a.tags }}" as="t" hint-placeholder-count="2">
+                  <span style="font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a; border: 1px solid #3a2f1a; border-radius: 3px; padding: 4px 8px;">{{ t }}</span>
+                </sc-for>
+              </div>
             </div>
           </div>
-          <div style="font-size: 12px; letter-spacing: 0.18em; color: #5f574a; text-transform: uppercase; white-space: nowrap;">{{ countLabel }}</div>
-        </div>
+        </sc-for>
+      </div>
 
-        <sc-if value="{{ anyOpen }}" hint-placeholder-val="{{ false }}">
-          <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 40;"></div>
-        </sc-if>
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 60px 0; text-align: center; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a;">{{ emptyLabel }}</div>
+      </sc-if>
 
-        <!-- grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px;">
-          <sc-for list="{{ articles }}" as="a" hint-placeholder-count="12">
-            <div style="display: flex; flex-direction: column; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; animation: riseIn 0.5s ease both;">
-              <div style="position: relative; aspect-ratio: 16 / 10; background-color: #16120c; background-image: repeating-linear-gradient(135deg, #181309 0px, #181309 11px, #1d1710 11px, #1d1710 22px); border-bottom: 1px solid #29221a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                <sc-if value="{{ a.hasImg }}" hint-placeholder-val="{{ false }}">
-                  <img src="{{ a.imgUrl }}" alt="{{ a.title }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
-                </sc-if>
-                <sc-if value="{{ a.noImg }}" hint-placeholder-val="{{ true }}">
-                  <div style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6c6354; text-align: center; padding: 0 20px;">{{ a.title }}<br><span style="color: #4a4337;">no cover</span></div>
-                </sc-if>
-                <sc-if value="{{ a.draft }}" hint-placeholder-val="{{ false }}">
-                  <span style="position: absolute; left: 12px; top: 12px; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #0f0c09; background: #d8a942; border-radius: 3px; padding: 4px 8px; z-index: 2;">Draft</span>
-                </sc-if>
-              </div>
-              <div style="padding: 20px 20px 18px; display: flex; flex-direction: column; flex: 1;">
-                <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a;">{{ a.dateLabel }}</div>
-                <h3 style="margin-top: 11px; font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 21px; line-height: 1.22; text-wrap: pretty;">{{ a.title }}</h3>
-                <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px;">
-                  <sc-for list="{{ a.tags }}" as="t" hint-placeholder-count="2">
-                    <span style="font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a; border: 1px solid #3a2f1a; border-radius: 3px; padding: 4px 8px;">{{ t }}</span>
-                  </sc-for>
-                </div>
-                <div style="margin-top: 18px; display: flex; gap: 8px;">
-                  <button type="button" onClick="{{ a.onEdit }}" style="flex: 1; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 12px; border-radius: 5px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">Edit</button>
-                  <button type="button" onClick="{{ a.onDelete }}" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 12px; border-radius: 5px; cursor: pointer; background: transparent; border: 1px solid #4a221a; color: #b5786c;" style-hover="border-color: #b5786c; color: #e7b0a4;">Delete</button>
-                </div>
-              </div>
-            </div>
+      <!-- pager -->
+      <sc-if value="{{ showPager }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: nowrap; overflow-x: auto;">
+          <button type="button" onClick="{{ prev.onClick }}" style="{{ prev.style }}" style-hover="{{ prev.hoverStyle }}">{{ prev.label }}</button>
+          <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="5">
+            <button type="button" onClick="{{ pg.onClick }}" style="{{ pg.style }}" style-hover="{{ pg.hoverStyle }}">{{ pg.label }}</button>
           </sc-for>
+          <button type="button" onClick="{{ next.onClick }}" style="{{ next.style }}" style-hover="{{ next.hoverStyle }}">{{ next.label }}</button>
         </div>
+      </sc-if>
+    </div>
+  </sc-if>
 
-        <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
-          <div style="padding: 60px 0; text-align: center; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a;">{{ emptyLabel }}</div>
-        </sc-if>
+  <!-- ===================== READER VIEW (looks like article.html) ===================== -->
+  <sc-if value="{{ isReader }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 720px; margin: 0 auto; padding: 0 32px;">
 
-        <!-- pager -->
-        <sc-if value="{{ showPager }}" hint-placeholder-val="{{ false }}">
-          <div style="margin-top: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: nowrap; overflow-x: auto;">
-            <button type="button" onClick="{{ prev.onClick }}" style="{{ prev.style }}" style-hover="{{ prev.hoverStyle }}">{{ prev.label }}</button>
-            <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="5">
-              <button type="button" onClick="{{ pg.onClick }}" style="{{ pg.style }}" style-hover="{{ pg.hoverStyle }}">{{ pg.label }}</button>
-            </sc-for>
-            <button type="button" onClick="{{ next.onClick }}" style="{{ next.style }}" style-hover="{{ next.hoverStyle }}">{{ next.label }}</button>
-          </div>
-        </sc-if>
+      <!-- top bar -->
+      <div style="padding: 48px 0 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <button type="button" onClick="{{ goList }}" style="display: inline-flex; align-items: center; gap: 9px; font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170; background: transparent; border: none; cursor: pointer; padding: 0;" style-hover="color: #d8a942;">← Back</button>
+        <button type="button" onClick="{{ editCurrent }}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 16px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #d8a942;" style-hover="border-color: #d8a942; color: #ece1cf;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          Edit
+        </button>
       </div>
-    </sc-if>
 
-    <!-- ===================== EDITOR VIEW ===================== -->
-    <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
-      <div style="padding: 34px 0 0;">
-        <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
-          <div style="margin-bottom: 22px; padding: 13px 16px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 13px;">{{ error }}</div>
+      <!-- article header -->
+      <header style="padding: 64px 0 30px; border-bottom: 1px solid #221c14;">
+        <div style="font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: #b78f3a; margin-bottom: 26px;">{{ readerDate }}</div>
+        <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.015em; text-wrap: pretty;">{{ readerTitle }}</h1>
+      </header>
+
+      <!-- body -->
+      <article style="padding: 46px 0 0;">
+        <sc-if value="{{ readerLoading }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a;">Loading…</div>
         </sc-if>
+        {{ readerEl }}
+      </article>
 
-        <div style="display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start;">
+      <footer style="margin-top: 64px; padding-top: 28px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+        <button type="button" onClick="{{ goList }}" style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a; background: transparent; border: none; cursor: pointer; padding: 0;" style-hover="color: #d8a942;">← Back to all</button>
+        <button type="button" onClick="{{ editCurrent }}" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a; background: transparent; border: none; cursor: pointer; padding: 0;" style-hover="color: #d8a942;">Edit this post →</button>
+      </footer>
+    </div>
+  </sc-if>
 
-          <!-- left: frontmatter -->
-          <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div>
-              <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Title</label>
-              <input class="fld" type="text" value="{{ edTitle }}" onChange="{{ onTitle }}" placeholder="Post title">
-            </div>
-            <div>
-              <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Date</label>
-              <input class="fld" type="date" value="{{ edDate }}" onChange="{{ onDate }}">
-              <div style="margin-top: 7px; font-size: 11px; color: #5f574a;">Folder: {{ folderHint }}</div>
-            </div>
-            <div>
-              <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Status</label>
-              <button type="button" onClick="{{ toggleDraft }}" style="{{ draftBtnStyle }}">{{ draftLabel }}</button>
-            </div>
-            <div>
-              <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Tags</label>
-              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
-                <sc-for list="{{ edTags }}" as="t" hint-placeholder-count="3">
-                  <button type="button" onClick="{{ t.onRemove }}" style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #d8a942; border: 1px solid #3a2f1a; border-radius: 3px; padding: 5px 9px; cursor: pointer; background: #1d1710;" style-hover="border-color: #b5786c; color: #e7b0a4;">{{ t.label }} ✕</button>
-                </sc-for>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <input class="fld" list="all-tags" type="text" value="{{ tagInput }}" onChange="{{ onTagInput }}" placeholder="Add tag…">
-                <button type="button" onClick="{{ addTagFromInput }}" style="white-space: nowrap; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 14px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">Add</button>
-              </div>
-              <datalist id="all-tags">
-                <sc-for list="{{ allTagOptions }}" as="t" hint-placeholder-count="6">
-                  <option value="{{ t }}"></option>
-                </sc-for>
-              </datalist>
-            </div>
-            <div>
-              <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Cover image</label>
-              <sc-if value="{{ hasCover }}" hint-placeholder-val="{{ false }}">
-                <img src="{{ coverUrl }}" alt="cover" style="width: 100%; border-radius: 6px; border: 1px solid #29221a; margin-bottom: 10px;">
-              </sc-if>
-              <button type="button" onClick="{{ uploadCover }}" style="width: 100%; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 11px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">{{ coverBtnLabel }}</button>
-            </div>
-          </div>
+  <!-- ===================== EDITOR VIEW (Confluence-like) ===================== -->
+  <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 720px; margin: 0 auto; padding: 0 32px;">
 
-          <!-- right: body editor -->
+      <!-- TOP TOOLBAR -->
+      <div style="position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 0; background: rgba(15,12,9,0.93); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid #221c14;">
+        <button type="button" onClick="{{ cancelEdit }}" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; background: transparent; border: none; cursor: pointer; padding: 8px 4px;" style-hover="color: #d8a942;">← Back</button>
+        <div style="display: inline-flex; border: 1px solid #29221a; border-radius: 6px; overflow: hidden;">
+          <button type="button" onClick="{{ setRendered }}" style="{{ renderedTabStyle }}">Rendered</button>
+          <button type="button" onClick="{{ setMarkdown }}" style="{{ markdownTabStyle }}">Markdown</button>
+        </div>
+        <button type="button" onClick="{{ insertImage }}" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 9px 14px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">+ Insert image</button>
+        <div style="flex: 1;"></div>
+        <button type="button" onClick="{{ toggleProps }}" style="{{ propsBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">Properties {{ propsCaret }}</button>
+      </div>
+
+      <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 18px; padding: 13px 16px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 13px;">{{ error }}</div>
+      </sc-if>
+
+      <!-- PROPERTIES DRAWER -->
+      <sc-if value="{{ propsOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 18px; border: 1px solid #2a2218; border-radius: 8px; padding: 22px; background: #13100a; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; animation: menuIn 0.16s ease both;">
           <div>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 12px; flex-wrap: wrap;">
-              <div style="display: inline-flex; border: 1px solid #29221a; border-radius: 6px; overflow: hidden;">
-                <button type="button" onClick="{{ setRaw }}" style="{{ rawTabStyle }}">Raw</button>
-                <button type="button" onClick="{{ setRendered }}" style="{{ renderedTabStyle }}">Rendered</button>
-              </div>
-              <button type="button" onClick="{{ insertImage }}" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 9px 14px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">+ Insert image</button>
+            <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Status</label>
+            <button type="button" onClick="{{ toggleDraft }}" style="{{ draftBtnStyle }}">{{ draftLabel }}</button>
+          </div>
+          <div>
+            <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Date</label>
+            <input class="fld" type="date" value="{{ edDate }}" onChange="{{ onDate }}">
+            <div style="margin-top: 7px; font-size: 11px; color: #5f574a;">Folder: {{ folderHint }}</div>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Tags</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
+              <sc-for list="{{ edTags }}" as="t" hint-placeholder-count="3">
+                <button type="button" onClick="{{ t.onRemove }}" style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #d8a942; border: 1px solid #3a2f1a; border-radius: 3px; padding: 5px 9px; cursor: pointer; background: #1d1710;" style-hover="border-color: #b5786c; color: #e7b0a4;">{{ t.label }} ✕</button>
+              </sc-for>
             </div>
-
-            <sc-if value="{{ isRaw }}" hint-placeholder-val="{{ true }}">
-              <textarea id="md-body" class="md-raw" value="{{ edBody }}" onChange="{{ onBody }}" onInput="{{ onBody }}" placeholder="Write Markdown here…"></textarea>
-            </sc-if>
-            <sc-if value="{{ isRendered }}" hint-placeholder-val="{{ false }}">
-              <div style="border: 1px solid #2a2218; border-radius: 6px; padding: 28px 32px; background: #100d09;">{{ preview }}</div>
-            </sc-if>
-
-            <div style="margin-top: 22px; display: flex; gap: 10px; justify-content: flex-end;">
-              <button type="button" onClick="{{ cancelEdit }}" style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 20px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170;" style-hover="border-color: #4a3c1d; color: #c9bca6;">Cancel</button>
-              <button type="button" onClick="{{ save }}" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
+            <div style="display: flex; gap: 8px;">
+              <input class="fld" list="all-tags" type="text" value="{{ tagInput }}" onChange="{{ onTagInput }}" placeholder="Add tag…">
+              <button type="button" onClick="{{ addTagFromInput }}" style="white-space: nowrap; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 14px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">Add</button>
             </div>
+            <datalist id="all-tags">
+              <sc-for list="{{ allTagOptions }}" as="t" hint-placeholder-count="6">
+                <option value="{{ t }}"></option>
+              </sc-for>
+            </datalist>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Cover image</label>
+            <sc-if value="{{ hasCover }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ coverUrl }}" alt="cover" style="width: 100%; border-radius: 6px; border: 1px solid #29221a; margin-bottom: 10px;">
+            </sc-if>
+            <button type="button" onClick="{{ uploadCover }}" style="width: 100%; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 11px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">{{ coverBtnLabel }}</button>
           </div>
         </div>
-      </div>
-    </sc-if>
+      </sc-if>
 
-  </div>
+      <!-- CANVAS (article.html look) -->
+      <header style="padding: 44px 0 28px; border-bottom: 1px solid #221c14;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+          <span style="font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: #b78f3a;">{{ edDateLabel }}</span>
+          <sc-if value="{{ edIsDraft }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #0f0c09; background: #d8a942; border-radius: 3px; padding: 3px 8px;">Draft</span>
+          </sc-if>
+        </div>
+        <input class="title-input" type="text" value="{{ edTitle }}" onInput="{{ onTitle }}" placeholder="Title">
+      </header>
+
+      <div style="padding: 38px 0 0;">
+        {{ bodyEl }}
+      </div>
+
+      <!-- BOTTOM TOOLBAR -->
+      <div style="position: sticky; bottom: 0; z-index: 30; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0; background: rgba(15,12,9,0.93); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid #221c14;">
+        <button type="button" onClick="{{ togglePreview }}" style="{{ previewBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">{{ previewBtnLabel }}</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" onClick="{{ cancelEdit }}" style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 20px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170;" style-hover="border-color: #4a3c1d; color: #c9bca6;">Cancel</button>
+          <button type="button" onClick="{{ save }}" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -238,8 +291,13 @@ class Component extends DCLogic {
   state = {
     view: 'list', articles: [], allTags: [], loading: true, serverDown: false,
     tag: 'all', sort: 'newest', menu: null, page: 1,
-    ed: null, mode: 'raw', tagInput: '', saving: false, error: '',
+    ed: null, mode: 'rendered', tagInput: '', saving: false, error: '', propsOpen: false,
+    reader: { dir: '', title: '', date: '', html: '', loading: false },
   };
+
+  // instance (non-render) state for the WYSIWYG surface
+  wysiwygHtml = '';
+  wysiwygDirty = false;
 
   componentDidMount() { this.load(); }
 
@@ -270,6 +328,8 @@ class Component extends DCLogic {
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
+  escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
   parseFM(text) {
     const m = /^\uFEFF?---\s*\n([\s\S]*?)\n---\s*\n?/.exec(text);
     const fm = {};
@@ -294,6 +354,54 @@ class Component extends DCLogic {
 
   setEd(patch) { this.setState((s) => ({ ed: { ...s.ed, ...patch } })); }
 
+  // ---- markdown <-> rendered helpers ----
+  // Display: rewrite article-relative asset paths so images resolve from the site root.
+  displayBody(body, dir) {
+    let s = body || '';
+    if (dir) s = s.replace(/(!\[[^\]]*\]\()(assets\/)/g, '$1articles/' + dir + '/$2');
+    return s;
+  }
+  // Store: collapse the absolute asset prefix back to the article-relative form.
+  storeBody(body, dir) {
+    let s = body || '';
+    if (dir) s = s.split('articles/' + dir + '/assets/').join('assets/');
+    return s;
+  }
+  seedWysiwyg(body, dir) {
+    const display = this.displayBody(body, dir);
+    this.wysiwygHtml = window.marked ? window.marked.parse(display) : this.escapeHtml(display);
+    this.wysiwygDirty = false;
+  }
+  ensureTurndown() {
+    if (this.td) return this.td;
+    if (!window.TurndownService) return null;
+    const td = new window.TurndownService({
+      headingStyle: 'atx', hr: '---', bulletListMarker: '-',
+      codeBlockStyle: 'fenced', emDelimiter: '_', strongDelimiter: '**', linkStyle: 'inlined',
+    });
+    if (window.turndownPluginGfm && window.turndownPluginGfm.gfm) td.use(window.turndownPluginGfm.gfm);
+    this.td = td;
+    return td;
+  }
+  htmlToMarkdown(html) {
+    const td = this.ensureTurndown();
+    if (!td) return null;
+    return td.turndown(html).replace(/\n{3,}/g, '\n\n').trim();
+  }
+  // Latest markdown for the body, reading the live WYSIWYG DOM when needed.
+  getCurrentBody() {
+    const ed = this.state.ed || {};
+    if (this.state.mode === 'rendered' && this.wysiwygDirty) {
+      const el = document.getElementById('wysiwyg');
+      if (el) {
+        const md = this.htmlToMarkdown(el.innerHTML);
+        if (md != null) return this.storeBody(md, ed.originalDir);
+        if (!this._warnedTd) { this._warnedTd = true; window.alert('Rich-text converter not loaded yet — switch to Markdown mode to edit safely.'); }
+      }
+    }
+    return ed.body || '';
+  }
+
   // ---- list controls ----
   sortDefs = [
     { key: 'newest', label: 'Newest' }, { key: 'oldest', label: 'Oldest' },
@@ -312,12 +420,28 @@ class Component extends DCLogic {
     return out;
   }
 
+  // ---- reader ----
+  openReader = async (dir) => {
+    this.setState({ view: 'reader', menu: null, reader: { dir, title: '', date: '', html: '', loading: true } });
+    try {
+      const r = await fetch('/api/article?dir=' + encodeURIComponent(dir));
+      if (!r.ok) throw new Error('load failed');
+      const data = await r.json();
+      const { fm, body } = this.parseFM(data.raw || '');
+      const display = this.displayBody(body, dir);
+      const html = window.marked ? window.marked.parse(display) : this.escapeHtml(display).replace(/\n/g, '<br>');
+      const date = fm.date || (dir.match(/^\d{4}-\d{2}-\d{2}/) || [''])[0];
+      this.setState({ reader: { dir, title: fm.title || dir, date: this.formatDate(date), html, loading: false } });
+    } catch (e) { this.setState({ serverDown: true, view: 'list' }); }
+  };
+  goList = () => this.setState({ view: 'list', reader: { dir: '', title: '', date: '', html: '', loading: false } });
+  editCurrent = () => { const d = this.state.reader && this.state.reader.dir; if (d) this.openEdit(d); };
+
   // ---- editor lifecycle ----
   openNew = () => {
-    this.setState({
-      view: 'editor', mode: 'raw', error: '', tagInput: '',
-      ed: { originalDir: null, title: '', date: this.today(), draft: true, tags: [], img: '', body: '', assets: [] },
-    });
+    const ed = { originalDir: null, title: '', date: this.today(), draft: true, tags: [], img: '', body: '', assets: [] };
+    this.seedWysiwyg('', null);
+    this.setState({ view: 'editor', mode: 'rendered', error: '', tagInput: '', propsOpen: false, menu: null, ed });
   };
 
   openEdit = async (dir) => {
@@ -329,22 +453,47 @@ class Component extends DCLogic {
       const { fm, body } = this.parseFM(data.raw || '');
       const tags = Array.isArray(fm.tags) ? fm.tags : (fm.tags ? [fm.tags] : []);
       const date = fm.date || (dir.match(/^\d{4}-\d{2}-\d{2}/) || [''])[0];
-      this.setState({
-        view: 'editor', mode: 'raw', tagInput: '', error: '',
-        ed: { originalDir: dir, title: fm.title || '', date, draft: fm.draft === 'true' || fm.draft === true, tags, img: fm.img || '', body, assets: data.assets || [] },
-      });
+      const ed = { originalDir: dir, title: fm.title || '', date, draft: fm.draft === 'true' || fm.draft === true, tags, img: fm.img || '', body, assets: data.assets || [] };
+      this.seedWysiwyg(body, dir);
+      this.setState({ view: 'editor', mode: 'rendered', tagInput: '', error: '', propsOpen: false, menu: null, ed });
     } catch (e) { this.setState({ serverDown: true }); }
   };
 
-  cancelEdit = () => this.setState({ view: 'list', ed: null, error: '' });
+  cancelEdit = () => this.setState({ view: 'list', ed: null, error: '', propsOpen: false });
+  toggleProps = () => this.setState((s) => ({ propsOpen: !s.propsOpen }));
 
   // ---- field handlers ----
   onTitle = (e) => this.setEd({ title: e.target.value });
   onDate = (e) => this.setEd({ date: e.target.value });
   onBody = (e) => this.setEd({ body: e.target.value });
+  onWysiwygInput = () => { this.wysiwygDirty = true; };
   toggleDraft = () => this.setEd({ draft: !this.state.ed.draft });
-  setRaw = () => this.setState({ mode: 'raw' });
-  setRendered = () => this.setState({ mode: 'rendered' });
+
+  // ---- editor mode switching ----
+  setRendered = () => {
+    if (this.state.mode === 'rendered') return;
+    const ed = this.state.ed;
+    this.seedWysiwyg(ed.body, ed.originalDir);
+    this.setState({ mode: 'rendered' });
+  };
+  setMarkdown = () => {
+    if (this.state.mode === 'markdown') return;
+    const body = this.getCurrentBody();
+    this.wysiwygDirty = false;
+    this.setState((s) => ({ mode: 'markdown', ed: { ...s.ed, body } }));
+  };
+  togglePreview = () => {
+    if (this.state.mode === 'preview') {
+      const back = this.prevEditMode === 'markdown' ? 'markdown' : 'rendered';
+      if (back === 'rendered') this.seedWysiwyg(this.state.ed.body, this.state.ed.originalDir);
+      this.setState({ mode: back });
+      return;
+    }
+    const body = this.getCurrentBody();
+    this.prevEditMode = this.state.mode;
+    this.wysiwygDirty = false;
+    this.setState((s) => ({ mode: 'preview', ed: { ...s.ed, body } }));
+  };
 
   onTagInput = (e) => this.setState({ tagInput: e.target.value });
   addTag = (t) => {
@@ -388,7 +537,21 @@ class Component extends DCLogic {
     const dir = await this.ensureSaved();
     if (!dir) return;
     const path = await this.uploadTo(dir, file);
-    if (path) this.insertAtCursor('\n![](' + path + ')\n');
+    if (!path) return;
+    if (this.state.mode === 'rendered') {
+      const el = document.getElementById('wysiwyg');
+      const disp = 'articles/' + dir + '/' + path;
+      if (el) {
+        el.focus();
+        const ok = document.execCommand && document.execCommand('insertHTML', false, '<img src="' + disp + '" alt="">');
+        if (!ok) el.innerHTML += '<img src="' + disp + '" alt="">';
+        this.wysiwygDirty = true;
+      }
+    } else if (this.state.mode === 'markdown') {
+      this.insertAtCursor('\n![](' + path + ')\n');
+    } else {
+      this.setEd({ body: (this.state.ed.body || '') + '\n![](' + path + ')\n' });
+    }
   });
 
   insertAtCursor(text) {
@@ -400,27 +563,28 @@ class Component extends DCLogic {
     this.setEd({ body: body.slice(0, s) + text + body.slice(e) });
   }
 
-  // ---- save / delete ----
-  async doSave() {
+  // ---- save ----
+  async doSave(bodyArg) {
     const ed = this.state.ed;
     if (!String(ed.title).trim()) { this.setState({ error: 'Title is required.' }); return null; }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(ed.date)) { this.setState({ error: 'Date must be YYYY-MM-DD.' }); return null; }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ed.date)) { this.setState({ error: 'Date must be YYYY-MM-DD.', propsOpen: true }); return null; }
+    const body = bodyArg != null ? bodyArg : this.getCurrentBody();
     this.setState({ saving: true, error: '' });
     try {
       const r = await fetch('/api/article', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ originalDir: ed.originalDir, date: ed.date, title: ed.title, draft: ed.draft, tags: ed.tags, img: ed.img, body: ed.body }),
+        body: JSON.stringify({ originalDir: ed.originalDir, date: ed.date, title: ed.title, draft: ed.draft, tags: ed.tags, img: ed.img, body }),
       });
       if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || ('HTTP ' + r.status)); }
       const j = await r.json();
       this.lastGit = j.git;
-      this.setState((s) => ({ saving: false, ed: { ...s.ed, originalDir: j.dir } }));
+      this.setState((s) => ({ saving: false, ed: { ...s.ed, originalDir: j.dir, body } }));
       return j.dir;
     } catch (e) { this.setState({ saving: false, error: String(e.message || e) }); return null; }
   }
 
-  // Each save/delete is auto-committed and pushed server-side. Returns a warning
-  // string only when the commit or push failed (so the change isn't on the remote).
+  // Each save is auto-committed and pushed server-side. Returns a warning string
+  // only when the commit or push failed (so the change isn't on the remote).
   gitWarn(g) {
     if (!g || g.skipped || g.pushed) return '';
     if (g.committed === false && !g.error) return '';
@@ -436,30 +600,19 @@ class Component extends DCLogic {
   };
 
   save = async () => {
-    const dir = await this.doSave();
+    const dir = await this.doSave(this.getCurrentBody());
     if (dir) {
       const w = this.gitWarn(this.lastGit);
       if (w) window.alert(w);
       await this.load();
-      this.setState({ view: 'list', ed: null });
+      this.setState({ view: 'list', ed: null, propsOpen: false });
     }
-  };
-
-  remove = async (dir) => {
-    if (!window.confirm('Delete ' + dir + ' and all its files? This cannot be undone.')) return;
-    try {
-      const r = await fetch('/api/article?dir=' + encodeURIComponent(dir), { method: 'DELETE' });
-      if (!r.ok) throw new Error('delete failed');
-      const j = await r.json().catch(() => ({}));
-      const w = this.gitWarn(j.git);
-      if (w) window.alert(w);
-      await this.load();
-    } catch (e) { this.setState({ serverDown: true }); }
   };
 
   renderVals() {
     const st = this.state;
     const isList = st.view === 'list';
+    const isReader = st.view === 'reader';
     const isEditor = st.view === 'editor';
 
     // ---------- LIST ----------
@@ -479,6 +632,10 @@ class Component extends DCLogic {
       hasImg: !!p.imgUrl, noImg: !p.imgUrl,
       tags: Array.isArray(p.tags) ? p.tags : [],
     }));
+
+    // stable sequential number, newest-first across the whole set (like index.html)
+    const numMap = {};
+    all.slice().sort((a, b) => b.ts - a.ts).forEach((a, i) => { numMap[a.dir] = String(i + 1).padStart(2, '0'); });
 
     const tagCounts = {};
     all.forEach((a) => a.tags.forEach((t) => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
@@ -508,9 +665,10 @@ class Component extends DCLogic {
     const page = Math.min(Math.max(1, st.page), totalPages);
     const start = (page - 1) * perPage;
     const pageItems = sorted.slice(start, start + perPage).map((a) => ({
-      dir: a.dir, title: a.title, dateLabel: a.dateLabel, tags: a.tags, draft: a.draft,
+      dir: a.dir, title: a.title, dateLabel: a.dateLabel, tags: a.tags, draft: a.draft, num: numMap[a.dir],
       hasImg: a.hasImg, noImg: a.noImg, imgUrl: a.imgUrl,
-      onEdit: () => this.openEdit(a.dir), onDelete: () => this.remove(a.dir),
+      onOpen: () => this.openReader(a.dir),
+      onEdit: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openEdit(a.dir); },
     }));
 
     const countLabel = st.loading ? 'Loading…' : (st.tag === 'all' ? (sorted.length + ' posts') : (sorted.length + ' of ' + all.length));
@@ -528,21 +686,35 @@ class Component extends DCLogic {
     const tabBtn = (on) => ({ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '10px 18px', cursor: 'pointer', border: 'none', background: on ? '#d8a942' : 'transparent', color: on ? '#0f0c09' : '#8c8170' });
     const draftOn = !!ed.draft;
     const draftBtnStyle = { width: '100%', textAlign: 'left', fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 14px', borderRadius: '6px', cursor: 'pointer', background: draftOn ? '#1d1710' : '#13241a', border: draftOn ? '1px solid #3a2f1a' : '1px solid #234a32', color: draftOn ? '#d8a942' : '#6fce97' };
+    const ghostBtn = { fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '9px 14px', borderRadius: '6px', cursor: 'pointer', background: 'transparent', border: '1px solid #3a2f1a', color: '#c9bca6' };
+    const propsBtnStyle = { ...ghostBtn, border: st.propsOpen ? '1px solid #d8a942' : '1px solid #3a2f1a', color: st.propsOpen ? '#ece1cf' : '#c9bca6' };
+    const inPreview = st.mode === 'preview';
+    const previewBtnStyle = { ...ghostBtn, padding: '12px 18px', fontSize: '12px', letterSpacing: '0.14em', border: inPreview ? '1px solid #d8a942' : '1px solid #3a2f1a', color: inPreview ? '#ece1cf' : '#c9bca6' };
     const saveBtnStyle = { fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '6px', cursor: st.saving ? 'default' : 'pointer', background: '#d8a942', border: '1px solid #d8a942', color: '#0f0c09', opacity: st.saving ? 0.6 : 1 };
 
-    // preview with asset paths rewritten relative to the article folder
-    let previewEl = null;
-    if (isEditor && st.mode === 'rendered') {
-      const base = ed.originalDir ? ('articles/' + ed.originalDir + '/') : '';
-      let md = ed.body || '';
-      if (base) md = md.replace(/(!\[[^\]]*\]\()(assets\/)/g, '$1' + base + '$2');
-      const html = (window.marked ? window.marked.parse(md) : md.replace(/\n/g, '<br>'));
-      previewEl = React.createElement('div', { className: 'prose', dangerouslySetInnerHTML: { __html: html } });
+    // body editing surface (depends on mode)
+    let bodyEl = null;
+    if (isEditor) {
+      if (st.mode === 'markdown') {
+        bodyEl = React.createElement('textarea', { id: 'md-body', className: 'md-raw', value: ed.body, onChange: this.onBody, onInput: this.onBody, placeholder: 'Write Markdown here…' });
+      } else if (st.mode === 'rendered') {
+        bodyEl = React.createElement('div', { id: 'wysiwyg', className: 'prose wysiwyg', contentEditable: true, suppressContentEditableWarning: true, onInput: this.onWysiwygInput, dangerouslySetInnerHTML: { __html: this.wysiwygHtml || '' } });
+      } else {
+        const display = this.displayBody(ed.body, ed.originalDir);
+        const html = window.marked ? window.marked.parse(display) : this.escapeHtml(display);
+        bodyEl = React.createElement('div', { className: 'prose', dangerouslySetInnerHTML: { __html: html } });
+      }
     }
 
+    // ---------- READER ----------
+    const readerEl = (isReader && st.reader.html)
+      ? React.createElement('div', { className: 'prose', dangerouslySetInnerHTML: { __html: st.reader.html } })
+      : null;
+
     return {
-      // view flags
-      isList, isEditor, serverDown: st.serverDown, reload: this.reload,
+      // view flags + shared
+      isList, isReader, isEditor, serverDown: st.serverDown, reload: this.reload,
+
       // list
       btnHover: { borderColor: '#4a3c1d' }, sortBtnStyle, tagBtnStyle, sortOpen, tagOpen,
       sortCaret: sortOpen ? '▲' : '▼', tagCaret: tagOpen ? '▲' : '▼', sortLabel, tagLabel,
@@ -555,21 +727,31 @@ class Component extends DCLogic {
       emptyLabel: st.tag === 'all' ? 'No articles yet — create one.' : 'No posts with this tag.',
       showPager: totalPages > 1, pages, prev: mkNav('← Prev', page - 1, page <= 1), next: mkNav('Next →', page + 1, page >= totalPages),
       openNew: this.openNew,
+
+      // reader
+      readerTitle: st.reader.title || 'Untitled', readerDate: st.reader.date, readerLoading: st.reader.loading,
+      readerEl, goList: this.goList, editCurrent: this.editCurrent,
+
       // editor
       error: st.error,
-      edTitle: ed.title, edDate: ed.date, edBody: ed.body,
-      onTitle: this.onTitle, onDate: this.onDate, onBody: this.onBody,
-      folderHint: ed.originalDir || (ed.date || '—'),
+      edTitle: ed.title, onTitle: this.onTitle,
+      edDateLabel: this.formatDate(ed.date) || 'No date', edIsDraft: draftOn,
+      cancelEdit: this.cancelEdit,
+      setRendered: this.setRendered, setMarkdown: this.setMarkdown,
+      renderedTabStyle: tabBtn(st.mode === 'rendered'), markdownTabStyle: tabBtn(st.mode === 'markdown'),
+      insertImage: this.insertImage,
+      toggleProps: this.toggleProps, propsOpen: st.propsOpen, propsBtnStyle, propsCaret: st.propsOpen ? '▲' : '▼',
+      bodyEl,
+      togglePreview: this.togglePreview, previewBtnStyle, previewBtnLabel: inPreview ? 'Exit preview' : 'Preview',
+      save: this.save, saveBtnStyle, saveLabel: st.saving ? 'Publishing…' : 'Publish',
+
+      // editor — properties drawer
       toggleDraft: this.toggleDraft, draftBtnStyle, draftLabel: draftOn ? 'Draft (hidden from site)' : 'Published',
+      edDate: ed.date, onDate: this.onDate, folderHint: ed.originalDir || (ed.date || '—'),
       edTags: (ed.tags || []).map((t) => ({ label: t, onRemove: () => this.removeTag(t) })),
       allTagOptions: st.allTags, tagInput: st.tagInput, onTagInput: this.onTagInput, addTagFromInput: this.addTagFromInput,
       hasCover: !!ed.img, coverUrl: ed.originalDir && ed.img && !/^https?:/i.test(ed.img) ? ('articles/' + ed.originalDir + '/' + ed.img) : ed.img,
       coverBtnLabel: ed.img ? 'Replace cover' : 'Upload cover', uploadCover: this.uploadCover,
-      insertImage: this.insertImage,
-      setRaw: this.setRaw, setRendered: this.setRendered, isRaw: st.mode === 'raw', isRendered: st.mode === 'rendered',
-      rawTabStyle: tabBtn(st.mode === 'raw'), renderedTabStyle: tabBtn(st.mode === 'rendered'),
-      preview: previewEl,
-      cancelEdit: this.cancelEdit, save: this.save, saveBtnStyle, saveLabel: st.saving ? 'Saving…' : 'Save',
     };
   }
 }
