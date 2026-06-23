@@ -135,7 +135,7 @@ window.ARTICLES = [
       "faith",
       "relationships"
     ],
-    "img": "2025-01-15/assets/cover.jpeg"
+    "img": "2025-01-15/assets/rhtFa.jpg"
   },
   {
     "slug": "2024-12-28--2024-Reflection-%E2%80%93-The-Year-of-Openness",
