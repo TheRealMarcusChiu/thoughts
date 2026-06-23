@@ -74,7 +74,7 @@ window.ARTICLES = [
       "relationships",
       "reflection"
     ],
-    "img": "2025-07-06/assets/cover.jpeg"
+    "img": "2025-07-06/assets/dbc27496-894e-41e6-aca9-44aa2c7f6d32.png"
   },
   {
     "slug": "2025-04-23--Christian-Ramblings-%231",
