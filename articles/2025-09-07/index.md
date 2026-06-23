@@ -2,7 +2,7 @@
 draft: false
 title: "4yo Wisdom"
 tags: ["love", "family"]
-img: 'assets/cover.jpeg'
+img: 'assets/Gemini_Generated_Image_24qpp24qpp24qpp2.png'
 date: 2025-09-07
 ---
 

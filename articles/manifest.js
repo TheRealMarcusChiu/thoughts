@@ -37,7 +37,7 @@ window.ARTICLES = [
       "love",
       "family"
     ],
-    "img": "2025-09-07/assets/cover.jpeg"
+    "img": "2025-09-07/assets/Gemini_Generated_Image_24qpp24qpp24qpp2.png"
   },
   {
     "slug": "2025-07-30--Christian-Ramblings-%232",
