@@ -50,7 +50,7 @@ window.ARTICLES = [
       "scripture",
       "praise"
     ],
-    "img": "2025-07-30/assets/cover.jpeg"
+    "img": "2025-07-30/assets/6db2dc5c-3543-4aff-98fa-89eb12fa54d4.png"
   },
   {
     "slug": "2025-07-09--Thoughts-on-Praise",

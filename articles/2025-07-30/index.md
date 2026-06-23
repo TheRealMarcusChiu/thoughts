@@ -1,9 +1,9 @@
 ---
 draft: false
-title: 'Christian Ramblings #2'
-summary: 'summary'
-tags: ['christianity', 'faith', 'scripture', 'praise']
-img: 'assets/cover.jpeg'
+title: "Christian Ramblings #2"
+tags: ["christianity", "faith", "scripture", "praise"]
+img: 'assets/6db2dc5c-3543-4aff-98fa-89eb12fa54d4.png'
+date: 2025-07-30
 ---
 
 "When you really think about it: Everything are parables."
