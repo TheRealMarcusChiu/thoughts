@@ -26,7 +26,7 @@ window.ARTICLES = [
       "relationships",
       "self-worth"
     ],
-    "img": "2026-02-03/assets/cover.jpeg"
+    "img": "2026-02-03/assets/354f18b7-f814-47ff-8d3e-228124547467.jpeg"
   },
   {
     "slug": "2025-09-07--4yo-Wisdom",
