@@ -1,9 +1,9 @@
 ---
 draft: false
-title: 'Thoughts on Praise'
-summary: 'summary'
-tags: ['christianity', 'faith', 'praise']
-img: 'assets/cover.jpeg'
+title: "Thoughts on Praise"
+tags: ["christianity", "faith", "praise"]
+img: 'assets/ChatGPT_Image_Jun_23_2026_06_57_32_PM.png'
+date: 2025-07-09
 ---
 
 I find myself revisiting Thoughts on Praise - below is a trimmed version.
