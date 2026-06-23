@@ -10,9 +10,11 @@ window.ARTICLES = [
       "love",
       "aesthetics",
       "reflection",
-      "relationships"
+      "relationships",
+      "life",
+      "philosophy"
     ],
-    "img": ""
+    "img": "2026-06-23/assets/beauty.jpeg"
   },
   {
     "slug": "2026-02-03--Unworthy-Love",
