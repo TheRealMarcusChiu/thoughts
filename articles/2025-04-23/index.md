@@ -1,9 +1,9 @@
 ---
 draft: false
-title: 'Christian Ramblings #1'
-summary: 'summary'
-tags: ['christianity', 'faith', 'scripture', 'praise', 'relationships']
-img: 'assets/cover.jpeg'
+title: "Christian Ramblings #1"
+tags: ["christianity", "faith", "scripture", "praise", "relationships"]
+img: 'assets/a21cf251-e9a5-4439-afd8-33d2594f83e6.png'
+date: 2025-04-23
 ---
 
 Finished a 12-week introductory lesson on Christianity. Everyone in class was told to write a one-page reflection and share it at “last supper”. Unfortunately, I couldn’t make it but here’s my reflection.

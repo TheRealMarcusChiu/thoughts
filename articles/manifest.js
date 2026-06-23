@@ -88,7 +88,7 @@ window.ARTICLES = [
       "praise",
       "relationships"
     ],
-    "img": "2025-04-23/assets/cover.jpeg"
+    "img": "2025-04-23/assets/a21cf251-e9a5-4439-afd8-33d2594f83e6.png"
   },
   {
     "slug": "2025-03-17--Conversation-in-the-Womb-%E2%80%93-A-Parable-of-Life-After-Delivery",
