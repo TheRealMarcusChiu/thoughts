@@ -95,6 +95,12 @@
       </nav>
     </sc-if>
 
+    <!-- comments (giscus) -->
+    <section style="margin-top: 64px; padding-top: 36px; border-top: 1px solid #221c14;">
+      <div style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170; margin-bottom: 26px;">Comments</div>
+      <div id="giscus-container"></div>
+    </section>
+
     <!-- footer -->
     <footer style="margin-top: 56px; padding-top: 28px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
       <a href="index.html?view=writing" style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">← More writing</a>
@@ -146,6 +152,7 @@ class Component extends DCLogic {
     this.setState({ title: meta.title, date: meta.date, slug: meta.slug, html: '', loading: true });
     document.title = meta.title + ' — Marcus Chiu';
     this.trackPageview(meta);
+    this.loadGiscus(dec(meta.slug));
     window.scrollTo(0, 0);
 
     // Fetch only this article's Markdown, then strip its frontmatter.
@@ -183,6 +190,42 @@ class Component extends DCLogic {
       page_path: path,
       page_location: window.location.origin + path,
     });
+  }
+
+  // giscus comments. All posts share the article.html path, so the thread is
+  // keyed on the slug (data-mapping="specific"). #giscus-container is an empty,
+  // stably-keyed node, so the injected iframe survives the template's re-renders;
+  // on prev/next we swap the thread in place via postMessage.
+  loadGiscus(term) {
+    const host = document.getElementById('giscus-container');
+    if (!host) return;
+    const frame = host.querySelector('iframe.giscus-frame');
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.postMessage({ giscus: { setConfig: { term } } }, 'https://giscus.app');
+      return;
+    }
+    // Not mounted yet (or still loading) — (re)inject with the current term.
+    host.innerHTML = '';
+    const s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    const attrs = {
+      'data-repo': 'TheRealMarcusChiu/thoughts',
+      'data-repo-id': 'R_kgDOS15zmg',
+      'data-category': 'Announcements',
+      'data-category-id': 'DIC_kwDOS15zms4C-2nL',
+      'data-mapping': 'specific',
+      'data-term': term,
+      'data-strict': '0',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'bottom',
+      'data-theme': 'transparent_dark',
+      'data-lang': 'en',
+    };
+    for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
+    s.crossOrigin = 'anonymous';
+    s.async = true;
+    host.appendChild(s);
   }
 
   stripFrontmatter(text) {
