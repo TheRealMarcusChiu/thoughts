@@ -12,6 +12,7 @@ host, including opening the files directly via `file://`.
 index.html      # article listing (sort + filter)
 article.html    # single-article reader
 support.js      # shared runtime / rendering
+easter-eggs.js  # shared easter eggs (type "marcus" → highlighter; Konami → candlelight)
 articles/
   <YYYY-MM-DD>/
     index.md    # the article (frontmatter + Markdown body)
