@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WKSFZQ4K6F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  // Suppress the generic auto pageview; route() logs a per-article one instead.
+  gtag('config', 'G-WKSFZQ4K6F', { send_page_view: false });
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -67,7 +76,7 @@
       <nav style="margin-top: 72px; padding-top: 38px; border-top: 1px solid #221c14; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div>
           <sc-if value="{{ hasNewer }}" hint-placeholder-val="{{ false }}">
-            <a href="article.html?slug={{ newer.slug }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
+            <a href="article.html#{{ newer.slug }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
               <span style="font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170;">← Newer post</span>
               <span style="font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 19px; line-height: 1.25; text-wrap: pretty;">{{ newer.title }}</span>
               <span style="margin-top: auto; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a;">{{ newer.date }}</span>
@@ -76,7 +85,7 @@
         </div>
         <div>
           <sc-if value="{{ hasOlder }}" hint-placeholder-val="{{ false }}">
-            <a href="article.html?slug={{ older.slug }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-align: right; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
+            <a href="article.html#{{ older.slug }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-align: right; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
               <span style="font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170;">Older post →</span>
               <span style="font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 19px; line-height: 1.25; text-wrap: pretty;">{{ older.title }}</span>
               <span style="margin-top: auto; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a;">{{ older.date }}</span>
@@ -100,31 +109,44 @@ class Component extends DCLogic {
   state = { html: '', title: '', date: '', slug: '', loading: true, articles: [] };
 
   async componentDidMount() {
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get('slug');
-
     // Manifest carries the metadata — no need to fetch every article's body.
-    let posts = [];
     await this.waitForArticles();
-    posts = window.ARTICLES || [];
+    const posts = window.ARTICLES || [];
 
     const articles = posts
       .map((p) => ({ slug: p.slug, path: p.path, title: p.title, date: this.formatDate(p.date), ts: Date.parse(p.date) }))
       .sort((a, b) => b.ts - a.ts);
     this.setState({ articles });
 
-    // URLSearchParams already decodes the param; manifest slugs are URL-escaped,
-    // so match on the decoded form (and fall back to a raw compare).
+    // Hash changes (prev/next) don't reload the page, so re-route on them.
+    window.addEventListener('hashchange', () => this.route());
+    await this.route();
+  }
+
+  // Slug comes from the URL hash (article.html#<slug>); fall back to the legacy
+  // ?slug= query so older links keep working.
+  currentSlug() {
+    const hash = (window.location.hash || '').replace(/^#/, '');
+    const qp = new URLSearchParams(window.location.search).get('slug') || '';
+    return hash || qp || '';
+  }
+
+  async route() {
+    const slug = this.currentSlug();
+    // Manifest slugs are URL-escaped, so match on the decoded form (raw fallback).
     const dec = (s) => { try { return decodeURIComponent(s); } catch (e) { return s; } };
-    const meta = articles.find(a => dec(a.slug) === slug || a.slug === slug) || articles[0];
+    const articles = this.state.articles || [];
+    const meta = articles.find(a => dec(a.slug) === dec(slug) || a.slug === slug) || articles[0];
     if (!meta) {
       document.title = 'Not found — Marcus Chiu';
       this.setState({ title: 'Post not found', date: '', slug: slug || '', html: '', loading: false });
       return;
     }
 
-    this.setState({ title: meta.title, date: meta.date, slug: meta.slug });
+    this.setState({ title: meta.title, date: meta.date, slug: meta.slug, html: '', loading: true });
     document.title = meta.title + ' — Marcus Chiu';
+    this.trackPageview(meta);
+    window.scrollTo(0, 0);
 
     // Fetch only this article's Markdown, then strip its frontmatter.
     // Load this article's body (sibling .js next to the .md; works from file://).
@@ -149,6 +171,18 @@ class Component extends DCLogic {
       html = md.replace(/\n/g, '<br>');
     }
     this.setState({ html, loading: false });
+  }
+
+  // GA can't see the URL hash, so log an explicit page_view with a clean,
+  // per-article virtual path — each post then shows up separately in reports.
+  trackPageview(meta) {
+    if (typeof window.gtag !== 'function') return;
+    const path = '/articles/' + meta.slug;
+    window.gtag('event', 'page_view', {
+      page_title: meta.title + ' — Marcus Chiu',
+      page_path: path,
+      page_location: window.location.origin + path,
+    });
   }
 
   stripFrontmatter(text) {
