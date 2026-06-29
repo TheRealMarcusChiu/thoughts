@@ -10,9 +10,10 @@ Type=simple
 # directory, so this MUST be the project root (where index.html lives).
 WorkingDirectory=/root/thoughts
 ExecStart=/root/.nvm/versions/node/v24.16.0/bin/node server/server.mjs
-# Bind locally by default and put a reverse proxy in front; set HOST=0.0.0.0
-# only behind a firewall — the admin API has no authentication.
-Environment=HOST=127.0.0.1
+# Bound to all interfaces to allow remote connections. The admin API has NO
+# authentication — only expose this behind a trusted network/firewall, and
+# preferably a reverse proxy (nginx/Caddy) for TLS + access control.
+Environment=HOST=0.0.0.0
 Environment=PORT=9000
 Restart=on-failure
 RestartSec=3
