@@ -131,7 +131,7 @@ systemctl enable --now thoughts-admin.service
 systemctl status thoughts-admin.service
 ```
 
-The service binds `127.0.0.1:8787` by default — front it with a reverse proxy
+The service binds `127.0.0.1:9000` by default — front it with a reverse proxy
 (nginx/Caddy) for TLS and access control, since the admin API has no auth. To
 expose it directly on the container's network instead, edit the unit and set
 `Environment=HOST=0.0.0.0` (only behind a trusted firewall), then

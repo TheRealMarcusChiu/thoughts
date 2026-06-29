@@ -13,7 +13,7 @@ ExecStart=/root/.nvm/versions/node/v24.16.0/bin/node server/server.mjs
 # Bind locally by default and put a reverse proxy in front; set HOST=0.0.0.0
 # only behind a firewall — the admin API has no authentication.
 Environment=HOST=127.0.0.1
-Environment=PORT=8787
+Environment=PORT=9000
 Restart=on-failure
 RestartSec=3
 User=root
