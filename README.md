@@ -131,10 +131,11 @@ systemctl enable --now thoughts-admin.service
 systemctl status thoughts-admin.service
 ```
 
-The service binds `127.0.0.1:9000` by default — front it with a reverse proxy
-(nginx/Caddy) for TLS and access control, since the admin API has no auth. To
-expose it directly on the container's network instead, edit the unit and set
-`Environment=HOST=0.0.0.0` (only behind a trusted firewall), then
+The service binds `0.0.0.0:9000` (all interfaces) so it accepts remote
+connections. The admin API has **no authentication** — only run it on a trusted
+network/firewall, and preferably behind a reverse proxy (nginx/Caddy) for TLS
+and access control. To restrict it to the container itself instead, edit the
+unit and set `Environment=HOST=127.0.0.1`, then
 `systemctl daemon-reload && systemctl restart thoughts-admin.service`.
 
 `server/update-local.sh` is a convenience script that SSHes in, pulls the latest

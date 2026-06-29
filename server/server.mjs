@@ -280,9 +280,18 @@ const MIME = {
   '.gif': 'image/gif', '.webp': 'image/webp', '.ico': 'image/x-icon',
 };
 
+// Allow the front-end (possibly served from another origin/domain) to call the
+// admin API cross-origin. No cookies are used, so a wildcard origin is fine.
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Max-Age': '86400',
+};
+
 function sendJson(res, code, obj) {
   const body = JSON.stringify(obj);
-  res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', ...CORS });
   res.end(body);
 }
 
@@ -397,7 +406,10 @@ export function createAdminServer(root) {
     let url;
     try { url = new URL(req.url ?? '/', 'http://127.0.0.1'); }
     catch { res.writeHead(400); res.end('bad request'); return; }
-    const done = url.pathname.startsWith('/api/')
+    const isApi = url.pathname.startsWith('/api/');
+    // CORS preflight for cross-origin admin calls.
+    if (isApi && req.method === 'OPTIONS') { res.writeHead(204, CORS); res.end(); return; }
+    const done = isApi
       ? handleApi(req, res, url)
       : handleStatic(req, res, url);
     // Backstop: both handlers catch internally, but guard against any future
