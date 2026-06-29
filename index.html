@@ -56,6 +56,12 @@
   .title-input { width: 100%; background: transparent; border: none; outline: none; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.015em; }
   .title-input::placeholder { color: #463f33; }
   .prose.wysiwyg { min-height: 440px; outline: none; }
+  .opt:hover { background: #1a150e !important; color: #ece1cf !important; box-shadow: inset 2px 0 0 #d8a942 !important; padding-left: 14px !important; }
+  .menubtn:hover { border-color: #d8a942 !important; background: #1a150e !important; color: #c9bca6 !important; }
+  .fab { transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease !important; }
+  .fab:hover { background: #e6bb58 !important; transform: translateY(-2px) !important; box-shadow: 0 20px 46px -12px rgba(216,169,66,0.75) !important; }
+  .gearbtn { transition: all 0.18s ease !important; }
+  .gearbtn:hover { border-color: #d8a942 !important; color: #ece1cf !important; background: rgba(29,23,16,0.96) !important; }
   .prose.wysiwyg:empty:before { content: 'Write your article…'; color: #463f33; font-style: italic; }
 </style>
 </helmet>
@@ -92,7 +98,7 @@
 
         <!-- SORT dropdown -->
         <div style="position: relative;">
-          <button type="button" onClick="{{ toggleSort }}" style="{{ sortBtnStyle }}" style-hover="{{ btnHover }}">
+          <button type="button" class="menubtn" onClick="{{ toggleSort }}" style="{{ sortBtnStyle }}" style-hover="{{ btnHover }}">
             <span style="color: #5f574a;">Sort</span>
             <span style="color: #ece1cf;">{{ sortLabel }}</span>
             <span style="color: #b78f3a; font-size: 9px;">{{ sortCaret }}</span>
@@ -100,7 +106,7 @@
           <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
             <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 214px; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
               <sc-for list="{{ sortOptions }}" as="o" hint-placeholder-count="4">
-                <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}">{{ o.label }}</button>
+                <button type="button" class="opt" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}">{{ o.label }}</button>
               </sc-for>
             </div>
           </sc-if>
@@ -108,7 +114,7 @@
 
         <!-- FILTER (tags) dropdown -->
         <div style="position: relative;">
-          <button type="button" onClick="{{ toggleTag }}" style="{{ tagBtnStyle }}" style-hover="{{ btnHover }}">
+          <button type="button" class="menubtn" onClick="{{ toggleTag }}" style="{{ tagBtnStyle }}" style-hover="{{ btnHover }}">
             <span style="color: #5f574a;">Filter</span>
             <span style="color: #ece1cf;">{{ tagLabel }}</span>
             <span style="color: #b78f3a; font-size: 9px;">{{ tagCaret }}</span>
@@ -116,7 +122,7 @@
           <sc-if value="{{ tagOpen }}" hint-placeholder-val="{{ false }}">
             <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; max-height: 340px; overflow-y: auto; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
               <sc-for list="{{ tagOptions }}" as="o" hint-placeholder-count="6">
-                <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
+                <button type="button" class="opt" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
               </sc-for>
             </div>
           </sc-if>
@@ -125,7 +131,7 @@
         <!-- STATUS dropdown (admin only) -->
         <sc-if value="{{ adminMode }}" hint-placeholder-val="{{ false }}">
         <div style="position: relative;">
-          <button type="button" onClick="{{ toggleStatus }}" style="{{ statusBtnStyle }}" style-hover="{{ btnHover }}">
+          <button type="button" class="menubtn" onClick="{{ toggleStatus }}" style="{{ statusBtnStyle }}" style-hover="{{ btnHover }}">
             <span style="color: #5f574a;">Status</span>
             <span style="color: #ece1cf;">{{ statusLabel }}</span>
             <span style="color: #b78f3a; font-size: 9px;">{{ statusCaret }}</span>
@@ -133,7 +139,7 @@
           <sc-if value="{{ statusOpen }}" hint-placeholder-val="{{ false }}">
             <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
               <sc-for list="{{ statusOptions }}" as="o" hint-placeholder-count="3">
-                <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
+                <button type="button" class="opt" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
               </sc-for>
             </div>
           </sc-if>
@@ -344,7 +350,7 @@
 
   <!-- admin: floating settings (endpoint) + new-article button -->
   <sc-if value="{{ adminBar }}" hint-placeholder-val="{{ false }}">
-    <button type="button" title="Settings" onClick="{{ toggleSettings }}" style="{{ gearBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">
+    <button type="button" class="gearbtn" title="Settings" onClick="{{ toggleSettings }}" style="{{ gearBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>
     <sc-if value="{{ settingsOpen }}" hint-placeholder-val="{{ false }}">
@@ -359,7 +365,7 @@
         <div style="margin-top: 11px; font-size: 11px; line-height: 1.6; color: #5f574a;">Leave blank to use the same origin. Run the server with <span style="color: #8c8170;">node server/server.mjs</span>.</div>
       </div>
     </sc-if>
-    <button type="button" title="New article" onClick="{{ openNew }}" style="position: fixed; right: 24px; bottom: 24px; z-index: 90; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; line-height: 1; border-radius: 50%; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09; box-shadow: 0 16px 40px -12px rgba(216,169,66,0.6);" style-hover="background: #e6bb58;">+</button>
+    <button type="button" class="fab" title="New article" onClick="{{ openNew }}" style="position: fixed; right: 24px; bottom: 24px; z-index: 90; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; line-height: 1; border-radius: 50%; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09; box-shadow: 0 16px 40px -12px rgba(216,169,66,0.6);" style-hover="background: #e6bb58;">+</button>
   </sc-if>
 </div>
 </x-dc>
@@ -1068,8 +1074,8 @@ body.marcus-on,body.marcus-on *{cursor:url('data:image/svg+xml,<svg xmlns="http:
       transition: 'all 0.15s ease',
     };
     const mkOpt = (on) => ({
-      style: { ...optBase, background: on ? '#1d1710' : 'transparent', color: on ? '#d8a942' : '#8c8170' },
-      hoverStyle: on ? {} : { background: '#1a150e', color: '#c9bca6' },
+      style: { ...optBase, background: on ? '#1d1710' : 'transparent', color: on ? '#d8a942' : '#8c8170', boxShadow: on ? 'inset 2px 0 0 #d8a942' : 'inset 0 0 0 #d8a942' },
+      hoverStyle: on ? {} : { background: '#1a150e', color: '#ece1cf', boxShadow: 'inset 2px 0 0 #d8a942', paddingLeft: '14px' },
     });
 
     // sort options
