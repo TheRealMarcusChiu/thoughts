@@ -1,0 +1,25 @@
+[Unit]
+Description=Mark the Thoughts — admin server (local CRUD + manifest build)
+Documentation=https://git.marcuschiu.com/thoughts
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Repo checkout inside the LXC container. server.mjs serves the working
+# directory, so this MUST be the project root (where index.html lives).
+WorkingDirectory=/root/thoughts
+ExecStart=/root/.nvm/versions/node/v24.16.0/bin/node server/server.mjs
+# Bind locally by default and put a reverse proxy in front; set HOST=0.0.0.0
+# only behind a firewall — the admin API has no authentication.
+Environment=HOST=127.0.0.1
+Environment=PORT=8787
+Restart=on-failure
+RestartSec=3
+User=root
+# Light hardening (relax if your checkout lives elsewhere).
+NoNewPrivileges=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

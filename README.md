@@ -9,19 +9,40 @@ host, including opening the files directly via `file://`.
 ## Structure
 
 ```
-index.html      # article listing (sort + filter)
-article.html    # single-article reader
+index.html      # single-page app: article listing + reader (easter eggs inlined)
+config.js       # site config (title, tagline) — copied from config.js.example
 support.js      # shared runtime / rendering
-easter-eggs.js  # shared easter eggs (type "marcus" → highlighter; Konami → candlelight)
 articles/
   <YYYY-MM-DD>/
     index.md    # the article (frontmatter + Markdown body)
     index.js    # auto-generated body bundle (do not edit)
     assets/     # images for the article (optional)
   manifest.js   # auto-generated listing (do not edit)
-scripts/
-  generate-manifest.mjs
+server/
+  server.mjs            # local admin server + manifest build (node server/server.mjs [--build])
+  update-local.sh       # deploy helper (ssh: git pull + restart service)
+  thoughts-admin.service # systemd unit for running the server in a container
 ```
+
+## Configuration
+
+Site-level text (the header title and tagline) lives in `config.js`. Copy the
+template and edit the values:
+
+```sh
+cp config.js.example config.js
+```
+
+```js
+window.SITE_CONFIG = {
+  title: 'Mark the Thoughts',
+  tagline: 'Reflections, parables, and ramblings — collected here. Sort and filter, or click any post to read it.',
+};
+```
+
+`config.js.example` is the checked-in template; `config.js` is what the site
+actually loads. If `config.js` is missing, the header falls back to the built-in
+defaults.
 
 ## Writing an article
 
@@ -57,7 +78,7 @@ Frontmatter keys:
 After adding or editing articles, regenerate the manifest and body bundles:
 
 ```sh
-node scripts/generate-manifest.mjs
+node server/server.mjs --build
 ```
 
 This scans `articles/`, writes `articles/manifest.js` (the listing), and writes a
@@ -69,17 +90,52 @@ A local-only tool for managing articles without editing files by hand. It is a
 dev tool — never deploy the server.
 
 ```sh
-node scripts/admin-server.mjs   # then open http://127.0.0.1:8787/
+node server/server.mjs   # then open http://127.0.0.1:8787/
 ```
 
-`admin.html` lists every article (including drafts), and lets you create, edit,
-and delete posts: frontmatter fields (title, date, draft, tags, cover image), a
-raw/rendered Markdown editor, and image uploads into the article's `assets/`
-folder. New posts default to `draft: true`. Changing a post's date renames its
-folder; if the date is already taken the folder is auto-suffixed (`-2`, `-3`).
-Every change re-runs the manifest build automatically, so the static site stays
-in sync. The server requires no npm dependencies.
+Admin mode lives inside `index.html` itself. With the site open, press
+**⌘E** (macOS) / **Ctrl+E** (Windows/Linux) to toggle it. The listing then shows
+every article (including drafts, whose tiles are dimmed) with a ✎ edit button on
+each tile, a **Status** filter (All / Visible / Hidden), a ⚙ settings button to
+point the editor at a different server endpoint, and a floating **+** button to
+create a post. Press **⌘E** / **Ctrl+E** again to leave admin mode.
+
+Creating or editing a post opens an in-page editor with frontmatter fields
+(title, date, draft, tags, cover image), a rendered/Markdown editor, and image
+uploads into the article's `assets/` folder. New posts default to `draft: true`.
+Changing a post's date renames its folder; if the date is already taken the
+folder is auto-suffixed (`-2`, `-3`). Every change re-runs the manifest build and
+is auto-committed/pushed server-side, so the static site stays in sync. The
+server requires no npm dependencies, and the editor only works while it is
+running (otherwise admin mode shows a "server not reachable" banner).
 
 ## Deploy
 
 Serve the directory as static files. No server-side code is required.
+
+## Run the admin server as a service (systemd)
+
+To keep the admin server running in a Proxmox LXC Ubuntu container, use the
+bundled unit `server/thoughts-admin.service`. It assumes the repo is checked out
+at `/root/thoughts` and runs Node from the nvm path
+`/root/.nvm/versions/node/v24.16.0/bin/node` — adjust `ExecStart` in the unit if
+your Node version or install path differs (systemd does not load nvm's PATH, so
+an absolute node path is required).
+
+```sh
+# from inside the container
+git clone <repo> /root/thoughts
+ln -s /root/thoughts/server/thoughts-admin.service /etc/systemd/system/thoughts-admin.service
+systemctl daemon-reload
+systemctl enable --now thoughts-admin.service
+systemctl status thoughts-admin.service
+```
+
+The service binds `127.0.0.1:8787` by default — front it with a reverse proxy
+(nginx/Caddy) for TLS and access control, since the admin API has no auth. To
+expose it directly on the container's network instead, edit the unit and set
+`Environment=HOST=0.0.0.0` (only behind a trusted firewall), then
+`systemctl daemon-reload && systemctl restart thoughts-admin.service`.
+
+`server/update-local.sh` is a convenience script that SSHes in, pulls the latest
+commit, and restarts the service after you've published changes.

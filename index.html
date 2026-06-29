@@ -1,19 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WKSFZQ4K6F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-WKSFZQ4K6F');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="./support.js"></script>
-<title>Thoughts</title>
 </head>
 <body>
 <x-dc>
@@ -21,26 +12,78 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<script src="articles/manifest.js"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown@7/dist/turndown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.js"></script>
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { background: #0f0c09; }
   ::selection { background: #d8a942; color: #0f0c09; }
   @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* article reader (.prose) */
+  .prose { font-family: 'Newsreader', Georgia, serif; font-size: 19px; line-height: 1.82; color: #cdc1ab; animation: riseIn 0.5s ease both; }
+  .prose > *:first-child { margin-top: 0; }
+  .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+  .prose h2 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 31px; line-height: 1.18; letter-spacing: -0.01em; margin: 1.9em 0 0.55em; }
+  .prose h3 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 23px; margin: 1.6em 0 0.5em; }
+  .prose a { color: #d8a942; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(216,169,66,0.4); }
+  .prose a:hover { text-decoration-color: #d8a942; }
+  .prose strong { color: #ece1cf; font-weight: 600; }
+  .prose em { font-style: italic; }
+  .prose blockquote { margin: 1.6em 0; padding: 0.1em 0 0.1em 1.4em; border-left: 2px solid #d8a942; color: #a99e88; font-style: italic; }
+  .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.3em; }
+  .prose li { margin: 0.4em 0; }
+  .prose li::marker { color: #b78f3a; }
+  .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.82em; background: #1c1710; border: 1px solid #2a2218; border-radius: 4px; padding: 2px 6px; color: #d8a942; }
+  .prose pre { background: #14110b; border: 1px solid #2a2218; border-radius: 6px; padding: 18px; overflow-x: auto; margin: 0 0 1.4em; }
+  .prose pre code { background: none; border: none; padding: 0; color: #cdc1ab; }
+  .prose hr { border: none; border-top: 1px solid #2a2218; margin: 2.6em 0; }
+  .prose img { max-width: 100%; border-radius: 6px; }
+  .prose h1 { font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 31px; line-height: 1.18; letter-spacing: -0.01em; margin: 1.9em 0 0.55em; }
+  .prose table { border-collapse: collapse; margin: 0 0 1.4em; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .prose th, .prose td { border: 1px solid #2a2218; padding: 7px 12px; text-align: left; }
+
+  /* editor */
+  input, textarea, select, button { font-family: 'JetBrains Mono', monospace; }
+  .fld { width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 14px; padding: 11px 13px; outline: none; transition: border-color 0.2s ease; }
+  .fld:focus { border-color: #d8a942; }
+  .md-raw { width: 100%; min-height: 520px; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #cdc1ab; font-size: 14px; line-height: 1.7; padding: 18px; resize: vertical; outline: none; transition: border-color 0.2s ease; }
+  .md-raw:focus { border-color: #d8a942; }
+  .title-input { width: 100%; background: transparent; border: none; outline: none; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.015em; }
+  .title-input::placeholder { color: #463f33; }
+  .prose.wysiwyg { min-height: 440px; outline: none; }
+  .prose.wysiwyg:empty:before { content: 'Write your article…'; color: #463f33; font-style: italic; }
 </style>
 </helmet>
 
 <div style="background: #0f0c09; min-height: 100vh; color: #ece1cf; font-family: 'JetBrains Mono', monospace; padding: 0 0 120px; -webkit-font-smoothing: antialiased;">
 
+  <!-- admin: server-down banner -->
+  <sc-if value="{{ serverDown }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 24px 40px 0;">
+      <div style="padding: 16px 18px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 13px; line-height: 1.7;">
+        Admin server not reachable. Start it with <span style="color: #f0c9bf;">node server/server.mjs</span> then
+        <button type="button" onClick="{{ reload }}" style="margin-left: 8px; background: #6b2c20; border: none; color: #ffe; border-radius: 5px; padding: 6px 12px; cursor: pointer; font-size: 12px; font-family: 'JetBrains Mono', monospace;">Retry</button>
+        <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #b98a7e;">Endpoint</span>
+          <input type="text" value="{{ apiBase }}" onChange="{{ onApiBase }}" onBlur="{{ commitApiBase }}" onKeyDown="{{ apiKey }}" placeholder="same origin (e.g. http://127.0.0.1:8787)" style="flex: 1; min-width: 240px; background: #1c0f0c; border: 1px solid #6b2c20; border-radius: 5px; color: #f0c9bf; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 7px 10px; outline: none;">
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
   <div style="max-width: 1180px; margin: 0 auto; padding: 0 40px;">
 
     <!-- ===== HEADER ===== -->
     <header style="padding: 96px 0 52px; border-bottom: 1px solid #221c14;">
-            <a href="http://www.marcuschiu.com" rel="noopener noreferrer" style="display: inline-block; font-size: 12px; letter-spacing: 0.34em; color: #d8a942; text-transform: uppercase; margin-bottom: 38px; text-decoration: none;" style-hover="color: #ece1cf;">← www.marcuschiu.com</a>
-      <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(48px, 8vw, 104px); line-height: 0.98; letter-spacing: -0.015em;" id="site-title">Mark the Thoughts</h1>
-      <p style="margin-top: 30px; max-width: 56ch; font-size: 14px; line-height: 1.85; color: #8c8170;" id="site-tagline">Reflections, parables, and ramblings — collected here. Sort and filter, or click any post to read it.</p>
+      <a href="http://www.marcuschiu.com" style="display: inline-block; font-size: 12px; letter-spacing: 0.34em; color: #d8a942; text-transform: uppercase; margin-bottom: 38px; text-decoration: none;" style-hover="color: #ece1cf;">← www.marcuschiu.com</a>
+      <h1 id="site-title" style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(48px, 8vw, 104px); line-height: 0.98; letter-spacing: -0.015em;">{{ siteTitle }}</h1>
+      <p id="site-tagline" style="margin-top: 30px; max-width: 56ch; font-size: 14px; line-height: 1.85; color: #8c8170;">{{ siteTagline }}</p>
     </header>
 
     <!-- ===== CONTROLS BAR ===== -->
@@ -79,6 +122,24 @@
           </sc-if>
         </div>
 
+        <!-- STATUS dropdown (admin only) -->
+        <sc-if value="{{ adminMode }}" hint-placeholder-val="{{ false }}">
+        <div style="position: relative;">
+          <button type="button" onClick="{{ toggleStatus }}" style="{{ statusBtnStyle }}" style-hover="{{ btnHover }}">
+            <span style="color: #5f574a;">Status</span>
+            <span style="color: #ece1cf;">{{ statusLabel }}</span>
+            <span style="color: #b78f3a; font-size: 9px;">{{ statusCaret }}</span>
+          </button>
+          <sc-if value="{{ statusOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: #16120c; border: 1px solid #2a2218; border-radius: 7px; padding: 6px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); z-index: 60; display: flex; flex-direction: column; gap: 2px; animation: menuIn 0.16s ease both;">
+              <sc-for list="{{ statusOptions }}" as="o" hint-placeholder-count="3">
+                <button type="button" onClick="{{ o.onClick }}" style="{{ o.style }}" style-hover="{{ o.hoverStyle }}"><span>{{ o.label }}</span><span style="{{ o.countStyle }}">{{ o.count }}</span></button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
       </div>
       <div style="font-size: 12px; letter-spacing: 0.18em; color: #5f574a; text-transform: uppercase; white-space: nowrap;">{{ countLabel }}</div>
     </div>
@@ -91,7 +152,7 @@
     <!-- ===== WRITING GRID ===== -->
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px;">
       <sc-for list="{{ articles }}" as="a" hint-placeholder-count="12">
-        <a href="article.html#{{ a.slug }}" style="display: flex; flex-direction: column; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.2s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 0 0 1px #d8a942, 0 18px 40px -20px rgba(216,169,66,0.5);">
+        <a href="?slug={{ a.slug }}" onClick="{{ a.onOpen }}" style="position: relative; display: flex; flex-direction: column; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; overflow: hidden; transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.2s ease, box-shadow 0.28s ease; animation: riseIn 0.5s ease both;" style-hover="border-color: #d8a942; transform: translateY(-5px); box-shadow: 0 0 0 1px #d8a942, 0 18px 40px -20px rgba(216,169,66,0.5);">
           <div style="position: relative; aspect-ratio: 16 / 10; background-color: #16120c; background-image: repeating-linear-gradient(135deg, #181309 0px, #181309 11px, #1d1710 11px, #1d1710 22px); border-bottom: 1px solid #29221a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
             <sc-if value="{{ a.hasImg }}" hint-placeholder-val="{{ false }}">
               <img src="{{ a.imgUrl }}" alt="{{ a.title }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
@@ -100,6 +161,14 @@
               <div style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6c6354; text-align: center; padding: 0 20px;">{{ a.title }}<br><span style="color: #4a4337; letter-spacing: 0.16em;">cover image</span></div>
             </sc-if>
             <span style="position: absolute; left: 16px; bottom: 8px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; font-size: 48px; line-height: 1; color: rgba(216,169,66,0.16); z-index: 1;">{{ a.num }}</span>
+            <sc-if value="{{ a.draft }}" hint-placeholder-val="{{ false }}">
+              <span style="position: absolute; left: 12px; top: 12px; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #0f0c09; background: #d8a942; border-radius: 3px; padding: 4px 8px; z-index: 2;">Draft</span>
+            </sc-if>
+            <sc-if value="{{ a.isAdmin }}" hint-placeholder-val="{{ false }}">
+              <button type="button" title="Edit" onClick="{{ a.onEdit }}" style="position: absolute; top: 12px; right: 12px; z-index: 3; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; background: rgba(15,12,9,0.72); border: 1px solid #3a2f1a; color: #d8a942; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: all 0.18s ease;" style-hover="border-color: #d8a942; background: #1d1710; color: #ece1cf;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+              </button>
+            </sc-if>
           </div>
           <div style="padding: 22px 22px 20px; display: flex; flex-direction: column; flex: 1;">
             <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a;">{{ a.date }}</div>
@@ -110,6 +179,9 @@
               </sc-for>
             </div>
           </div>
+          <sc-if value="{{ a.draft }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; inset: 0; z-index: 1; background: rgba(15,12,9,0.5); border-radius: 6px; pointer-events: none;"></div>
+          </sc-if>
         </a>
       </sc-for>
     </div>
@@ -128,18 +200,723 @@
     <!-- ===== FOOTER ===== -->
     <footer style="margin-top: 96px; padding-top: 30px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
       <div style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a;">© 2026 Marcus Chiu</div>
-      <a href="http://www.marcuschiu.com" rel="noopener noreferrer" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">www.marcuschiu.com</a>
+      <a href="http://www.marcuschiu.com" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">← www.marcuschiu.com</a>
     </footer>
 
   </div>
+  </sc-if>
+
+  <!-- ===== ARTICLE READER ===== -->
+  <sc-if value="{{ isArticle }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width: 720px; margin: 0 auto; padding: 0 32px;">
+
+    <div style="padding: 48px 0 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+      <a id="mark-eyebrow" href="index.html" onClick="{{ goListClick }}" style="display: inline-flex; align-items: center; gap: 9px; font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170; text-decoration: none;" style-hover="color: #d8a942;">← All writing</a>
+      <sc-if value="{{ adminReader }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ editCurrent }}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 16px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #d8a942;" style-hover="border-color: #d8a942; color: #ece1cf;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          Edit
+        </button>
+      </sc-if>
+    </div>
+
+    <header style="padding: 64px 0 30px; border-bottom: 1px solid #221c14;">
+      <div style="font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: #b78f3a; margin-bottom: 26px;">{{ articleDate }}</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(38px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.015em; text-wrap: pretty;">{{ articleTitle }}</h1>
+    </header>
+
+    <article style="padding: 46px 0 0;">
+      <sc-if value="{{ articleLoading }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a;">Loading…</div>
+      </sc-if>
+      {{ articleBody }}
+    </article>
+
+    <sc-if value="{{ hasNav }}" hint-placeholder-val="{{ false }}">
+      <nav style="margin-top: 72px; padding-top: 38px; border-top: 1px solid #221c14; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <sc-if value="{{ hasNewer }}" hint-placeholder-val="{{ false }}">
+            <a href="?slug={{ newer.slug }}" onClick="{{ newer.onOpen }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
+              <span style="font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170;">← Newer post</span>
+              <span style="font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 19px; line-height: 1.25; text-wrap: pretty;">{{ newer.title }}</span>
+              <span style="margin-top: auto; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a;">{{ newer.date }}</span>
+            </a>
+          </sc-if>
+        </div>
+        <div>
+          <sc-if value="{{ hasOlder }}" hint-placeholder-val="{{ false }}">
+            <a href="?slug={{ older.slug }}" onClick="{{ older.onOpen }}" style="display: flex; flex-direction: column; height: 100%; gap: 10px; text-align: right; text-decoration: none; background: #14100b; border: 1px solid #29221a; border-radius: 6px; padding: 20px 22px; transition: border-color 0.25s ease, transform 0.25s ease;" style-hover="border-color: #d8a942; transform: translateY(-3px);">
+              <span style="font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170;">Older post →</span>
+              <span style="font-family: 'Newsreader', Georgia, serif; font-weight: 500; color: #ece1cf; font-size: 19px; line-height: 1.25; text-wrap: pretty;">{{ older.title }}</span>
+              <span style="margin-top: auto; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #b78f3a;">{{ older.date }}</span>
+            </a>
+          </sc-if>
+        </div>
+      </nav>
+    </sc-if>
+
+    <footer style="margin-top: 56px; padding-top: 28px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+      <a href="index.html" onClick="{{ goListClick }}" style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">← More writing</a>
+      <a href="http://www.marcuschiu.com" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a; text-decoration: none;" style-hover="color: #d8a942;">← www.marcuschiu.com</a>
+    </footer>
+
+  </div>
+  </sc-if>
+
+  <!-- ===== EDITOR (admin) ===== -->
+  <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width: 720px; margin: 0 auto; padding: 0 32px;">
+
+    <div style="position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 0; background: rgba(15,12,9,0.93); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid #221c14;">
+      <button type="button" onClick="{{ cancelEdit }}" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; background: transparent; border: none; cursor: pointer; padding: 8px 4px;" style-hover="color: #d8a942;">← Back</button>
+      <div style="display: inline-flex; border: 1px solid #29221a; border-radius: 6px; overflow: hidden;">
+        <button type="button" onClick="{{ setRendered }}" style="{{ renderedTabStyle }}">Rendered</button>
+        <button type="button" onClick="{{ setMarkdown }}" style="{{ markdownTabStyle }}">Markdown</button>
+      </div>
+      <button type="button" onClick="{{ insertImage }}" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 9px 14px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">+ Insert image</button>
+      <div style="flex: 1;"></div>
+      <button type="button" onClick="{{ toggleProps }}" style="{{ propsBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">Properties {{ propsCaret }}</button>
+    </div>
+
+    <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top: 18px; padding: 13px 16px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 13px;">{{ error }}</div>
+    </sc-if>
+
+    <sc-if value="{{ propsOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top: 18px; border: 1px solid #2a2218; border-radius: 8px; padding: 22px; background: #13100a; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; animation: menuIn 0.16s ease both;">
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Status</label>
+          <button type="button" onClick="{{ toggleDraft }}" style="{{ draftBtnStyle }}">{{ draftLabel }}</button>
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Date</label>
+          <input class="fld" type="date" value="{{ edDate }}" onChange="{{ onDate }}">
+          <div style="margin-top: 7px; font-size: 11px; color: #5f574a;">Folder: {{ folderHint }}</div>
+        </div>
+        <div style="grid-column: 1 / -1;">
+          <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Tags</label>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
+            <sc-for list="{{ edTags }}" as="t" hint-placeholder-count="3">
+              <button type="button" onClick="{{ t.onRemove }}" style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #d8a942; border: 1px solid #3a2f1a; border-radius: 3px; padding: 5px 9px; cursor: pointer; background: #1d1710;" style-hover="border-color: #b5786c; color: #e7b0a4;">{{ t.label }} ✕</button>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input class="fld" list="all-tags" type="text" value="{{ tagInput }}" onChange="{{ onTagInput }}" placeholder="Add tag…">
+            <button type="button" onClick="{{ addTagFromInput }}" style="white-space: nowrap; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 14px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">Add</button>
+          </div>
+          <datalist id="all-tags">
+            <sc-for list="{{ allTagOptions }}" as="t" hint-placeholder-count="6">
+              <option value="{{ t }}"></option>
+            </sc-for>
+          </datalist>
+        </div>
+        <div style="grid-column: 1 / -1;">
+          <label style="display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px;">Cover image</label>
+          {{ coverEl }}
+          <button type="button" onClick="{{ uploadCover }}" style="width: 100%; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 11px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #c9bca6;" style-hover="border-color: #d8a942; color: #ece1cf;">{{ coverBtnLabel }}</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <header style="padding: 44px 0 28px; border-bottom: 1px solid #221c14;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+        <span style="font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: #b78f3a;">{{ edDateLabel }}</span>
+        <sc-if value="{{ edIsDraft }}" hint-placeholder-val="{{ true }}">
+          <span style="font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #0f0c09; background: #d8a942; border-radius: 3px; padding: 3px 8px;">Draft</span>
+        </sc-if>
+      </div>
+      <input class="title-input" type="text" value="{{ edTitle }}" onInput="{{ onTitle }}" placeholder="Title">
+    </header>
+
+    <div style="padding: 38px 0 0;">
+      {{ bodyEl }}
+    </div>
+
+    <div style="position: sticky; bottom: 0; z-index: 30; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0; background: rgba(15,12,9,0.93); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid #221c14;">
+      <button type="button" onClick="{{ togglePreview }}" style="{{ previewBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">{{ previewBtnLabel }}</button>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button type="button" onClick="{{ cancelEdit }}" style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 20px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170;" style-hover="border-color: #4a3c1d; color: #c9bca6;">Cancel</button>
+        <button type="button" onClick="{{ save }}" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- admin: floating settings (endpoint) + new-article button -->
+  <sc-if value="{{ adminBar }}" hint-placeholder-val="{{ false }}">
+    <button type="button" title="Settings" onClick="{{ toggleSettings }}" style="{{ gearBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    </button>
+    <sc-if value="{{ settingsOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenus }}" style="position: fixed; inset: 0; z-index: 95;"></div>
+      <div style="position: fixed; right: 24px; top: 70px; z-index: 96; width: 320px; background: #16120c; border: 1px solid #2a2218; border-radius: 9px; padding: 18px; box-shadow: 0 22px 46px -18px rgba(0,0,0,0.75); animation: menuIn 0.16s ease both;">
+        <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170; margin-bottom: 11px;">Server endpoint</div>
+        <input type="text" value="{{ apiBase }}" onChange="{{ onApiBase }}" onBlur="{{ commitApiBase }}" onKeyDown="{{ apiKey }}" placeholder="same origin (e.g. http://127.0.0.1:8787)" style="width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 9px 11px; outline: none;">
+        <div style="margin-top: 11px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.04em; color: #8c8170;"><span style="{{ apiDotStyle }}"></span>{{ apiStatusText }}</span>
+          <button type="button" onClick="{{ commitApiBase }}" style="font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; padding: 7px 13px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #d8a942;" style-hover="border-color: #d8a942; color: #ece1cf;">Test</button>
+        </div>
+        <div style="margin-top: 11px; font-size: 11px; line-height: 1.6; color: #5f574a;">Leave blank to use the same origin. Run the server with <span style="color: #8c8170;">node server/server.mjs</span>.</div>
+      </div>
+    </sc-if>
+    <button type="button" title="New article" onClick="{{ openNew }}" style="position: fixed; right: 24px; bottom: 24px; z-index: 90; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; line-height: 1; border-radius: 50%; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09; box-shadow: 0 16px 40px -12px rgba(216,169,66,0.6);" style-hover="background: #e6bb58;">+</button>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { tag: 'all', sort: 'newest', menu: null, page: 1, allArticles: [], loading: true };
+  state = { route: 'list', slug: '', tag: 'all', sort: 'newest', status: 'all', menu: null, page: 1, allArticles: [], loading: true, articleHtml: '', articleLoading: false, articleTitle: '', articleDate: '', articleDir: '',
+            admin: false, adminArticles: null, allTags: [], serverDown: false, ed: null, mode: 'rendered', tagInput: '', saving: false, error: '', propsOpen: false,
+            apiBase: (() => { try { return localStorage.getItem('admin.apiBase') || ''; } catch (e) { return ''; } })(), apiStatus: '', settingsOpen: false };
+  _tok = 0;
+  wysiwygHtml = '';
+  wysiwygDirty = false;
 
   componentDidMount() {
+    this.initEggs();
+    window.addEventListener('popstate', this.syncRoute);
+    window.addEventListener('keydown', this.onAdminKey);
+    this.loadManifest();
+    this.syncRoute();
     this.loadArticles();
+  }
+
+  // Append a cache-buster so manifest/article bundles are always fetched fresh.
+  // Skipped under file:// and the design-preview sandbox, where a query string
+  // would not resolve against the served file.
+  cacheBust(url) {
+    if (this._noBust == null) this._noBust = (location.protocol === 'file:' || /(^|\.)claudeusercontent\.com$/.test(location.hostname));
+    if (this._noBust) return url;
+    return url + (url.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now();
+  }
+
+  loadManifest() {
+    return new Promise((resolve) => {
+      if (window.ARTICLES) return resolve();
+      const s = document.createElement('script');
+      s.src = this.cacheBust('articles/manifest.js');
+      s.onload = () => resolve();
+      s.onerror = () => resolve();
+      document.head.appendChild(s);
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.syncRoute);
+    window.removeEventListener('keydown', this.onAdminKey);
+  }
+
+  // ---- admin mode (Cmd/Ctrl+E) ----
+  onAdminKey = (e) => {
+    if ((e.metaKey || e.ctrlKey) && !e.altKey && (e.key === 'e' || e.key === 'E')) {
+      e.preventDefault();
+      this.toggleAdmin();
+    }
+  };
+
+  toggleAdmin = () => {
+    if (this.state.admin) { this.exitAdmin(); return; }
+    this.setState({ admin: true, menu: null, error: '' });
+    this.loadAdmin();
+  };
+
+  exitAdmin = () => {
+    const inEditor = this.state.route === 'editor';
+    this.setState({ admin: false, propsOpen: false, error: '', menu: null, ed: inEditor ? null : this.state.ed, route: inEditor ? 'list' : this.state.route });
+    if (inEditor) { document.title = this.siteTitleText(); if (history.pushState) history.pushState({}, '', location.pathname); }
+  };
+
+  async loadAdmin() {
+    this.setState({ apiStatus: 'checking' });
+    try {
+      const [aRes, tRes] = await Promise.all([fetch(this.api('/api/articles')), fetch(this.api('/api/tags'))]);
+      if (!aRes.ok || !tRes.ok) throw new Error('bad response');
+      const a = await aRes.json();
+      const t = await tRes.json();
+      this.setState({ adminArticles: a.articles || [], allTags: t.tags || [], serverDown: false, apiStatus: 'ok' });
+    } catch (e) {
+      this.setState({ serverDown: true, apiStatus: 'fail' });
+    }
+  }
+
+  reload = () => { this.setState({ serverDown: false }); this.loadAdmin(); };
+
+  // Prefix an /api path with the configurable server endpoint (blank = same origin).
+  api(path) { const b = (this.state.apiBase || '').trim().replace(/\/$/, ''); return b + path; }
+  onApiBase = (e) => {
+    const v = String(e.target.value || '');
+    try { const t = v.trim(); if (t) localStorage.setItem('admin.apiBase', t); else localStorage.removeItem('admin.apiBase'); } catch (err) {}
+    this.setState({ apiBase: v, apiStatus: '' });
+  };
+  commitApiBase = () => { this.setState({ apiBase: (this.state.apiBase || '').trim() }); this.loadAdmin(); };
+  apiKey = (e) => { if (e.key === 'Enter') { e.preventDefault(); this.commitApiBase(); if (e.target && e.target.blur) e.target.blur(); } };
+
+  // ---- editor helpers ----
+  today() { const d = new Date(); const p = (n) => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+  escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  computeSlug(date, title) { return encodeURIComponent(String(date || '') + '--' + String(title || '').replace(/ /g, '-')); }
+
+  parseFM(text) {
+    const m = /^\uFEFF?---\s*\n([\s\S]*?)\n---\s*\n?/.exec(text);
+    const fm = {}; let body = text;
+    if (m) {
+      body = text.slice(m[0].length);
+      for (const line of m[1].split('\n')) {
+        const i = line.indexOf(':'); if (i === -1) continue;
+        const k = line.slice(0, i).trim(); let v = line.slice(i + 1).trim();
+        if (v.startsWith('[') && v.endsWith(']')) v = v.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
+        else v = v.replace(/^["']|["']$/g, '');
+        fm[k] = v;
+      }
+    }
+    return { fm, body };
+  }
+
+  setEd(patch) { this.setState((s) => ({ ed: { ...s.ed, ...patch } })); }
+
+  displayBody(body, dir) { let s = body || ''; if (dir) s = s.replace(/(!\[[^\]]*\]\()(assets\/)/g, '$1articles/' + dir + '/$2'); return s; }
+  storeBody(body, dir) { let s = body || ''; if (dir) s = s.split('articles/' + dir + '/assets/').join('assets/'); return s; }
+  seedWysiwyg(body, dir) { const display = this.displayBody(body, dir); this.wysiwygHtml = window.marked ? window.marked.parse(display) : this.escapeHtml(display); this.wysiwygDirty = false; }
+
+  ensureTurndown() {
+    if (this.td) return this.td;
+    if (!window.TurndownService) return null;
+    const td = new window.TurndownService({ headingStyle: 'atx', hr: '---', bulletListMarker: '-', codeBlockStyle: 'fenced', emDelimiter: '_', strongDelimiter: '**', linkStyle: 'inlined' });
+    if (window.turndownPluginGfm && window.turndownPluginGfm.gfm) td.use(window.turndownPluginGfm.gfm);
+    this.td = td; return td;
+  }
+  htmlToMarkdown(html) { const td = this.ensureTurndown(); if (!td) return null; return td.turndown(html).replace(/\n{3,}/g, '\n\n').trim(); }
+  getCurrentBody() {
+    const ed = this.state.ed || {};
+    if (this.state.mode === 'rendered' && this.wysiwygDirty) {
+      const el = document.getElementById('wysiwyg');
+      if (el) {
+        const md = this.htmlToMarkdown(el.innerHTML);
+        if (md != null) return this.storeBody(md, ed.originalDir);
+        if (!this._warnedTd) { this._warnedTd = true; window.alert('Rich-text converter not loaded yet — switch to Markdown mode to edit safely.'); }
+      }
+    }
+    return ed.body || '';
+  }
+
+  // ---- editor lifecycle ----
+  openNew = () => {
+    const ed = { originalDir: null, title: '', date: this.today(), draft: true, tags: [], img: '', body: '', assets: [] };
+    this.seedWysiwyg('', null);
+    this.setState({ admin: true, route: 'editor', mode: 'rendered', error: '', tagInput: '', propsOpen: false, menu: null, ed });
+    window.scrollTo(0, 0);
+  };
+
+  openEditDir = async (dir) => {
+    this.setState({ error: '' });
+    try {
+      const r = await fetch(this.api('/api/article?dir=' + encodeURIComponent(dir)));
+      if (!r.ok) throw new Error('load failed');
+      const data = await r.json();
+      const { fm, body } = this.parseFM(data.raw || '');
+      const tags = Array.isArray(fm.tags) ? fm.tags : (fm.tags ? [fm.tags] : []);
+      const date = fm.date || (dir.match(/^\d{4}-\d{2}-\d{2}/) || [''])[0];
+      const ed = { originalDir: dir, title: fm.title || '', date, draft: fm.draft === 'true' || fm.draft === true, tags, img: fm.img || '', body, assets: data.assets || [] };
+      this.seedWysiwyg(body, dir);
+      this.setState({ admin: true, route: 'editor', mode: 'rendered', tagInput: '', error: '', propsOpen: false, menu: null, ed });
+      window.scrollTo(0, 0);
+    } catch (e) { this.setState({ serverDown: true }); }
+  };
+
+  cancelEdit = () => { this.setState({ route: 'list', ed: null, error: '', propsOpen: false }); window.scrollTo(0, 0); };
+  toggleProps = () => this.setState((s) => ({ propsOpen: !s.propsOpen }));
+
+  onTitle = (e) => this.setEd({ title: e.target.value });
+  onDate = (e) => this.setEd({ date: e.target.value });
+  onBody = (e) => this.setEd({ body: e.target.value });
+  onWysiwygInput = () => { this.wysiwygDirty = true; };
+  toggleDraft = () => this.setEd({ draft: !this.state.ed.draft });
+
+  setRendered = () => { if (this.state.mode === 'rendered') return; const ed = this.state.ed; this.seedWysiwyg(ed.body, ed.originalDir); this.setState({ mode: 'rendered' }); };
+  setMarkdown = () => { if (this.state.mode === 'markdown') return; const body = this.getCurrentBody(); this.wysiwygDirty = false; this.setState((s) => ({ mode: 'markdown', ed: { ...s.ed, body } })); };
+  togglePreview = () => {
+    if (this.state.mode === 'preview') { const back = this.prevEditMode === 'markdown' ? 'markdown' : 'rendered'; if (back === 'rendered') this.seedWysiwyg(this.state.ed.body, this.state.ed.originalDir); this.setState({ mode: back }); return; }
+    const body = this.getCurrentBody(); this.prevEditMode = this.state.mode; this.wysiwygDirty = false; this.setState((s) => ({ mode: 'preview', ed: { ...s.ed, body } }));
+  };
+
+  onTagInput = (e) => this.setState({ tagInput: e.target.value });
+  addTag = (t) => { t = String(t || '').trim(); if (!t) return; const cur = this.state.ed.tags; if (!cur.includes(t)) this.setEd({ tags: [...cur, t] }); this.setState({ tagInput: '' }); };
+  addTagFromInput = () => this.addTag(this.state.tagInput);
+  removeTag = (t) => this.setEd({ tags: this.state.ed.tags.filter((x) => x !== t) });
+
+  pickFile(cb) { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.onchange = () => { if (inp.files && inp.files[0]) cb(inp.files[0]); }; inp.click(); }
+  async uploadTo(dir, file) {
+    try {
+      const r = await fetch(this.api('/api/upload?dir=' + encodeURIComponent(dir) + '&name=' + encodeURIComponent(file.name)), { method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file });
+      if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || 'upload failed'); }
+      const j = await r.json(); return j.path;
+    } catch (e) { this.setState({ error: String(e.message || e) }); return null; }
+  }
+  uploadCover = () => this.pickFile(async (file) => { const dir = await this.ensureSaved(); if (!dir) return; const path = await this.uploadTo(dir, file); if (path) this.setEd({ img: path }); });
+  insertImage = () => this.pickFile(async (file) => {
+    const dir = await this.ensureSaved(); if (!dir) return; const path = await this.uploadTo(dir, file); if (!path) return;
+    if (this.state.mode === 'rendered') {
+      const el = document.getElementById('wysiwyg'); const disp = 'articles/' + dir + '/' + path;
+      if (el) { el.focus(); const ok = document.execCommand && document.execCommand('insertHTML', false, '<img src="' + disp + '" alt="">'); if (!ok) el.innerHTML += '<img src="' + disp + '" alt="">'; this.wysiwygDirty = true; }
+    } else if (this.state.mode === 'markdown') { this.insertAtCursor('\n![](' + path + ')\n'); }
+    else { this.setEd({ body: (this.state.ed.body || '') + '\n![](' + path + ')\n' }); }
+  });
+  insertAtCursor(text) {
+    const ta = document.getElementById('md-body'); const body = this.state.ed.body || '';
+    if (!ta) { this.setEd({ body: body + text }); return; }
+    const s = ta.selectionStart != null ? ta.selectionStart : body.length; const e = ta.selectionEnd != null ? ta.selectionEnd : body.length;
+    this.setEd({ body: body.slice(0, s) + text + body.slice(e) });
+  }
+
+  async doSave(bodyArg) {
+    const ed = this.state.ed;
+    if (!String(ed.title).trim()) { this.setState({ error: 'Title is required.' }); return null; }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ed.date)) { this.setState({ error: 'Date must be YYYY-MM-DD.', propsOpen: true }); return null; }
+    const body = bodyArg != null ? bodyArg : this.getCurrentBody();
+    this.setState({ saving: true, error: '' });
+    try {
+      const r = await fetch(this.api('/api/article'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ originalDir: ed.originalDir, date: ed.date, title: ed.title, draft: ed.draft, tags: ed.tags, img: ed.img, body }) });
+      if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || ('HTTP ' + r.status)); }
+      const j = await r.json(); this.lastGit = j.git;
+      this.setState((s) => ({ saving: false, ed: { ...s.ed, originalDir: j.dir, body } }));
+      return j.dir;
+    } catch (e) { this.setState({ saving: false, error: String(e.message || e) }); return null; }
+  }
+  gitWarn(g) {
+    if (!g || g.skipped || g.pushed) return '';
+    if (g.committed === false && !g.error) return '';
+    return g.committed ? ('Saved and committed locally, but git push failed:\n\n' + (g.error || 'unknown error')) : ('Saved to disk, but git commit failed:\n\n' + (g.error || 'unknown error'));
+  }
+  ensureSaved = async () => { const ed = this.state.ed; if (ed.originalDir) return ed.originalDir; return await this.doSave(); };
+  save = async () => {
+    const dir = await this.doSave(this.getCurrentBody());
+    if (dir) { const w = this.gitWarn(this.lastGit); if (w) window.alert(w); await this.loadAdmin(); this.setState({ route: 'list', ed: null, propsOpen: false }); window.scrollTo(0, 0); }
+  };
+
+  // ---- routing (single page: list <-> article) ----
+  siteTitleText() { return (window.SITE_CONFIG && window.SITE_CONFIG.title) || 'Mark the Thoughts'; }
+
+  syncRoute = () => {
+    const m = location.search.match(/[?&]slug=([^&]*)/);
+    const raw = m ? m[1] : null;
+    if (raw) {
+      this.openArticle(raw, false);
+    } else {
+      document.title = this.siteTitleText();
+      this.setState({ route: 'list', slug: '' });
+    }
+  };
+
+  navClick = (slug) => (e) => {
+    if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (e.button && e.button !== 0))) return;
+    if (e) e.preventDefault();
+    this.openArticle(slug, true);
+  };
+
+  goListClick = (e) => {
+    if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (e.button && e.button !== 0))) return;
+    if (e) e.preventDefault();
+    if (history.pushState) history.pushState({}, '', location.pathname);
+    document.title = this.siteTitleText();
+    this.setState({ route: 'list', slug: '' });
+    window.scrollTo(0, 0);
+  };
+
+  // Edit the article currently open in the reader (admin only).
+  editCurrent = () => {
+    let dir = this.state.articleDir;
+    if (!dir) { const m = this.findBySlug(this.state.slug); dir = m && m.path ? m.path.replace(/\/index\.md$/, '') : ''; }
+    if (dir) this.openEditDir(dir);
+  };
+
+  openArticle(slug, push) {
+    if (push && history.pushState) history.pushState({ slug }, '', '?slug=' + slug);
+    this.setState({ route: 'article', slug, articleHtml: '', articleLoading: true, articleTitle: '', articleDate: '', articleDir: '', menu: null });
+    window.scrollTo(0, 0);
+    this.loadArticleBody(slug);
+  }
+
+  findBySlug(slug) {
+    const dec = (s) => { try { return decodeURIComponent(s); } catch (e) { return s; } };
+    return this.state.allArticles.find(a => a.slug === slug || dec(a.slug) === dec(slug)) || null;
+  }
+
+  async loadArticleBody(slug) {
+    const token = ++this._tok;
+    await this.waitForArticles();
+    // In admin mode, prefer the live admin list (covers drafts and gives the dir).
+    const adminMeta = (this.state.admin && Array.isArray(this.state.adminArticles))
+      ? this.state.adminArticles.find(a => this.computeSlug(a.date, a.title) === slug) : null;
+    const meta = this.findBySlug(slug);
+    if (!adminMeta && !meta) {
+      if (this._tok === token) { document.title = 'Not found — ' + this.siteTitleText(); this.setState({ articleHtml: '', articleLoading: false, articleTitle: 'Post not found', articleDate: '', articleDir: '' }); }
+      return;
+    }
+    const title = adminMeta ? adminMeta.title : meta.title;
+    const date = adminMeta ? this.formatDate(adminMeta.date) : meta.date;
+    const dir = adminMeta ? adminMeta.dir : (meta.path ? meta.path.replace(/\/index\.md$/, '') : '');
+    if (this._tok === token) this.setState({ articleTitle: title, articleDate: date, articleDir: dir });
+    document.title = title + ' — ' + this.siteTitleText();
+    let md = '';
+    if (adminMeta && dir) {
+      // Fetch the latest raw markdown from the admin server (works for drafts too).
+      try { const r = await fetch(this.api('/api/article?dir=' + encodeURIComponent(dir))); if (r.ok) { const data = await r.json(); md = this.stripFrontmatter(data.raw || ''); } } catch (e) {}
+      if (md) md = md.replace(/(!\[[^\]]*\]\()(assets\/)/g, '$1articles/' + dir + '/$2');
+    } else if (meta) {
+      await this.loadBody(meta.path);
+      const bundled = window.ARTICLE_CONTENT && window.ARTICLE_CONTENT[meta.path];
+      if (bundled != null) {
+        md = this.stripFrontmatter(bundled);
+      } else {
+        try {
+          const r = await fetch(this.cacheBust('articles/' + meta.path), { cache: 'no-cache' });
+          if (r.ok) md = this.stripFrontmatter(await r.text());
+        } catch (e) {}
+      }
+    }
+    if (!md) md = '*This post has no Markdown yet.*';
+    await this.waitForMarked();
+    let html;
+    try { html = window.marked ? window.marked.parse(md) : md.replace(/\n/g, '<br>'); }
+    catch (e) { html = md.replace(/\n/g, '<br>'); }
+    if (this._tok === token) this.setState({ articleHtml: html, articleLoading: false });
+  }
+
+  stripFrontmatter(text) {
+    return text.replace(/^\uFEFF?---\s*\n[\s\S]*?\n---\s*\n?/, '');
+  }
+
+  loadBody(path) {
+    return new Promise((resolve) => {
+      if (window.ARTICLE_CONTENT && window.ARTICLE_CONTENT[path] != null) return resolve();
+      const s = document.createElement('script');
+      s.src = this.cacheBust('articles/' + path.replace(/\.md$/, '.js'));
+      s.onload = () => resolve();
+      s.onerror = () => resolve();
+      document.head.appendChild(s);
+    });
+  }
+
+  waitForMarked() {
+    return new Promise(resolve => {
+      let n = 0;
+      const tick = () => {
+        if (window.marked || n > 120) return resolve();
+        n++;
+        setTimeout(tick, 50);
+      };
+      tick();
+    });
+  }
+
+  initEggs() {
+    if (window.__marcusEggs) return;
+    window.__marcusEggs = true;
+/* Easter eggs (inlined; formerly easter-eggs.js).
+   - Type "marcus": highlighter mode. Drag over any text to mark it; marks
+     persist for the session and survive re-renders/reloads. Uses the CSS
+     Custom Highlight API (registers Ranges, injects no DOM), so support.js's
+     React re-renders can't tear the marks out.
+   - Konami code (up up down down left right left right b a): candlelight —
+     a warm, cursor-tracking vignette that dims the page.
+   Self-contained: injects its own CSS, lives outside the React root, and
+   re-applies after every re-render via a MutationObserver. Esc exits either. */
+(function () {
+  var byId = function (id) { return document.getElementById(id); };
+
+  // ---- inject styles ----
+  var css = `
+::highlight(marcus-mark){background-color:#d8a942;color:#0f0c09;}
+body.marcus-on,body.marcus-on *{cursor:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><rect x="9" y="2" width="6" height="13" rx="2" fill="%23d8a942"/><path d="M9 15h6l-3 6z" fill="%23ece1cf"/></svg>') 12 21,text;}
+#candle-overlay{position:fixed;inset:0;z-index:99998;pointer-events:none;opacity:0;transition:opacity .6s ease;background:radial-gradient(circle 150px at var(--cx,50%) var(--cy,50%),rgba(216,169,66,.10),rgba(216,169,66,.03) 45%,transparent 64%),radial-gradient(circle 200px at var(--cx,50%) var(--cy,50%),transparent 0%,transparent 36%,rgba(7,5,3,.93) 80%);}
+#candle-overlay.on{opacity:1;}
+#egg-toast{position:fixed;left:50%;bottom:38px;transform:translateX(-50%) translateY(8px);z-index:99999;pointer-events:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f0c09;background:#d8a942;padding:9px 16px;border-radius:999px;box-shadow:0 12px 30px -8px rgba(216,169,66,.5);opacity:0;transition:opacity .35s ease,transform .35s ease;}
+#egg-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}`;
+  var styleEl = document.createElement('style');
+  styleEl.textContent = css;
+  (document.head || document.documentElement).appendChild(styleEl);
+
+  // ---- tiny toast ----
+  var toastEl, toastT;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.id = 'egg-toast'; document.body.appendChild(toastEl); }
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+  }
+
+  // ===== candlelight (Konami code) =====
+  var overlay, candleOn = false;
+  function setCandle(on) {
+    candleOn = on;
+    if (!overlay) { overlay = document.createElement('div'); overlay.id = 'candle-overlay'; document.body.appendChild(overlay); }
+    overlay.classList.toggle('on', on);
+    if (on) toast('✦ candlelight');
+  }
+  document.addEventListener('mousemove', function (e) {
+    if (!candleOn || !overlay) return;
+    overlay.style.setProperty('--cx', e.clientX + 'px');
+    overlay.style.setProperty('--cy', e.clientY + 'px');
+  });
+  var KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  var kIdx = 0;
+
+  // ===== highlighter ("marcus") =====
+  var MARK_KEY = 'marcus.marks:' + location.pathname; // per-page store
+  var supportsHL = !!(window.CSS && CSS.highlights && window.Highlight);
+  var hl = supportsHL ? new Highlight() : null;
+  if (hl) CSS.highlights.set('marcus-mark', hl);
+  var marks = load();
+  var marcusOn = false, origTitle = null, origTag = null, origEb = null;
+
+  function load() { try { return JSON.parse(sessionStorage.getItem(MARK_KEY)) || []; } catch (e) { return []; } }
+  function save() { try { sessionStorage.setItem(MARK_KEY, JSON.stringify(marks)); } catch (e) {} }
+
+  // Anchor each mark to its text node's value + offsets + which same-valued node
+  // it is, so it can be re-resolved after React rebuilds the DOM (and on reload).
+  function textNodes() {
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), out = [], n;
+    while ((n = w.nextNode())) { if (n.nodeValue && n.nodeValue.trim()) out.push(n); }
+    return out;
+  }
+  function occ(nodes, node) { var c = 0; for (var i = 0; i < nodes.length; i++) { if (nodes[i] === node) return c; if (nodes[i].nodeValue === node.nodeValue) c++; } return c; }
+  function nth(nodes, val, k) { var c = 0; for (var i = 0; i < nodes.length; i++) { if (nodes[i].nodeValue === val) { if (c === k) return nodes[i]; c++; } } return null; }
+
+  function applyMarks() {
+    if (!hl) return;
+    hl.clear();
+    var nodes = textNodes();
+    for (var i = 0; i < marks.length; i++) {
+      var m = marks[i], node = nth(nodes, m.t, m.n);
+      if (!node) continue;
+      var len = node.nodeValue.length, s = Math.min(m.s, len), e = Math.min(m.e, len);
+      if (e <= s) continue;
+      try { var r = document.createRange(); r.setStart(node, s); r.setEnd(node, e); hl.add(r); } catch (err) {}
+    }
+  }
+
+  function captureSelection() {
+    var sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+    var range = sel.getRangeAt(0), nodes = textNodes(), segs = [];
+    if (range.startContainer.nodeType === 3 && range.startContainer === range.endContainer) {
+      segs.push({ node: range.startContainer, s: range.startOffset, e: range.endOffset });
+    } else {
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        if (!range.intersectsNode(node)) continue;
+        var s = node === range.startContainer ? range.startOffset : 0;
+        var e = node === range.endContainer ? range.endOffset : node.nodeValue.length;
+        if (e > s) segs.push({ node: node, s: s, e: e });
+      }
+    }
+    var added = false;
+    for (var j = 0; j < segs.length; j++) {
+      var g = segs[j];
+      marks.push({ t: g.node.nodeValue, s: g.s, e: g.e, n: occ(nodes, g.node) });
+      added = true;
+    }
+    if (added) { save(); applyMarks(); }
+    sel.removeAllRanges();
+  }
+  document.addEventListener('mouseup', function () { if (marcusOn) setTimeout(captureSelection, 0); });
+
+  // Click an existing mark to remove it (in highlighter mode). Hit-test the click
+  // point against stored marks; a hit also cancels the default action, so clicking
+  // a marked card title removes the mark instead of opening the post.
+  var downX = 0, downY = 0;
+  document.addEventListener('mousedown', function (e) { downX = e.clientX; downY = e.clientY; });
+  function caretAt(x, y) {
+    if (document.caretPositionFromPoint) { var p = document.caretPositionFromPoint(x, y); return p ? { node: p.offsetNode, offset: p.offset } : null; }
+    if (document.caretRangeFromPoint) { var r = document.caretRangeFromPoint(x, y); return r ? { node: r.startContainer, offset: r.startOffset } : null; }
+    return null;
+  }
+  function markAtPoint(x, y) {
+    var c = caretAt(x, y);
+    if (!c || !c.node || c.node.nodeType !== 3) return -1;
+    var nodes = textNodes();
+    for (var i = 0; i < marks.length; i++) {
+      var m = marks[i];
+      if (nth(nodes, m.t, m.n) === c.node && c.offset >= m.s && c.offset <= m.e) return i;
+    }
+    return -1;
+  }
+  document.addEventListener('click', function (e) {
+    if (!marcusOn) return;
+    if (Math.abs(e.clientX - downX) > 4 || Math.abs(e.clientY - downY) > 4) return; // a drag, not a click
+    var i = markAtPoint(e.clientX, e.clientY);
+    if (i < 0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    marks.splice(i, 1);
+    save();
+    applyMarks();
+    toast('mark removed');
+  }, true);
+
+  // The heading "becomes an instruction": index.html swaps its site title +
+  // tagline; article.html (no site title) swaps its "← All writing" eyebrow.
+  function applyTitle() {
+    var t = byId('site-title'), g = byId('site-tagline'), eb = byId('mark-eyebrow');
+    if (t) { if (origTitle == null) origTitle = t.textContent; var w1 = marcusOn ? 'Mark the thoughts.' : origTitle; if (t.textContent !== w1) t.textContent = w1; }
+    if (g) { if (origTag == null) origTag = g.textContent; var w2 = marcusOn ? 'Drag to mark · click a mark to remove · Esc to exit.' : origTag; if (g.textContent !== w2) g.textContent = w2; }
+    if (eb) { if (origEb == null) origEb = eb.textContent; var w3 = marcusOn ? '✦ Drag to mark · click to remove' : origEb; if (eb.textContent !== w3) eb.textContent = w3; }
+  }
+  function setMarcus(on) {
+    marcusOn = on;
+    document.body.classList.toggle('marcus-on', on);
+    applyTitle();
+    if (on) toast(supportsHL ? '✦ highlighter — drag to mark, click to remove' : '✦ highlighter (browser too old to mark)');
+  }
+
+  // ===== keys =====
+  var buf = '';
+  document.addEventListener('keydown', function (e) {
+    var tag = (e.target && e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || (e.target && e.target.isContentEditable)) return;
+    var key = e.key;
+
+    // Konami code -> candlelight
+    var expect = KONAMI[kIdx];
+    if (key === expect || (expect.length === 1 && key.toLowerCase() === expect)) {
+      if (++kIdx === KONAMI.length) { kIdx = 0; setCandle(!candleOn); }
+    } else {
+      kIdx = key === KONAMI[0] ? 1 : 0;
+    }
+
+    // type "marcus" -> highlighter
+    if (/^[a-z]$/i.test(key)) {
+      buf = (buf + key.toLowerCase()).slice(-8);
+      if (buf.slice(-6) === 'marcus') { setMarcus(!marcusOn); buf = ''; }
+    } else if (key !== 'Shift') {
+      buf = '';
+    }
+
+    if (key === 'Escape') { if (candleOn) setCandle(false); if (marcusOn) setMarcus(false); }
+  });
+
+  // ===== re-apply marks/title after React re-renders (sort, filter, route, menus) =====
+  var raf = 0;
+  new MutationObserver(function () {
+    if (raf) return;
+    raf = requestAnimationFrame(function () { raf = 0; applyMarks(); if (marcusOn) applyTitle(); });
+  }).observe(document.body, { childList: true, subtree: true, characterData: true });
+
+  applyMarks(); // restore any marks already saved this session
+
+  // ===== a hint in the console for the curious =====
+  (function () {
+    var head = 'font:600 12px "JetBrains Mono",monospace;color:#0f0c09;background:#d8a942;padding:4px 10px;border-radius:4px';
+    var serif = 'font:italic 14px Newsreader,Georgia,serif;color:#ece1cf';
+    var body = 'font:12px "JetBrains Mono",monospace;color:#cdc1ab;line-height:1.7';
+    var dim = 'font:11px "JetBrains Mono",monospace;color:#8c8170';
+    console.log('%c✦ Mark the Thoughts', head);
+    console.log('%cYou found the margin. Two things are hidden here:', serif);
+    console.log('%c  · type the author’s first name  →  a highlighter (drag to mark, click to remove)\n  · the old arcade incantation  ↑ ↑ ↓ ↓ ← → ← → B A  →  candlelight', body);
+    console.log('%c— marcuschiu.com', dim);
+  })();
+})();
   }
 
   async loadArticles() {
@@ -205,12 +982,49 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { tag, sort, menu, loading } = this.state;
+    const { tag, sort, status, menu, loading } = this.state;
     const all = this.state.allArticles;
+
+    // ---- view flags ----
+    const isArticle = this.state.route === 'article';
+    const isEditor = this.state.route === 'editor';
+    const isList = !isArticle && !isEditor;
+    const adminMode = this.state.admin;
+    const adminLoaded = adminMode && Array.isArray(this.state.adminArticles);
+    const byDate = all.slice().sort((a, b) => b.ts - a.ts);
+    const aidx = byDate.findIndex(a => a.slug === this.state.slug);
+    const meta = aidx >= 0 ? byDate[aidx] : (this.findBySlug(this.state.slug) || {});
+    const newer = aidx > 0 ? byDate[aidx - 1] : null;
+    const older = aidx >= 0 && aidx < byDate.length - 1 ? byDate[aidx + 1] : null;
+    const articleBody = this.state.articleHtml
+      ? React.createElement('div', { className: 'prose', dangerouslySetInnerHTML: { __html: this.state.articleHtml } })
+      : null;
+
+    // grid source: admin list (incl. drafts, with dir) when in admin mode, else manifest
+    const adminToTile = (a) => ({
+      slug: this.computeSlug(a.date, a.title),
+      path: (a.dir || '') + '/index.md',
+      dir: a.dir,
+      title: a.title,
+      date: this.formatDate(a.date),
+      ts: Date.parse(a.date),
+      tags: Array.isArray(a.tags) ? a.tags : [],
+      hasImg: !!a.imgUrl, noImg: !a.imgUrl, imgUrl: a.imgUrl || '',
+      draft: !!a.draft, isAdmin: true,
+    });
+    const gridAll = adminLoaded ? this.state.adminArticles.map(adminToTile) : all;
+    const numMap = {};
+    gridAll.slice().sort((a, b) => b.ts - a.ts).forEach((a, i) => { numMap[a.slug] = String(i + 1).padStart(2, '0'); });
+
+    // admin status filter (drafts = hidden); default 'all' shows hidden too
+    const draftCount = gridAll.filter(a => a.draft).length;
+    const statusBase = adminLoaded
+      ? (status === 'visible' ? gridAll.filter(a => !a.draft) : status === 'hidden' ? gridAll.filter(a => a.draft) : gridAll)
+      : gridAll;
 
     // tag list derived from loaded frontmatter, ordered by frequency then name
     const tagCounts = {};
-    all.forEach(a => a.tags.forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+    statusBase.forEach(a => a.tags.forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
     const tagOrder = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a] || a.localeCompare(b));
 
     const menuBtn = {
@@ -232,6 +1046,8 @@ class Component extends DCLogic {
     const tagOpen = menu === 'tag';
     const sortBtnStyle = { ...menuBtn, border: sortOpen ? '1px solid #d8a942' : '1px solid #29221a', color: '#8c8170' };
     const tagBtnStyle = { ...menuBtn, border: tagOpen ? '1px solid #d8a942' : '1px solid #29221a', color: '#8c8170' };
+    const statusOpen = menu === 'status';
+    const statusBtnStyle = { ...menuBtn, border: statusOpen ? '1px solid #d8a942' : '1px solid #29221a', color: '#8c8170' };
 
     const optBase = {
       display: 'flex',
@@ -265,7 +1081,7 @@ class Component extends DCLogic {
     const sortLabel = (this.sortDefs.find(s => s.key === sort) || this.sortDefs[0]).label;
 
     // tag options
-    const tagDefs = [{ key: 'all', label: 'All posts', count: all.length }]
+    const tagDefs = [{ key: 'all', label: 'All posts', count: gridAll.length }]
       .concat(tagOrder.map(t => ({ key: t, label: t, count: tagCounts[t] })));
     const tagOptions = tagDefs.map(t => {
       const on = t.key === tag;
@@ -281,8 +1097,21 @@ class Component extends DCLogic {
     });
     const tagLabel = tag === 'all' ? 'All posts' : tag;
 
+    // status options (admin)
+    const statusDefs = [
+      { key: 'all', label: 'All', count: gridAll.length },
+      { key: 'visible', label: 'Visible', count: gridAll.length - draftCount },
+      { key: 'hidden', label: 'Hidden', count: draftCount },
+    ];
+    const statusOptions = statusDefs.map(s => {
+      const on = s.key === status;
+      const o = mkOpt(on);
+      return { label: s.label, count: s.count, onClick: () => this.setState({ status: s.key, menu: null, page: 1 }), style: o.style, hoverStyle: o.hoverStyle, countStyle: { fontSize: '10px', letterSpacing: '0.05em', color: on ? '#b78f3a' : '#5f574a' } };
+    });
+    const statusLabel = (statusDefs.find(s => s.key === status) || statusDefs[0]).label;
+
     // filter + sort + paginate
-    const filtered = tag === 'all' ? all : all.filter(a => a.tags.includes(tag));
+    const filtered = tag === 'all' ? statusBase : statusBase.filter(a => a.tags.includes(tag));
     const sorters = {
       newest: (a, b) => b.ts - a.ts,
       oldest: (a, b) => a.ts - b.ts,
@@ -295,11 +1124,16 @@ class Component extends DCLogic {
     const totalPages = Math.max(1, Math.ceil(sorted.length / perPage));
     const page = Math.min(Math.max(1, this.state.page), totalPages);
     const start = (page - 1) * perPage;
-    const articles = sorted.slice(start, start + perPage);
+    const articles = sorted.slice(start, start + perPage).map(a => ({
+      ...a,
+      num: numMap[a.slug] || a.num,
+      onOpen: this.navClick(a.slug),
+      onEdit: a.isAdmin ? (e) => { if (e && e.stopPropagation) e.stopPropagation(); if (e) e.preventDefault(); this.openEditDir(a.dir); } : undefined,
+    }));
 
     const countLabel = loading
       ? 'Loading…'
-      : (tag === 'all' ? `${sorted.length} posts` : `${sorted.length} of ${all.length}`);
+      : (tag === 'all' ? `${sorted.length} posts` : `${sorted.length} of ${statusBase.length}`);
 
     // pager with ellipsis
     const pagerBtn = {
@@ -337,7 +1171,76 @@ class Component extends DCLogic {
       };
     });
 
+    // ---- editor view ----
+    const ed = this.state.ed || { title: '', date: '', draft: true, tags: [], img: '', body: '', originalDir: null };
+    const tabBtn = (on) => ({ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '10px 18px', cursor: 'pointer', border: 'none', background: on ? '#d8a942' : 'transparent', color: on ? '#0f0c09' : '#8c8170' });
+    const draftOn = !!ed.draft;
+    const draftBtnStyle = { width: '100%', textAlign: 'left', fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 14px', borderRadius: '6px', cursor: 'pointer', background: draftOn ? '#1d1710' : '#13241a', border: draftOn ? '1px solid #3a2f1a' : '1px solid #234a32', color: draftOn ? '#d8a942' : '#6fce97' };
+    const ghostBtn = { fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '9px 14px', borderRadius: '6px', cursor: 'pointer', background: 'transparent', border: '1px solid #3a2f1a', color: '#c9bca6' };
+    const propsBtnStyle = { ...ghostBtn, border: this.state.propsOpen ? '1px solid #d8a942' : '1px solid #3a2f1a', color: this.state.propsOpen ? '#ece1cf' : '#c9bca6' };
+    const inPreview = this.state.mode === 'preview';
+    const previewBtnStyle = { ...ghostBtn, padding: '12px 18px', fontSize: '12px', letterSpacing: '0.14em', border: inPreview ? '1px solid #d8a942' : '1px solid #3a2f1a', color: inPreview ? '#ece1cf' : '#c9bca6' };
+    const saveBtnStyle = { fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '6px', cursor: this.state.saving ? 'default' : 'pointer', background: '#d8a942', border: '1px solid #d8a942', color: '#0f0c09', opacity: this.state.saving ? 0.6 : 1 };
+    const coverUrl = ed.originalDir && ed.img && !/^https?:/i.test(ed.img) ? ('articles/' + ed.originalDir + '/' + ed.img) : ed.img;
+    const coverEl = (isEditor && ed.img)
+      ? React.createElement('img', { src: coverUrl, alt: 'cover', style: { width: '100%', borderRadius: '6px', border: '1px solid #29221a', marginBottom: '10px' } })
+      : null;
+    let bodyEl = null;
+    if (isEditor) {
+      if (this.state.mode === 'markdown') {
+        bodyEl = React.createElement('textarea', { id: 'md-body', className: 'md-raw', value: ed.body, onChange: this.onBody, onInput: this.onBody, placeholder: 'Write Markdown here…' });
+      } else if (this.state.mode === 'rendered') {
+        bodyEl = React.createElement('div', { id: 'wysiwyg', className: 'prose wysiwyg', contentEditable: true, suppressContentEditableWarning: true, onInput: this.onWysiwygInput, dangerouslySetInnerHTML: { __html: this.wysiwygHtml || '' } });
+      } else {
+        const dsp = this.displayBody(ed.body, ed.originalDir);
+        const eh = window.marked ? window.marked.parse(dsp) : this.escapeHtml(dsp);
+        bodyEl = React.createElement('div', { className: 'prose', dangerouslySetInnerHTML: { __html: eh } });
+      }
+    }
+
     return {
+      // site config (header)
+      siteTitle: (window.SITE_CONFIG && window.SITE_CONFIG.title) || 'Mark the Thoughts',
+      siteTagline: (window.SITE_CONFIG && window.SITE_CONFIG.tagline) || 'Reflections, parables, and ramblings — collected here. Sort and filter, or click any post to read it.',
+      // routing + article view
+      isList, isArticle,
+      articleTitle: this.state.articleTitle || meta.title || (this.state.articleLoading ? '' : 'Untitled'),
+      articleDate: this.state.articleDate || meta.date || '',
+      adminReader: adminMode && isArticle,
+      editCurrent: this.editCurrent,
+      articleLoading: this.state.articleLoading,
+      articleBody,
+      hasNav: !!(newer || older),
+      hasNewer: !!newer, hasOlder: !!older,
+      newer: newer ? { ...newer, onOpen: this.navClick(newer.slug) } : {},
+      older: older ? { ...older, onOpen: this.navClick(older.slug) } : {},
+      goListClick: this.goListClick,
+      // admin + editor
+      adminBar: adminMode && isList,
+      serverDown: this.state.serverDown,
+      reload: this.reload,
+      apiBase: this.state.apiBase, onApiBase: this.onApiBase, commitApiBase: this.commitApiBase, apiKey: this.apiKey,
+      apiStatusLabel: this.state.apiStatus === 'ok' ? 'Connected' : this.state.apiStatus === 'fail' ? 'Unreachable' : this.state.apiStatus === 'checking' ? 'Checking…' : '',
+      apiDotStyle: { width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, background: { ok: '#6fce97', fail: '#e7715f', checking: '#d8a942' }[this.state.apiStatus] || '#5f574a' },
+      exitAdmin: this.exitAdmin,
+      openNew: this.openNew,
+      isEditor,
+      error: this.state.error,
+      edTitle: ed.title, onTitle: this.onTitle,
+      edDateLabel: this.formatDate(ed.date) || 'No date', edIsDraft: draftOn,
+      cancelEdit: this.cancelEdit,
+      setRendered: this.setRendered, setMarkdown: this.setMarkdown,
+      renderedTabStyle: tabBtn(this.state.mode === 'rendered'), markdownTabStyle: tabBtn(this.state.mode === 'markdown'),
+      insertImage: this.insertImage,
+      toggleProps: this.toggleProps, propsOpen: this.state.propsOpen, propsBtnStyle, propsCaret: this.state.propsOpen ? '▲' : '▼',
+      bodyEl,
+      togglePreview: this.togglePreview, previewBtnStyle, previewBtnLabel: inPreview ? 'Exit preview' : 'Preview',
+      save: this.save, saveBtnStyle, saveLabel: this.state.saving ? 'Publishing…' : 'Publish',
+      toggleDraft: this.toggleDraft, draftBtnStyle, draftLabel: draftOn ? 'Draft (hidden from site)' : 'Published',
+      edDate: ed.date, onDate: this.onDate, folderHint: ed.originalDir || (ed.date || '—'),
+      edTags: (ed.tags || []).map((t) => ({ label: t, onRemove: () => this.removeTag(t) })),
+      allTagOptions: this.state.allTags, tagInput: this.state.tagInput, onTagInput: this.onTagInput, addTagFromInput: this.addTagFromInput,
+      coverBtnLabel: ed.img ? 'Replace cover' : 'Upload cover', uploadCover: this.uploadCover, coverEl,
       // dropdowns
       btnHover: { borderColor: '#4a3c1d' },
       sortBtnStyle, tagBtnStyle,
@@ -348,8 +1251,15 @@ class Component extends DCLogic {
       sortOptions, tagOptions,
       toggleSort: () => this.setState(s => ({ menu: s.menu === 'sort' ? null : 'sort' })),
       toggleTag: () => this.setState(s => ({ menu: s.menu === 'tag' ? null : 'tag' })),
+      adminMode,
+      statusOpen, statusBtnStyle, statusCaret: statusOpen ? '▲' : '▼', statusLabel, statusOptions,
+      toggleStatus: () => this.setState(s => ({ menu: s.menu === 'status' ? null : 'status' })),
       anyOpen: menu !== null,
-      closeMenus: () => this.setState({ menu: null }),
+      closeMenus: () => this.setState({ menu: null, settingsOpen: false }),
+      settingsOpen: this.state.settingsOpen,
+      toggleSettings: () => this.setState(s => ({ settingsOpen: !s.settingsOpen, menu: null })),
+      gearBtnStyle: { position: 'fixed', right: '24px', top: '22px', zIndex: 90, width: '42px', height: '42px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', cursor: 'pointer', background: 'rgba(22,18,12,0.92)', border: this.state.settingsOpen ? '1px solid #d8a942' : '1px solid #3a2f1a', color: this.state.settingsOpen ? '#ece1cf' : '#d8a942', WebkitBackdropFilter: 'blur(6px)', backdropFilter: 'blur(6px)' },
+      apiStatusText: this.state.apiStatus === 'ok' ? 'Connected' : this.state.apiStatus === 'fail' ? 'Unreachable' : this.state.apiStatus === 'checking' ? 'Checking…' : 'Not checked',
       // grid + pager
       articles,
       countLabel,
@@ -361,7 +1271,5 @@ class Component extends DCLogic {
   }
 }
 </script>
-
-<script src="./easter-eggs.js"></script>
 </body>
 </html>
