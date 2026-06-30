@@ -240,6 +240,8 @@
       {{ articleBody }}
     </article>
 
+    <div id="giscus-container" style="margin-top: 64px; padding-top: 38px; border-top: 1px solid #221c14;"></div>
+
     <sc-if value="{{ hasNav }}" hint-placeholder-val="{{ false }}">
       <nav style="margin-top: 72px; padding-top: 38px; border-top: 1px solid #221c14; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div>
@@ -425,6 +427,29 @@ class Component extends DCLogic {
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag('js', new Date());
     window.gtag('config', 'G-WKSFZQ4K6F');
+  }
+
+  // Mount giscus (GitHub Discussions comments) per article. Reads config from
+  // window.SITE_CONFIG.giscus; stays hidden until repo/repoId/categoryId are set.
+  mountGiscus(term) {
+    const el = document.getElementById('giscus-container');
+    if (!el) return;
+    el.innerHTML = '';
+    const cfg = (window.SITE_CONFIG && window.SITE_CONFIG.giscus) || null;
+    if (!cfg || cfg.enabled === false || !cfg.repo || cfg.repo.indexOf('OWNER/') === 0 || !cfg.repoId || !cfg.categoryId) return;
+    const s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.async = true;
+    s.crossOrigin = 'anonymous';
+    const attrs = {
+      'data-repo': cfg.repo, 'data-repo-id': cfg.repoId,
+      'data-category': cfg.category || 'Announcements', 'data-category-id': cfg.categoryId,
+      'data-mapping': cfg.mapping || 'specific', 'data-term': term || '',
+      'data-strict': '0', 'data-reactions-enabled': '1', 'data-emit-metadata': '0',
+      'data-input-position': 'bottom', 'data-theme': cfg.theme || 'dark', 'data-lang': 'en',
+    };
+    Object.keys(attrs).forEach((k) => s.setAttribute(k, attrs[k]));
+    el.appendChild(s);
   }
 
   // ---- admin mode (Cmd/Ctrl+E) ----
@@ -700,7 +725,7 @@ class Component extends DCLogic {
     let html;
     try { html = window.marked ? window.marked.parse(md) : md.replace(/\n/g, '<br>'); }
     catch (e) { html = md.replace(/\n/g, '<br>'); }
-    if (this._tok === token) this.setState({ articleHtml: html, articleLoading: false });
+    if (this._tok === token) { this.setState({ articleHtml: html, articleLoading: false }); setTimeout(() => { if (this._tok === token) this.mountGiscus(slug); }, 0); }
   }
 
   stripFrontmatter(text) {
