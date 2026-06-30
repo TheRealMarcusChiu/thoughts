@@ -684,7 +684,17 @@ class Component extends DCLogic {
 
   findBySlug(slug) {
     const dec = (s) => { try { return decodeURIComponent(s); } catch (e) { return s; } };
-    return this.state.allArticles.find(a => a.slug === slug || dec(a.slug) === dec(slug)) || null;
+    // Fall back to window.ARTICLES when state isn't populated yet (deep-link /
+    // reload: loadArticleBody can run before loadArticles' setState commits).
+    let list = this.state.allArticles;
+    if (!list || !list.length) {
+      list = (window.ARTICLES || []).map(p => ({
+        slug: p.slug, path: p.path, title: p.title,
+        date: this.formatDate(p.date), ts: Date.parse(p.date),
+        tags: Array.isArray(p.tags) ? p.tags : (p.tags ? [p.tags] : []),
+      }));
+    }
+    return list.find(a => a.slug === slug || dec(a.slug) === dec(slug)) || null;
   }
 
   async loadArticleBody(slug) {
