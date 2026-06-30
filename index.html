@@ -9,6 +9,8 @@
 <body>
 <x-dc>
 <helmet>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WKSFZQ4K6F"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500;1,6..72,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -380,6 +382,7 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this.initEggs();
+    this.initAnalytics();
     window.addEventListener('popstate', this.syncRoute);
     window.addEventListener('keydown', this.onAdminKey);
     this.loadManifest();
@@ -410,6 +413,18 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('popstate', this.syncRoute);
     window.removeEventListener('keydown', this.onAdminKey);
+  }
+
+  // Google Analytics (gtag.js). The loader <script> is in <helmet>; this sets up
+  // the dataLayer + config (kept out of the template, where inline script braces
+  // would be mis-parsed by the DC compiler).
+  initAnalytics() {
+    if (window.__gaInit) return;
+    window.__gaInit = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-WKSFZQ4K6F');
   }
 
   // ---- admin mode (Cmd/Ctrl+E) ----
