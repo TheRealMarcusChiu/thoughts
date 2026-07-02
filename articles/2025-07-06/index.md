@@ -1,6 +1,6 @@
 ---
 draft: false
-title: "A Fading Glimpse"
+title: "Glimpse"
 tags: ["love", "relationships", "reflection"]
 img: 'assets/dbc27496-894e-41e6-aca9-44aa2c7f6d32.png'
 date: 2025-07-06

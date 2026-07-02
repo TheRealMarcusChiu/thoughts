@@ -65,9 +65,9 @@ window.ARTICLES = [
     "img": "2025-07-09/assets/ChatGPT_Image_Jun_23_2026_06_57_32_PM.png"
   },
   {
-    "slug": "2025-07-06--A-Fading-Glimpse",
+    "slug": "2025-07-06--Glimpse",
     "path": "2025-07-06/index.md",
-    "title": "A Fading Glimpse",
+    "title": "Glimpse",
     "date": "2025-07-06",
     "tags": [
       "love",
