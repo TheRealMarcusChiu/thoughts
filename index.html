@@ -377,7 +377,7 @@
 class Component extends DCLogic {
   state = { route: 'list', slug: '', tag: 'all', sort: 'newest', status: 'all', menu: null, page: 1, allArticles: [], loading: true, articleHtml: '', articleLoading: false, articleTitle: '', articleDate: '', articleDir: '',
             admin: false, adminArticles: null, allTags: [], serverDown: false, ed: null, mode: 'rendered', tagInput: '', saving: false, error: '', propsOpen: false,
-            apiBase: (() => { try { return localStorage.getItem('admin.apiBase') || ''; } catch (e) { return ''; } })(), apiStatus: '', settingsOpen: false };
+            apiBase: (() => { try { return localStorage.getItem('admin.apiBase:' + location.pathname.replace(/index\.html$/, '')) || ''; } catch (e) { return ''; } })(), apiStatus: '', settingsOpen: false };
   _tok = 0;
   wysiwygHtml = '';
   wysiwygDirty = false;
@@ -489,9 +489,12 @@ class Component extends DCLogic {
 
   // Prefix an /api path with the configurable server endpoint (blank = same origin).
   api(path) { const b = (this.state.apiBase || '').trim().replace(/\/$/, ''); return b + path; }
+  // Scope the stored endpoint to this site's path so sibling sites on the same
+  // domain (/thoughts/, /tech/, /images/, …) keep independent endpoints.
+  apiBaseKey() { return 'admin.apiBase:' + location.pathname.replace(/index\.html$/, ''); }
   onApiBase = (e) => {
     const v = String(e.target.value || '');
-    try { const t = v.trim(); if (t) localStorage.setItem('admin.apiBase', t); else localStorage.removeItem('admin.apiBase'); } catch (err) {}
+    try { const t = v.trim(); if (t) localStorage.setItem(this.apiBaseKey(), t); else localStorage.removeItem(this.apiBaseKey()); } catch (err) {}
     this.setState({ apiBase: v, apiStatus: '' });
   };
   commitApiBase = () => { this.setState({ apiBase: (this.state.apiBase || '').trim() }); this.loadAdmin(); };
