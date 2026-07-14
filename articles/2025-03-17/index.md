@@ -1,9 +1,9 @@
 ---
 draft: false
-title: 'Conversation in the Womb – A Parable of Life After Delivery'
-summary: 'summary'
-tags: ['christianity', 'faith', 'parable']
+title: "Conversation in the Womb – A Parable of Life After Delivery"
+tags: ["christianity", "faith", "parable"]
 img: 'assets/cover.jpeg'
+date: 2025-03-17
 ---
 
 In a mother’s womb were two babies.
@@ -33,3 +33,11 @@ Said the first: “Well I don’t see Her, so it is only logical that She doesn�
 To which the second replied, “Sometimes, when you’re in silence and you focus and you really listen, you can perceive Her presence, and you can hear Her loving voice, calling down from above.”
 
 – a parable from Your Sacred Self by Dr. Wayne Dyer
+
+---
+
+Edit - July 14, 2026
+
+_"Faith is not about what we see; it is the courage to believe in a life beyond the birth canal, a truth that remains silent and hidden until the very moment of delivery, when the darkness of the womb gives way to the blinding light of a new existence."_
+
+This reflection focuses on the idea that faith is often an abstract or theoretical concept during one's "normal" life, but it becomes a definitive, life-or-death commitment only when confronted with the transition from the known to the unknown
