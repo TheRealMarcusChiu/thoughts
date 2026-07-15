@@ -5,7 +5,7 @@ tags: []
 date: 2026-07-15
 ---
 
-# Christianity uniquely holds together truths that people often separate  
+Christianity uniquely holds together truths that people often separate.
 
 # The Conjunctions/Juxtapositions 
 
