@@ -73,6 +73,8 @@ Edwards highlights pairings such as:
 * **Infinite majesty and profound humility**
   * He is the King of kings.
   * Yet He was born in a manger and washed His disciples' feet.
+  - The throne reached down to the manger.
+  - The King knelt before His subjects.
 * **Infinite justice and infinite grace**
   * He perfectly judges sin.
   * He freely forgives sinners.
@@ -82,15 +84,39 @@ Edwards highlights pairings such as:
 * **Lion-like power and lamb-like meekness**
   * He conquers Satan, sin, and death.
   * He offers Himself as a sacrifice.
+  - He broke the chains of death with nail-pierced hands.
+  - The Almighty chose meekness without surrendering power.
 * **Supreme glory and deepest suffering**
   * He is worshiped by angels.
   * He endures the shame of the cross.
+  - The crown of glory passed through a crown of thorns.
+  - His deepest humiliation unveiled His highest glory.
+  - He shone brightest upon the darkest hill.
 * **Perfect holiness and boundless mercy**
   * He cannot tolerate evil.
   * He welcomes repentant sinners.
+  - His holiness exposes my sin; His mercy covers it
 * **Infinite transcendence and intimate nearness**
   * He upholds the universe.
   * He dwells among His people.
+  - Infinity learned to cry in a cradle.
+  - The Word without beginning entered time
+
+> Lord Jesus,
+>
+> You are the Lion who conquered as the Lamb.
+>
+> You are infinite Majesty clothed in perfect humility.
+>
+> You are holiness that does not withdraw from sinners, but welcomes them home.
+>
+> You are justice fully satisfied and grace freely given.
+>
+> You are strength made beautiful by gentleness.
+>
+> You are glory hidden beneath suffering, and life that triumphed through death.
+>
+> In You, every excellence meets without conflict, and every perfection shines without rival.
 
 ## Why Edwards thought this mattered
 
