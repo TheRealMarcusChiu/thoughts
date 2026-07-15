@@ -2,7 +2,7 @@
 draft: true
 title: "Ramblings #1"
 tags: ["christianity", "faith", "love", "identity", "relationships"]
-date: 2037-11-20
+date: 2026-05-18
 ---
 
 Test
