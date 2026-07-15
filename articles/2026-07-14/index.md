@@ -215,3 +215,16 @@ One thing we ask from the YOU, this only do we seek:
 -   that we may dwell in the house of the LORD all the days of our lives
 -   to gaze upon the beauty of the LORD
 -   and to seek You in your temple
+
+
+
+# Random
+
+In a marriage a ring is beautiful but it reflects the beauty of the love between a husband and a wife. This is creation - everything God has made is a reflection of his love for his son. And just as a Monet painting reflects the character of Monet, the creation of god reflects the character of God.
+
+
+A story is a sequence of words. If you don't know what some words mean you look them up in a dictionary.
+
+A dictionary is a book of meanings where you find the meanings of words. And the Word is a book of the meaning of life.
+
+Without a dictionary you'll won't be able to understand a story. And without the Word you'll won't be able to understand your life.
