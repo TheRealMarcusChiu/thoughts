@@ -56,9 +56,7 @@ Jesus consistently taught that God's kingdom operates differently from worldly a
 
 # Excellencies of Christ
 
-If you're referring to **"The Excellencies of Christ,"** you're likely thinking of one of the most famous sermons by the 18th-century theologian Jonathan Edwards.
-
-The sermon is built around **Revelation 5:5–6**:
+The Jonathan Edward's sermon `Excellencies of Christ` is built around **Revelation 5:5–6**:
 
 > "Behold, the Lion of the tribe of Judah..."
 >
@@ -106,13 +104,21 @@ Edwards highlights pairings such as:
 >
 > You are the Lion who conquered as the Lamb.
 >
-> You are infinite Majesty clothed in perfect humility.
+> Your Majesty is clothed in humility.
 >
-> You are holiness that does not withdraw from sinners, but welcomes them home.
+> Your infinite transcendence upholds the universe, and yet you intimate nearness dwells among us
 >
-> You are justice fully satisfied and grace freely given.
+> Your throne reached down to the manger
 >
-> You are strength made beautiful by gentleness.
+> The infinity learned to cry 
+>
+> You are the king of kings who have knelt down before Your subjects. You have washed their feet as the Lord of Lords.
+>
+> Your holiness hates sin, and your mercy loves a repentant sinner.
+>
+> At the cross, infinite justice meets infinite grace, perfectly. You are justice fully satisfied and grace freely given.
+>
+> You are strength made beautiful by meekness - for meekness is power under-control.
 >
 > You are glory hidden beneath suffering, and life that triumphed through death.
 >
