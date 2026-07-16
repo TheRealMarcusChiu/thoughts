@@ -1,6 +1,6 @@
 ---
 draft: false
-title: "Prayer Mantra #2"
+title: "Prayer #2"
 tags: ["christianity", "faith", "relationships"]
 img: 'assets/rhtFa.jpg'
 date: 2025-01-15

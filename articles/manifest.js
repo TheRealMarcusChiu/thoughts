@@ -126,9 +126,9 @@ window.ARTICLES = [
     "img": "2025-01-27/assets/cover.jpeg"
   },
   {
-    "slug": "2025-01-15--Prayer-Mantra-%232",
+    "slug": "2025-01-15--Prayer-%232",
     "path": "2025-01-15/index.md",
-    "title": "Prayer Mantra #2",
+    "title": "Prayer #2",
     "date": "2025-01-15",
     "tags": [
       "christianity",
