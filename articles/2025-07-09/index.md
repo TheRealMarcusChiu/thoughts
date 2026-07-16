@@ -19,3 +19,9 @@ I had not noticed either that just as men spontaneously praise whatever they val
 I think we delight to praise what we enjoy because the praise not merely expresses but completes the enjoyment. It is not out of compliment that lovers keep on telling one another how beautiful they are; the delight is incomplete till it is expressed. It is frustrating to have discovered a new author and not to be able to tell anyone how good he is; to come upon some mountain valley of unexpected grandeur and then to have to keep silent because the people with you care for it no more than for a tin can in the ditch; to hear a good joke and find no one to share it with. This is so even when our expressions are inadequate, as of course they usually are.
 
 The worthier the object, the more intense this delight would be. If it were possible for a created soul fully to “appreciate”, that is to love and delight in, the worthiest object of all, and simultaneously at every moment to give this delight perfect expression, then that soul would be in supreme beatitude. It is along these lines that I find it easiest to understand the Christian doctrine that “Heaven” is a state in which angels now, and men hereafter, are perpetually employed in praising God.
+
+---
+
+Update - July 16, 2026
+
+_I have told you these things so that My joy may be in you and your joy may be complete._ ~ John 15:11
