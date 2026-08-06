@@ -124,16 +124,5 @@ window.ARTICLES = [
       "self-improvement"
     ],
     "img": "2025-01-27/assets/cover.jpeg"
-  },
-  {
-    "slug": "2024-12-28--2024-Reflection-%E2%80%93-The-Year-of-Openness",
-    "path": "2024-12-28/index.md",
-    "title": "2024 Reflection – The Year of Openness",
-    "date": "2024-12-28",
-    "tags": [
-      "reflection",
-      "life"
-    ],
-    "img": "2024-12-28/assets/cover.png"
   }
 ];
