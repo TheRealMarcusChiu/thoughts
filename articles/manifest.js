@@ -126,18 +126,6 @@ window.ARTICLES = [
     "img": "2025-01-27/assets/cover.jpeg"
   },
   {
-    "slug": "2025-01-15--Prayer-%232",
-    "path": "2025-01-15/index.md",
-    "title": "Prayer #2",
-    "date": "2025-01-15",
-    "tags": [
-      "christianity",
-      "faith",
-      "relationships"
-    ],
-    "img": "2025-01-15/assets/rhtFa.jpg"
-  },
-  {
     "slug": "2024-12-28--2024-Reflection-%E2%80%93-The-Year-of-Openness",
     "path": "2024-12-28/index.md",
     "title": "2024 Reflection – The Year of Openness",
