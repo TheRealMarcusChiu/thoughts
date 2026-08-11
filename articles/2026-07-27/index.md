@@ -1,7 +1,7 @@
 ---
 draft: true
 title: "Mercy vs Forgiveness"
-tags: ["christianity", "relationships", "scripture", "life"]
+tags: ["christianity", "relationships", "scripture"]
 date: 2026-07-27
 ---
 
