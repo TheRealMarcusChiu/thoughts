@@ -25,3 +25,17 @@ The worthier the object, the more intense this delight would be. If it were poss
 Update - July 16, 2026
 
 _I have told you these things so that My joy may be in you and your joy may be complete._ ~ John 15:11
+
+---
+
+Update - August 20, 2026
+
+Rewrote it as how I would meditate
+
+The most obvious fact about praise - whether of God or anything else - strangely escaped me. I thought of it in terms of compliment, approval, or the giving of honor. I had never noticed that all enjoyment spontaneously overflows into praise. The world rings with praise: lovers praising whom they love, readers talking about their favorite book, to hikers praising the countryside. Praise almost seems to be inner health made audible.
+
+I also did not notice that just as men spontaneously praise whatever they value, they also spontaneously urge others to join them in praising it: isn't she lovely? wasn't this book great?   Don't you think that this countryside is magnificent? When we urge others to praise God, whether through singing worship songs or sharing the gospel, we are doing what all men do when they speak of what they care about.
+
+We delight to praise what we enjoy because the praise not merely expresses enjoyment but completes it. It is not out of compliment that lovers keep on telling one another how beautiful they are; the delight is incomplete till it is expressed. It is frustrating to have discovered a new book and not be able to tell anyone how good he is; to come upon some mountain valley of unexpected grandeur and then to have to keep silent because the people with you care for it no more than for a tin can in the ditch; to hear a good joke and find no one to share it with. This is so even when our expressions are inadequate, as they usually are.
+
+The worthier the object, the greater its delight would be. If it were possible for a created soul to: fully "appreciate" (i.e. that is to love and delight in) the worthiest object of all, and simultaneously at every moment to give this delight perfect expression, then that soul would be in supreme beatitude. It is along these lines that one find it easiest to understand the Christian doctrine that "heaven" is a state in which angels now, and men hereafter, are perpetually employed in praising God.
