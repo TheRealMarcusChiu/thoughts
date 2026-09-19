@@ -6,6 +6,8 @@ img: 'assets/dbc27496-894e-41e6-aca9-44aa2c7f6d32.png'
 date: 2025-07-06
 ---
 
+![](assets/Screenshot_2026-08-17_at_2.37.06_AM.png)
+
 Take a step back - a glimpse of you will flicker.
 
 I didn't realize how focused I can be in trying to understand her character, her likes & dislikes: she's soft-spoken at first, prefers 1-on-1 hangouts over groups, enjoys "spilling the tea", bantering, and making silly "demon sounds". She can be a goofball at times, and it's the weirdness I liked. She could get anxious in new groups, self-conscious about her hair when it's windy, her love-language is touch then quality-time, prone to love-bombing & easily attached - but is certainly aware of it. She likes picking up random hobbies: rock tumbling, guitar, and crafting beaded rings. She likes Lego botanical sets, thin minimalistic metal bracelets, purses, perfumes, TikTok, and yarn-knitted clothes especially in the winter (a soft white one at the coffee shop, and a striped blue-gray one when we got pho).
