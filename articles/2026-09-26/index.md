@@ -1,6 +1,6 @@
 ---
 draft: true
-title: "Friend"
+title: "I see you Friend"
 tags: []
 date: 2026-09-26
 ---
