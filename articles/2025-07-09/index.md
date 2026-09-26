@@ -47,3 +47,18 @@ Update - August 21, 2026
 _My soul is satisfied as with the richest of foods; with joyful lips my mouth will praise You._ ~ Psalms 63:5
 
 _Rejoice in the Lord always. I will say it again: Rejoice!_ ~ Philippians 4:4
+
+---
+
+Update - September 26, 2026
+
+_Praise is not an alternative to joy but the expression of joy_
+
+God glorifies Himself toward the creatures... in two ways: 1. By
+appearing to. ... their understanding. 2. In communicating Himself
+to their hearts, and in their rejoicing and delighting in, and enjoying,
+the manifestations which He makes of Himself. .. _God is glorified
+not only by His glory’s being seen, but by its being rejoiced in_. When those that see it delight in it, God is more glorified than if they only
+see it. ... He that testifies his idea of God’s glory [doesn’t] glorify
+God so much as he that testifies also his approbation of it and his
+delight in it.
