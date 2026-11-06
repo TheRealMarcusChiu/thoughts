@@ -6,7 +6,7 @@ img: 'assets/beauty.jpeg'
 date: 2026-06-23
 ---
 
-TODO amend statements below ~ Nov 5, 2026
+TODO amend statements to only infinite beauty ~ Nov 5, 2026
 
 
 Beauty? Whether you find it in a quiet walk along the countryside, in someone whom you love, or in a "[ratatouille dish](https://www.youtube.com/shorts/jS80Ll1lb-Y)" that transports you back to the comforts of childhood, they all share one thing in common - or perhaps two. This is beauty.
