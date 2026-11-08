@@ -6,7 +6,7 @@ window.ARTICLES = [
     "title": "I see you Friend",
     "date": "2026-09-26",
     "tags": [],
-    "img": ""
+    "img": "2026-09-26/assets/cover-image.png"
   },
   {
     "slug": "2026-06-23--What-is-Beauty%3F",

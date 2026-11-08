@@ -2,6 +2,7 @@
 draft: false
 title: "I see you Friend"
 tags: []
+img: 'assets/cover-image.png'
 date: 2026-09-26
 ---
 
