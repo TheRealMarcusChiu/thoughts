@@ -2,6 +2,7 @@
 draft: true
 title: "Marriage"
 tags: []
+img: 'assets/Interwoven_Knot_and_Wedding_Bands_copy.png'
 date: 2026-11-16
 ---
 
