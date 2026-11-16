@@ -1,7 +1,7 @@
 ---
 draft: false
 title: "I see you Friend"
-tags: []
+tags: ["reflection", "relationships", "life"]
 img: 'assets/cover-image.png'
 date: 2026-09-26
 ---

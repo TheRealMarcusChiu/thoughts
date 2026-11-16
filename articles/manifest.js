@@ -5,7 +5,11 @@ window.ARTICLES = [
     "path": "2026-09-26/index.md",
     "title": "I see you Friend",
     "date": "2026-09-26",
-    "tags": [],
+    "tags": [
+      "reflection",
+      "relationships",
+      "life"
+    ],
     "img": "2026-09-26/assets/cover-image.png"
   },
   {
